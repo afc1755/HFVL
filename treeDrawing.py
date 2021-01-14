@@ -33,11 +33,12 @@ right_mid_4_vlist = pyglet.graphics.vertex_list(3, ('v2f', [220, 380, 280, 380, 
 
 star = shapes.Rectangle(180, 420, 40, 40, color=(255, 255, 0), batch=batch2)
 
+
 @window.event
 def on_draw():
     window.clear()
     batch1.draw()
-    glColor3ub(0,153,0)
+    glColor3ub(0, 153, 0)
     left_mid_1_vlist.draw(GL_TRIANGLES)
     right_mid_1_vlist.draw(GL_TRIANGLES)
     left_mid_3_vlist.draw(GL_TRIANGLES)
@@ -50,5 +51,6 @@ def on_draw():
     right_mid_4_vlist.draw(GL_TRIANGLES)
 
     batch2.draw()
+
 
 pyglet.app.run()

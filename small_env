@@ -1,0 +1,8 @@
+$drawBox('box1',200,400,100,100)
+$drawBox('box2',200,200,100,100,text='sample text')
+$drawBox('box3',600,300,100,100,text='sample text 2')
+$drawArrow('box1','box2')
+$drawArrow('box2','box3',bold='True')
+$drawBox('box4',700,00,100,100,text='what is up?')
+$drawBox('box5',350,450,100,100,text='what is up')
+$drawArrow('box4','box5',bold='True')
