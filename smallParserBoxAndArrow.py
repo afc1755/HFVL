@@ -107,7 +107,7 @@ def read_file(file_to_read):
             elif function_line[0] == '$modifyBox':
                 box_text = ''
                 box_args = function_line[1].split(',')
-                box_id = box_args[0].replace('\'', '')
+                box_id = box_args[0].replace('\'', '').strip()
                 if box_id not in box_dict:
                     print('error: no such box as ' + box_id)
                 for i in range(1, len(box_args)):
@@ -121,7 +121,7 @@ def read_file(file_to_read):
                             box_dict[box_id][5] = False
                     elif attribute_args[0].strip().lower() == 'color':
                         if attribute_args[1].strip('\'').lower() == 'blue':
-                            arrowline_dict[box_id][6] = BLUE
+                            box_dict[box_id][6] = BLUE
                         elif attribute_args[1].strip('\'').lower() == 'green':
                             box_dict[box_id][6] = GREEN
                         elif attribute_args[1].strip('\'').lower() == 'red':
@@ -228,11 +228,10 @@ def pathfind_arrow(start_box, end_box):
         else:
             y1 = y1 - start_box[3]
 
-
-
     return x1, y1, x2, y2
 
+
 if __name__ == "__main__":
-    read_file('small_env')
+    read_file('sampleSHA')
 
 
