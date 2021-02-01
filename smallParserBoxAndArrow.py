@@ -99,11 +99,8 @@ def read_file(file_to_read):
                                 user_arr_color = RED
                             else:
                                 print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                x1, y1, x2, y2 = pathfind_arrow(box_dict[start_box_id], box_dict[end_box_id])
 
-                x1 = box_dict[start_box_id][0] + box_dict[start_box_id][2]/2
-                y1 = box_dict[start_box_id][1] + box_dict[start_box_id][3]
-                x2 = box_dict[end_box_id][0] + box_dict[end_box_id][2] / 2
-                y2 = box_dict[end_box_id][1] + box_dict[end_box_id][3]
                 arrow_color.append(user_arr_color)
                 arrowline_dict[start_box_id+end_box_id] = [x1, y1, x2, y2, arr_bold, user_arr_color]
 
@@ -204,6 +201,36 @@ def read_file(file_to_read):
 
     pyglet.app.run()
 
+
+def pathfind_arrow(start_box, end_box):
+    x1 = start_box[0] + start_box[2] / 2
+    y1 = start_box[1] + start_box[3]
+    x2 = end_box[0] + end_box[2] / 2
+    y2 = end_box[1] + end_box[3]
+
+    xdiff = x1 - x2
+    ydiff = y1 - y2
+
+    if abs(xdiff) > abs(ydiff):
+        if xdiff < 0:
+            x1 = x1 + (start_box[2] / 2)
+            x2 = x2 - (end_box[2] / 2)
+            y1 = y1 - (start_box[3] / 2)
+            y2 = y2 - (end_box[3] / 2)
+        else:
+            x1 = x1 - start_box[2] / 2
+            x2 = x2 + end_box[2] / 2
+            y1 = y1 - start_box[3] / 2
+            y2 = y2 - end_box[3] / 2
+    else:
+        if ydiff < 0:
+            y2 = y2 - end_box[3]
+        else:
+            y1 = y1 - start_box[3]
+
+
+
+    return x1, y1, x2, y2
 
 if __name__ == "__main__":
     read_file('small_env')
