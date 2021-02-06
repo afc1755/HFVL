@@ -1,6 +1,6 @@
 $drawBox(w1,100,700,150,100,text='WORD 1')
 $drawBox(w2,250,700,150,100,text='WORD 1')
-$drawBox(w3,400,700,150,100,text='WORD 1')
+$drawBox(w3,400,700,150,100,text='WORD ala 1')
 $drawBox(w4,550,700,150,100,text='WORD 1')
 $drawBox(w5,700,700,150,100,text='WORD 1')
 

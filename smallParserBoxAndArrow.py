@@ -40,8 +40,8 @@ def read_file(file_to_read):
     text_batch = pyglet.graphics.Batch()
     background = shapes.Rectangle(0, 0, 1200, 800, color=(255, 255, 255), batch=background_batch)
     lang_file = open(file_to_read)
-
     for line in lang_file:
+        #while line.strip().split(' ')[0].lower() != 'frame':
         if line[0] == '$':
             function_line = line.replace(')', '').replace('\n', '').split('(')
             if function_line[0] == '$drawBox':
