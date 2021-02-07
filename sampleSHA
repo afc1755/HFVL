@@ -6,11 +6,11 @@ $drawBox(w5,700,700,150,100,text='WORD 1')
 
 $drawBox(fbox,550,500,75,75,text='F')
 
-$drawBox(ow1,100,0,150,100,text='OUT WORD 1')
-$drawBox(ow2,250,0,150,100,text='OUT WORD 2')
-$drawBox(ow3,400,0,150,100,text='OUT WORD 3')
-$drawBox(ow4,550,0,150,100,text='OUT WORD 4')
-$drawBox(ow5,700,0,150,100,text='OUT WORD 5')
+$drawBox(ow1,100,60,150,100,text='OUT WORD 1')
+$drawBox(ow2,250,60,150,100,text='OUT WORD 2')
+$drawBox(ow3,400,60,150,100,text='OUT WORD 3')
+$drawBox(ow4,550,60,150,100,text='OUT WORD 4')
+$drawBox(ow5,700,60,150,100,text='OUT WORD 5')
 
 $drawArrow(w1,ow2)
 $drawArrow(w2,ow3)
