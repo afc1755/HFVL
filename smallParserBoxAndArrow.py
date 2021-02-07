@@ -42,22 +42,24 @@ BUTTON_Y = (NAV_BOX_HEIGHT - BUTTON_HEIGHT)/2
 
 
 def run_frames(file_to_read):
-    frames, b_batches, t_batches, f_batches = read_file(file_to_read)
-    fd = FrameDisplayer(frames, b_batches, t_batches, f_batches, len(frames) - 1)
+    frames = read_file(file_to_read)
+    fd = FrameDisplayer(frames, len(frames) - 1)
+    fd.prepare_frames()
     pyglet.app.run()
 
 
 class FrameDisplayer(pyglet.window.Window):
 
-    def __init__(self, frames, b_batches, t_batches, f_batches, total_frames):
+    def __init__(self, frames, total_frames):
         super(FrameDisplayer, self).__init__(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.frames = frames
         self.frame_num = 0
-        self.b_batches = b_batches
-        self.t_batches = t_batches
-        self.f_batches = f_batches
         self.total_frames = total_frames
         self.curr_speed = 0
+
+    def prepare_frames(self):
+        print('hey')
+
 
     def next_frame(self):
         if self.frame_num == self.total_frames:
@@ -81,38 +83,40 @@ class FrameDisplayer(pyglet.window.Window):
         dummy_arr = []
 
         self.clear()
-
+        b_batch = pyglet.graphics.Batch()
+        t_batch = pyglet.graphics.Batch()
+        f_batch = pyglet.graphics.Batch()
         background = shapes.Rectangle(0, NAV_BOX_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT - NAV_BOX_HEIGHT, color=WHITE,
-                                      batch=self.b_batches[self.frame_num])
+                                      batch=b_batch)
         nav_background = shapes.Rectangle(0, 0, WINDOW_WIDTH, NAV_BOX_HEIGHT, color=GRAY,
-                                          batch=self.b_batches[self.frame_num])
+                                          batch=b_batch)
         next_button = shapes.Rectangle(NEXT_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
-                                       batch=self.b_batches[self.frame_num])
+                                       batch=b_batch)
         previous_button = shapes.Rectangle(PREVIOUS_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
-                                           batch=self.b_batches[self.frame_num])
+                                           batch=b_batch)
         play_button = shapes.Rectangle(PLAY_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
-                                       batch=self.b_batches[self.frame_num])
+                                       batch=b_batch)
         next_button_text = pyglet.text.Label('Next',
                                              font_size=DEFAULT_TEXT_SIZE * 1.3,
                                              x=NEXT_BUTTON_X + DEFAULT_TEXT_SIZE * 3,
                                              y=BUTTON_Y + DEFAULT_TEXT_SIZE * 2,
                                              color=BLACK_ALPHA,
-                                             batch=self.t_batches[self.frame_num])
+                                             batch=t_batch)
 
         play_button_text = pyglet.text.Label('Play ' + str(SPEED_ARR[self.curr_speed]) + 'x',
                                              font_size=DEFAULT_TEXT_SIZE * 1.3,
                                              x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * .75,
                                              y=BUTTON_Y + DEFAULT_TEXT_SIZE * 2,
                                              color=BLACK_ALPHA,
-                                             batch=self.t_batches[self.frame_num])
+                                             batch=t_batch)
         previous_button_text = pyglet.text.Label('Previous',
                                                  font_size=DEFAULT_TEXT_SIZE * 1.3,
                                                  x=PREVIOUS_BUTTON_X + DEFAULT_TEXT_SIZE * 1.5,
                                                  y=BUTTON_Y + DEFAULT_TEXT_SIZE * 2,
                                                  color=BLACK_ALPHA,
-                                                 batch=self.t_batches[self.frame_num])
+                                                 batch=t_batch)
 
-        self.b_batches[self.frame_num].draw()
+        b_batch.draw()
         for curr_key in self.frames[self.frame_num]['box_dict']:
             curr_box = self.frames[self.frame_num]['box_dict'][curr_key]
             if curr_box[4] != '':
@@ -121,14 +125,14 @@ class FrameDisplayer(pyglet.window.Window):
                                                    x=curr_box[0] + DEFAULT_TEXT_SIZE,
                                                    y=curr_box[1] + curr_box[3] / 2,
                                                    color=curr_box[6] + (255,),
-                                                   batch=self.t_batches[self.frame_num]))
+                                                   batch=t_batch))
             dummy_arr.append(shapes.BorderedRectangle(curr_box[0], curr_box[1],
                                                       curr_box[2], curr_box[3],
                                                       border=SMALL_BOX_BORDER_BOLD if curr_box[5]
                                                       else SMALL_BOX_BORDER_NORMAL,
                                                       color=WHITE,
                                                       border_color=curr_box[6],
-                                                      batch=self.f_batches[self.frame_num]))
+                                                      batch=f_batch))
 
         for arrow_key in self.frames[self.frame_num]['arrow_dict']:
             arrow = self.frames[self.frame_num]['arrow_dict'][arrow_key]
@@ -136,7 +140,7 @@ class FrameDisplayer(pyglet.window.Window):
                                          arrow[2], arrow[3],
                                          width=LINE_BOLD_SIZE if arrow[4] else LINE_NORMAL_SIZE,
                                          color=arrow[5],
-                                         batch=self.f_batches[self.frame_num]))
+                                         batch=f_batch))
             glColor3ub(*arrow[5])
             if arrow[4]:
                 arrowhead_thickness = ARROW_BOLD_SIZE
@@ -148,8 +152,8 @@ class FrameDisplayer(pyglet.window.Window):
                                                     arrow[2] + arrowhead_thickness,
                                                     arrow[3] + arrowhead_thickness])).draw(GL_TRIANGLES)
 
-        self.f_batches[self.frame_num].draw()
-        self.t_batches[self.frame_num].draw()
+        f_batch.draw()
+        t_batch.draw()
 
     #@window.event
     def on_mouse_press(self, x, y, button, modifiers):
@@ -163,10 +167,6 @@ class FrameDisplayer(pyglet.window.Window):
 
 def read_file(file_to_read):
     frames = []
-
-    background_batch = []
-    foreground_batch = []
-    text_batch = []
 
     lang_file = open(file_to_read)
     box_dict = {}
@@ -293,10 +293,7 @@ def read_file(file_to_read):
             box_dict = {}
             arrow_dict = {}
             reading_frame_num += 1
-            foreground_batch.append(pyglet.graphics.Batch())
-            background_batch.append(pyglet.graphics.Batch())
-            text_batch.append(pyglet.graphics.Batch())
-    return frames, background_batch, text_batch, foreground_batch
+    return frames
 
 
 def pathfind_arrow(start_box, end_box):
