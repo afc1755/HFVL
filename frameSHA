@@ -72,7 +72,7 @@ Frame 5:
 Frame End
 
 Frame 6:
-    $modifyBox(fbox,color='red',bold=True,text='DOING MATH')
+    $modifyBox(fbox,color='red',bold=True,text='DO MATH')
 Frame End
 
 Frame 7:
@@ -87,11 +87,11 @@ Frame 8:
     $modifyBox(w3, text='aa bb cc dd',color='black',bold=False)
     $modifyBox(w4, text='aa bb cc dd',color='black',bold=False)
     $modifyBox(w5, text='aa bb cc dd',color='black',bold=False)
-    $modifyBox(ow1,text='new bytes',color='green',bold=True)
+    $modifyBox(ow1,text='41 1f 63 29',color='green',bold=True)
 Frame End
 
 Frame 9:
-    $modifyBox(fbox,color='black',bold=False)
+    $modifyBox(fbox,color='black',bold=False,text='F')
     $modifyArrow(fbox,ow1,color='black',bold=False)
 Frame End
 
