@@ -1,6 +1,11 @@
+from abc import ABC
+
 import pyglet
 from pyglet import shapes
+from pyglet import clock
 from pyglet.gl import *
+import time
+import copy
 
 # constant value declarations
 WINDOW_WIDTH = 1200
@@ -10,7 +15,6 @@ NAV_BOX_WIDTH = WINDOW_WIDTH
 NAV_BOX_HEIGHT = 60
 BUTTON_WIDTH = 100
 BUTTON_HEIGHT = 50
-
 
 SMALL_BOX_WIDTH = 120
 SMALL_BOX_HEIGHT = 100
@@ -34,32 +38,33 @@ ARROW_BOLD_SIZE = 12
 LINE_NORMAL_SIZE = 2
 LINE_BOLD_SIZE = 4
 SPEED_ARR = (0.25, 0.5, 1, 1.5, 2)
+TEXT_SPEED_ARR = ('1/4', '1/2', '1', '1.5', '2')
 
 NEXT_BUTTON_X = WINDOW_WIDTH - (2 * BUTTON_WIDTH)
 PREVIOUS_BUTTON_X = BUTTON_WIDTH
-PLAY_BUTTON_X = WINDOW_WIDTH/2 - (BUTTON_WIDTH / 2)
-BUTTON_Y = (NAV_BOX_HEIGHT - BUTTON_HEIGHT)/2
+PLAY_BUTTON_X = 1.15 * WINDOW_WIDTH / 3 - (BUTTON_WIDTH / 2)
+STOP_BUTTON_X = WINDOW_WIDTH / 2 - (BUTTON_WIDTH / 2)
+RESTART_BUTTON_X = 1.85 * WINDOW_WIDTH / 3 - (BUTTON_WIDTH / 2)
+BUTTON_Y = (NAV_BOX_HEIGHT - BUTTON_HEIGHT) / 2
 
 
 def run_frames(file_to_read):
     frames = read_file(file_to_read)
     fd = FrameDisplayer(frames, len(frames) - 1)
-    fd.prepare_frames()
+    game_clock = pyglet.clock.Clock()
     pyglet.app.run()
 
 
 class FrameDisplayer(pyglet.window.Window):
-
     def __init__(self, frames, total_frames):
         super(FrameDisplayer, self).__init__(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.frames = frames
         self.frame_num = 0
         self.total_frames = total_frames
         self.curr_speed = 0
-
-    def prepare_frames(self):
-        print('hey')
-
+        self.is_playing = False
+        self.time_diff = 0
+        self.old_time = time.time()
 
     def next_frame(self):
         if self.frame_num == self.total_frames:
@@ -76,11 +81,34 @@ class FrameDisplayer(pyglet.window.Window):
         print('previous frame!')
 
     def play_frames(self):
-        print('playing frames!')
+        clock.unschedule(self.call_draw)
+        clock.schedule_interval(self.call_draw, (1.5 / SPEED_ARR[self.curr_speed]))
+        if self.is_playing:
+            if self.curr_speed > 3:
+                self.curr_speed = 0
+            else:
+                self.curr_speed += 1
+        self.is_playing = True
+        print('playing frames at ' + str(SPEED_ARR[self.curr_speed]) + 'x speed')
 
-    #@window.event
+    def call_draw(self, dt):
+        self.on_draw()
+
+    def stop_frames(self):
+        clock.unschedule(self.call_draw)
+        self.is_playing = False
+        print('stopping frames!')
+
+    def restart(self):
+        self.frame_num = 0
+        print('restarting frames!')
+
     def on_draw(self):
         dummy_arr = []
+        if self.is_playing and (time.time() - self.old_time) + self.time_diff >= (0.8 / SPEED_ARR[self.curr_speed]):
+            self.next_frame()
+            self.time_diff = 0
+            self.old_time = time.time()
 
         self.clear()
         b_batch = pyglet.graphics.Batch()
@@ -96,6 +124,10 @@ class FrameDisplayer(pyglet.window.Window):
                                            batch=b_batch)
         play_button = shapes.Rectangle(PLAY_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
                                        batch=b_batch)
+        stop_button = shapes.Rectangle(STOP_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
+                                       batch=b_batch)
+        restart_button = shapes.Rectangle(RESTART_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
+                                          batch=b_batch)
         next_button_text = pyglet.text.Label('Next',
                                              font_size=DEFAULT_TEXT_SIZE * 1.3,
                                              x=NEXT_BUTTON_X + DEFAULT_TEXT_SIZE * 3,
@@ -103,18 +135,48 @@ class FrameDisplayer(pyglet.window.Window):
                                              color=BLACK_ALPHA,
                                              batch=t_batch)
 
-        play_button_text = pyglet.text.Label('Play ' + str(SPEED_ARR[self.curr_speed]) + 'x',
-                                             font_size=DEFAULT_TEXT_SIZE * 1.3,
-                                             x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * .75,
-                                             y=BUTTON_Y + DEFAULT_TEXT_SIZE * 2,
-                                             color=BLACK_ALPHA,
-                                             batch=t_batch)
+        if self.is_playing:
+            play_button_text = pyglet.text.Label('Playing @ ' + TEXT_SPEED_ARR[self.curr_speed] + 'x',
+                                                 font_size=DEFAULT_TEXT_SIZE,
+                                                 x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * .25,
+                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .5),
+                                                 color=BLACK_ALPHA,
+                                                 batch=t_batch)
+        else:
+            play_button_text = pyglet.text.Label('Play @ ' + TEXT_SPEED_ARR[self.curr_speed] + 'x',
+                                                 font_size=DEFAULT_TEXT_SIZE,
+                                                 x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * 1.2,
+                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .5),
+                                                 color=BLACK_ALPHA,
+                                                 batch=t_batch)
+
         previous_button_text = pyglet.text.Label('Previous',
                                                  font_size=DEFAULT_TEXT_SIZE * 1.3,
                                                  x=PREVIOUS_BUTTON_X + DEFAULT_TEXT_SIZE * 1.5,
-                                                 y=BUTTON_Y + DEFAULT_TEXT_SIZE * 2,
+                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                                  color=BLACK_ALPHA,
                                                  batch=t_batch)
+        stop_button_text = pyglet.text.Label('Stop',
+                                             font_size=DEFAULT_TEXT_SIZE * 1.3,
+                                             x=STOP_BUTTON_X + DEFAULT_TEXT_SIZE * 3,
+                                             y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                             color=BLACK_ALPHA,
+                                             batch=t_batch)
+
+        restart_button_text = pyglet.text.Label('Restart',
+                                                font_size=DEFAULT_TEXT_SIZE * 1.3,
+                                                x=RESTART_BUTTON_X + DEFAULT_TEXT_SIZE * 2.1,
+                                                y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                                color=BLACK_ALPHA,
+                                                batch=t_batch)
+
+        frame_text = pyglet.text.Label('Frame ' + str(self.frame_num) + '/ ' + str(self.total_frames),
+                                       font_name='Courier',
+                                       font_size=DEFAULT_TEXT_SIZE,
+                                       x=DEFAULT_TEXT_SIZE/4,
+                                       y=WINDOW_HEIGHT - DEFAULT_TEXT_SIZE,
+                                       color=BLACK_ALPHA,
+                                       batch=t_batch)
 
         b_batch.draw()
         for curr_key in self.frames[self.frame_num]['box_dict']:
@@ -155,7 +217,6 @@ class FrameDisplayer(pyglet.window.Window):
         f_batch.draw()
         t_batch.draw()
 
-    #@window.event
     def on_mouse_press(self, x, y, button, modifiers):
         if NEXT_BUTTON_X <= x <= NEXT_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
             self.next_frame()
@@ -163,6 +224,10 @@ class FrameDisplayer(pyglet.window.Window):
             self.previous_frame()
         elif PLAY_BUTTON_X <= x <= PLAY_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
             self.play_frames()
+        elif STOP_BUTTON_X <= x <= STOP_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
+            self.stop_frames()
+        elif RESTART_BUTTON_X <= x <= RESTART_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
+            self.restart()
 
 
 def read_file(file_to_read):
@@ -170,7 +235,9 @@ def read_file(file_to_read):
 
     lang_file = open(file_to_read)
     box_dict = {}
+    old_box_dict = {}
     arrow_dict = {}
+    old_arrow_dict = {}
     reading_frame_num = 0
 
     for line in lang_file:
@@ -208,8 +275,11 @@ def read_file(file_to_read):
                                     user_box_color = GREEN
                                 elif attribute_args[1].strip('\'').lower() == 'red':
                                     user_box_color = RED
+                                elif attribute_args[1].strip('\'').lower() == 'black':
+                                    user_box_color = BLACK
                                 else:
-                                    print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                                    print(
+                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
                     box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color]
                 elif function_line[0] == '$drawArrow':
                     arrow_args = function_line[1].split(',')
@@ -233,10 +303,13 @@ def read_file(file_to_read):
                                     user_arr_color = GREEN
                                 elif attribute_args[1].strip('\'').lower() == 'red':
                                     user_arr_color = RED
+                                elif attribute_args[1].strip('\'').lower() == 'black':
+                                    user_arr_color = BLACK
                                 else:
-                                    print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                                    print(
+                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
                     x1, y1, x2, y2 = pathfind_arrow(box_dict[start_box_id], box_dict[end_box_id])
-                    arrow_dict[start_box_id+end_box_id] = [x1, y1, x2, y2, arr_bold, user_arr_color]
+                    arrow_dict[start_box_id + end_box_id] = [x1, y1, x2, y2, arr_bold, user_arr_color]
 
                 elif function_line[0] == '$modifyBox':
                     box_args = function_line[1].split(',')
@@ -259,6 +332,8 @@ def read_file(file_to_read):
                                 box_dict[box_id][6] = GREEN
                             elif attribute_args[1].strip('\'').lower() == 'red':
                                 box_dict[box_id][6] = RED
+                            elif attribute_args[1].strip('\'').lower() == 'black':
+                                box_dict[box_id][6] = BLACK
                             else:
                                 print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
 
@@ -267,7 +342,8 @@ def read_file(file_to_read):
                     start_box_id = arrow_args[0].replace('\'', '')
                     end_box_id = arrow_args[1].replace('\'', '')
                     if (start_box_id + end_box_id) not in arrow_dict:
-                        print('boxes not found for arrow to go between\nbox ids: ' + start_box_id + ' and ' + end_box_id)
+                        print(
+                            'boxes not found for arrow to go between\nbox ids: ' + start_box_id + ' and ' + end_box_id)
                     if len(arrow_args) > 2:
                         for i in range(2, len(arrow_args)):
                             attribute_args = arrow_args[i].split('=')
@@ -283,15 +359,20 @@ def read_file(file_to_read):
                                     arrow_dict[start_box_id + end_box_id][5] = GREEN
                                 elif attribute_args[1].strip('\'').lower() == 'red':
                                     arrow_dict[start_box_id + end_box_id][5] = RED
+                                elif attribute_args[1].strip('\'').lower() == 'black':
+                                    arrow_dict[start_box_id + end_box_id][5] = BLACK
                                 else:
-                                    print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                                    print(
+                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
             else:
                 print('error while parsing\ninvalid function at line: \n\t' + line)
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
             frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict})
         else:
-            box_dict = {}
-            arrow_dict = {}
+            old_box_dict = box_dict
+            old_arrow_dict = arrow_dict
+            box_dict = copy.deepcopy(old_box_dict)
+            arrow_dict = copy.deepcopy(old_arrow_dict)
             reading_frame_num += 1
     return frames
 
@@ -327,4 +408,3 @@ def pathfind_arrow(start_box, end_box):
 
 if __name__ == "__main__":
     run_frames('frameSHA')
-
