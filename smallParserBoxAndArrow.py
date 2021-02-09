@@ -51,7 +51,6 @@ BUTTON_Y = (NAV_BOX_HEIGHT - BUTTON_HEIGHT) / 2
 def run_frames(file_to_read):
     frames = read_file(file_to_read)
     fd = FrameDisplayer(frames, len(frames) - 1)
-    game_clock = pyglet.clock.Clock()
     pyglet.app.run()
 
 
