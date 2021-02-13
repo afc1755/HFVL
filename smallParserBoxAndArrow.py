@@ -1,5 +1,3 @@
-from abc import ABC
-
 import pyglet
 from pyglet import shapes
 from pyglet import clock
@@ -282,8 +280,8 @@ def read_file(file_to_read):
                     box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color]
                 elif function_line[0] == '$drawArrow':
                     arrow_args = function_line[1].split(',')
-                    start_box_id = arrow_args[0].replace('\'', '')
-                    end_box_id = arrow_args[1].replace('\'', '')
+                    start_box_id = arrow_args[0].strip().replace('\'', '')
+                    end_box_id = arrow_args[1].strip().replace('\'', '')
                     arr_bold = False
                     user_arr_color = BLACK
 
@@ -382,8 +380,18 @@ def pathfind_arrow(start_box, end_box):
     x2 = end_box[0] + end_box[2] / 2
     y2 = end_box[1] + end_box[3]
 
-    xdiff = x1 - x2
-    ydiff = y1 - y2
+    if start_box[0] < end_box[0]:
+        xdiff = start_box[0] + start_box[2] - end_box[0]
+    elif start_box[0] > end_box[0]:
+        xdiff = start_box[0] - end_box[0] + end_box[2]
+    else:
+        xdiff = 0
+    if start_box[1] > end_box[1]:
+        ydiff = start_box[1] - end_box[1] + end_box[3]
+    elif start_box[1] < end_box[1]:
+        ydiff = start_box[1] + start_box[3] - end_box[1]
+    else:
+        ydiff = 0
 
     if abs(xdiff) > abs(ydiff):
         if xdiff < 0:
@@ -406,4 +414,4 @@ def pathfind_arrow(start_box, end_box):
 
 
 if __name__ == "__main__":
-    run_frames('frameSHA')
+    run_frames('fullShaStartFrame')

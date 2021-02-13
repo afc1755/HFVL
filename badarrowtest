@@ -1,0 +1,5 @@
+Frame 1:
+    $drawBox(lb30, 250, 300, 150, 40, text='30 left bit rotation')
+    $drawBox(lb30o, 400, 200, 150, 40, text='Output')
+    $drawArrow(lb30, lb30o)
+Frame End

@@ -1,0 +1,64 @@
+Frame 1:
+    $drawBox(w1,100,700,150,100,text='WORD 1 ROUND 0')
+    $drawBox(w2,250,700,150,100,text='WORD 2 ROUND 0')
+    $drawBox(w3,400,700,150,100,text='WORD 3 ROUND 0')
+    $drawBox(w4,550,700,150,100,text='WORD 4 ROUND 0')
+    $drawBox(w5,700,700,150,100,text='WORD 5 ROUND 0')
+
+    $drawBox(f,550,600,75,75,text='F')
+
+    $drawBox(am1, 700,625,150,40,text='Addition mod 2^32')
+    $drawBox(am2, 700, 495, 150,40,text='Addition mod 2^32')
+    $drawBox(am3, 700, 365, 150,40,text='Addition mod 2^32')
+    $drawBox(am4, 700, 235, 150,40,text='Addition mod 2^32')
+
+    $drawBox(am1o, 700, 560, 150, 40,text='Output')
+    $drawBox(am2o, 700, 430, 150, 40,text='Output')
+    $drawBox(am3o, 700, 300, 150, 40,text='Output')
+
+    $drawBox(lb5, 100, 495, 150, 40, text ='5 left bit rotation')
+    $drawBox(lb5o, 400, 495, 150, 40, text ='output')
+
+    $drawBox(lb30, 250, 300, 150, 40, text='30 left bit rotation')
+    $drawBox(lb30o, 400, 200, 150, 40, text='Output')
+
+    $drawBox(exw, 900, 365, 150, 40,text='Expanded Word:')
+    $drawBox(rc, 900, 235, 150, 40,text='Expanded Word:')
+
+    $drawBox(ow1,100,60,150,100,text='WORD 1 ROUND 1')
+    $drawBox(ow2,250,60,150,100,text='WORD 2 ROUND 1')
+    $drawBox(ow3,400,60,150,100,text='WORD 3 ROUND 1')
+    $drawBox(ow4,550,60,150,100,text='WORD 4 ROUND 1')
+    $drawBox(ow5,700,60,150,100,text='WORD 5 ROUND 1')
+
+    $drawArrow(w1,ow2)
+    $drawArrow(w1,lb5)
+    $drawArrow(lb5,lb5o)
+    $drawArrow(lb5o,am2)
+
+    $drawArrow(w2,lb30)
+    $drawArrow(w2,f)
+    $drawArrow(lb30,lb30o)
+    $drawArrow(lb30o,ow3)
+
+    $drawArrow(w3,ow4)
+    $drawArrow(w3, f)
+
+    $drawArrow(w4, f)
+    $drawArrow(w4, ow5)
+
+    $drawArrow(w5, am1)
+
+    $drawArrow(f, am1)
+    $drawArrow(am1,am1o)
+    $drawArrow(am1o,am2)
+    $drawArrow(am2,am2o)
+    $drawArrow(am2o,am3)
+    $drawArrow(am3,am3o)
+    $drawArrow(am3o,am4)
+    $drawArrow(am4,ow1)
+    $drawArrow(exw, am3)
+    $drawArrow(rc, am4)
+
+Frame End
+
