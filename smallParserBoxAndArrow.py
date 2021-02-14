@@ -167,7 +167,7 @@ class FrameDisplayer(pyglet.window.Window):
                                                 color=BLACK_ALPHA,
                                                 batch=t_batch)
 
-        frame_text = pyglet.text.Label('Frame ' + str(self.frame_num) + '/ ' + str(self.total_frames),
+        frame_text = pyglet.text.Label('Frame ' + str(self.frame_num) + '/' + str(self.total_frames),
                                        font_name='Courier',
                                        font_size=DEFAULT_TEXT_SIZE,
                                        x=DEFAULT_TEXT_SIZE/4,
@@ -195,21 +195,18 @@ class FrameDisplayer(pyglet.window.Window):
 
         for arrow_key in self.frames[self.frame_num]['arrow_dict']:
             arrow = self.frames[self.frame_num]['arrow_dict'][arrow_key]
-            dummy_arr.append(shapes.Line(arrow[0], arrow[1],
-                                         arrow[2], arrow[3],
-                                         width=LINE_BOLD_SIZE if arrow[4] else LINE_NORMAL_SIZE,
-                                         color=arrow[5],
-                                         batch=f_batch))
-            glColor3ub(*arrow[5])
-            if arrow[4]:
+            for arrow_line in arrow[0]:
+                dummy_arr.append(shapes.Line(arrow_line[0], arrow_line[1],
+                                             arrow_line[2], arrow_line[3],
+                                             width=LINE_BOLD_SIZE if arrow[1] else LINE_NORMAL_SIZE,
+                                             color=arrow[2],
+                                             batch=f_batch))
+            glColor3ub(*arrow[2])
+            if arrow[1]:
                 arrowhead_thickness = ARROW_BOLD_SIZE
             else:
                 arrowhead_thickness = ARROW_NORMAL_SIZE
-            pyglet.graphics.vertex_list(3, ('v2f', [arrow[2], arrow[3],
-                                                    arrow[2] - arrowhead_thickness,
-                                                    arrow[3] + arrowhead_thickness,
-                                                    arrow[2] + arrowhead_thickness,
-                                                    arrow[3] + arrowhead_thickness])).draw(GL_TRIANGLES)
+            pyglet.graphics.vertex_list(3, ('v2f', create_arrowhead(arrow, arrowhead_thickness))).draw(GL_TRIANGLES)
 
         f_batch.draw()
         t_batch.draw()
@@ -232,9 +229,7 @@ def read_file(file_to_read):
 
     lang_file = open(file_to_read)
     box_dict = {}
-    old_box_dict = {}
     arrow_dict = {}
-    old_arrow_dict = {}
     reading_frame_num = 0
 
     for line in lang_file:
@@ -305,8 +300,9 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
-                    x1, y1, x2, y2 = pathfind_arrow(box_dict[start_box_id], box_dict[end_box_id])
-                    arrow_dict[start_box_id + end_box_id] = [x1, y1, x2, y2, arr_bold, user_arr_color]
+                    arrow_coords = pathfind_arrow(box_dict, start_box_id, end_box_id, arrow_dict)
+                    arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
+                                                             start_box_id, end_box_id]
 
                 elif function_line[0] == '$modifyBox':
                     box_args = function_line[1].split(',')
@@ -346,18 +342,18 @@ def read_file(file_to_read):
                             attribute_args = arrow_args[i].split('=')
                             if attribute_args[0].strip().lower() == 'bold':
                                 if attribute_args[1].strip('\'').lower() == 'true':
-                                    arrow_dict[start_box_id + end_box_id][4] = True
+                                    arrow_dict[start_box_id + end_box_id][1] = True
                                 else:
-                                    arrow_dict[start_box_id + end_box_id][4] = False
+                                    arrow_dict[start_box_id + end_box_id][1] = False
                             elif attribute_args[0].strip().lower() == 'color':
                                 if attribute_args[1].strip('\'').lower() == 'blue':
-                                    arrow_dict[start_box_id + end_box_id][5] = BLUE
+                                    arrow_dict[start_box_id + end_box_id][2] = BLUE
                                 elif attribute_args[1].strip('\'').lower() == 'green':
-                                    arrow_dict[start_box_id + end_box_id][5] = GREEN
+                                    arrow_dict[start_box_id + end_box_id][2] = GREEN
                                 elif attribute_args[1].strip('\'').lower() == 'red':
-                                    arrow_dict[start_box_id + end_box_id][5] = RED
+                                    arrow_dict[start_box_id + end_box_id][2] = RED
                                 elif attribute_args[1].strip('\'').lower() == 'black':
-                                    arrow_dict[start_box_id + end_box_id][5] = BLACK
+                                    arrow_dict[start_box_id + end_box_id][2] = BLACK
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
@@ -374,43 +370,120 @@ def read_file(file_to_read):
     return frames
 
 
-def pathfind_arrow(start_box, end_box):
-    x1 = start_box[0] + start_box[2] / 2
-    y1 = start_box[1] + start_box[3]
-    x2 = end_box[0] + end_box[2] / 2
-    y2 = end_box[1] + end_box[3]
+def pathfind_arrow(box_dict, start_box_id, end_box_id, arrow_dict):
+    start_box = box_dict[start_box_id]
+    end_box = box_dict[end_box_id]
+    x1 = start_box[0]
+    y1 = start_box[1]
 
     if start_box[0] < end_box[0]:
-        xdiff = start_box[0] + start_box[2] - end_box[0]
+        xdiff = start_box[0] + (start_box[2] - end_box[0])
     elif start_box[0] > end_box[0]:
-        xdiff = start_box[0] - end_box[0] + end_box[2]
+        xdiff = start_box[0] - (end_box[0] + end_box[2])
     else:
         xdiff = 0
     if start_box[1] > end_box[1]:
-        ydiff = start_box[1] - end_box[1] + end_box[3]
+        ydiff = start_box[1] - (end_box[1] + end_box[3])
     elif start_box[1] < end_box[1]:
-        ydiff = start_box[1] + start_box[3] - end_box[1]
+        ydiff = start_box[1] + (start_box[3] - end_box[1])
     else:
         ydiff = 0
 
-    if abs(xdiff) > abs(ydiff):
-        if xdiff < 0:
-            x1 = x1 + (start_box[2] / 2)
-            x2 = x2 - (end_box[2] / 2)
-            y1 = y1 - (start_box[3] / 2)
-            y2 = y2 - (end_box[3] / 2)
-        else:
-            x1 = x1 - start_box[2] / 2
-            x2 = x2 + end_box[2] / 2
-            y1 = y1 - start_box[3] / 2
-            y2 = y2 - end_box[3] / 2
-    else:
-        if ydiff < 0:
-            y2 = y2 - end_box[3]
-        else:
-            y1 = y1 - start_box[3]
+    bigx = abs(xdiff) > abs(ydiff)
 
-    return x1, y1, x2, y2
+    if abs(xdiff) > abs(ydiff):
+        if xdiff > 0:
+            desiredx = end_box[0] + end_box[2]
+            y1 = y1 + start_box[3] / 2
+            desiredy = end_box[1] + (end_box[3] / 2)
+        else:
+            x1 = x1 + start_box[2]
+            desiredx = end_box[0]
+            y1 = y1 + start_box[3] / 2
+            desiredy = end_box[1] + (end_box[3] / 2)
+    else:
+        if ydiff > 0:
+            x1 = x1 + start_box[2] / 2
+            desiredy = end_box[1] + end_box[3]
+            desiredx = end_box[0] + end_box[2] / 2
+        else:
+            x1 = x1 + start_box[2] / 2
+            y1 = y1 + start_box[3]
+            desiredx = end_box[0] + end_box[2] / 2
+            desiredy = end_box[1]
+
+    oldx = x1
+    oldy = y1
+
+    currx = x1
+    curry = y1
+
+    vert_list = []
+    displacement = True
+    lasty = False
+
+    while currx != desiredx or curry != desiredy:
+        if displacement:
+            displacement = False
+            if bigx:
+                currx = (desiredx + currx) / 2
+                curry = oldy
+                lasty = False
+            else:
+                curry = (desiredy + curry) / 2
+                currx = oldx
+                lasty = True
+
+        elif lasty and currx - desiredx != 0:
+            currx = desiredx
+            curry = oldy
+            lasty = False
+        else:
+            curry = desiredy
+            currx = oldx
+            lasty = True
+
+        vert_list.append([oldx, oldy, currx, curry])
+        oldx = currx
+        oldy = curry
+
+    return vert_list
+
+
+def create_arrowhead(arrow, arrowhead_thickness):
+    arrow_lines = arrow[0]
+    startx = arrow_lines[-1][0]
+    starty = arrow_lines[-1][1]
+    endx = arrow_lines[-1][2]
+    endy = arrow_lines[-1][3]
+
+    points = [endx, endy]
+    diffx = endx - startx
+    diffy = endy - starty
+
+    if diffx < 0 and diffy == 0:
+        points.extend([endx + arrowhead_thickness,
+                       endy - arrowhead_thickness,
+                       endx + arrowhead_thickness,
+                       endy + arrowhead_thickness])
+    elif diffx > 0 and diffy == 0:
+        points.extend([endx - arrowhead_thickness,
+                       endy + arrowhead_thickness,
+                       endx - arrowhead_thickness,
+                       endy - arrowhead_thickness])
+    elif diffx == 0 and diffy < 0:
+        points.extend([endx - arrowhead_thickness,
+                       endy + arrowhead_thickness,
+                       endx + arrowhead_thickness,
+                       endy + arrowhead_thickness])
+    elif diffx == 0 and diffy > 0:
+        points.extend([endx + arrowhead_thickness,
+                       endy - arrowhead_thickness,
+                       endx - arrowhead_thickness,
+                       endy - arrowhead_thickness])
+    else:
+        print('Bad Last Arrow: Code Error!' + str(arrow))
+    return points
 
 
 if __name__ == "__main__":
