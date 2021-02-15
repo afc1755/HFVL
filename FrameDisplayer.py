@@ -54,7 +54,7 @@ class FrameDisplayer(pyglet.window.Window):
             print('stopping frames!')
         else:
             clock.unschedule(self.call_draw)
-            clock.schedule_interval(self.call_draw, (1.5 / SPEED_ARR[self.curr_speed]))
+            clock.schedule_interval(self.call_draw, (0.8 / SPEED_ARR[self.curr_speed]))
             self.is_playing = True
             print('playing frames at ' + str(SPEED_ARR[self.curr_speed]) + 'x speed')
 
@@ -82,81 +82,104 @@ class FrameDisplayer(pyglet.window.Window):
         previous_button = shapes.Rectangle(PREVIOUS_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
                                            batch=b_batch)
         play_pause_button = shapes.Rectangle(PLAY_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
-                                       batch=b_batch)
+                                             batch=b_batch)
         faster_up_button = shapes.Rectangle(FAST_BUTTON_X, BUTTON_Y, SMALL_BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
-                                       batch=b_batch)
+                                            batch=b_batch)
         slower_button = shapes.Rectangle(SLOW_BUTTON_X, BUTTON_Y, SMALL_BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
-                                       batch=b_batch)
+                                         batch=b_batch)
         restart_button = shapes.Rectangle(RESTART_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
                                           batch=b_batch)
-        next_button_text = pyglet.text.Label('Next',
-                                             font_size=DEFAULT_TEXT_SIZE * 1.3,
-                                             x=NEXT_BUTTON_X + DEFAULT_TEXT_SIZE * 3,
-                                             y=BUTTON_Y + DEFAULT_TEXT_SIZE * 2,
-                                             color=BLACK_ALPHA,
-                                             batch=t_batch)
 
+        title_text = pyglet.text.Label(self.frames[self.frame_num]['global_dict']['title'][0],
+                                       font_name=FONT_FAMILY,
+                                       font_size=TITLE_TEXT_SIZE,
+                                       x=WINDOW_WIDTH / 2 -
+                                         (8 * len(self.frames[self.frame_num]['global_dict']['title'][0])),
+                                       y=TITLE_Y,
+                                       color=self.frames[self.frame_num]['global_dict']['title'][1] + (255,),
+                                       batch=t_batch)
         if self.is_playing:
             play_button_text = pyglet.text.Label('Stop',
-                                                 font_size=DEFAULT_TEXT_SIZE,
-                                                 x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * .25,
-                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .5),
+                                                 font_name=FONT_FAMILY,
+                                                 font_size=BUTTON_TEXT_SIZE,
+                                                 bold=True,
+                                                 x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * 3,
+                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                                  color=BLACK_ALPHA,
                                                  batch=t_batch)
         else:
             play_button_text = pyglet.text.Label('Play',
-                                                 font_size=DEFAULT_TEXT_SIZE,
-                                                 x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * 1.2,
-                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .5),
-                                                 color=BLACK_ALPHA,
-                                                 batch=t_batch)
-
-        previous_button_text = pyglet.text.Label('Previous',
-                                                 font_size=DEFAULT_TEXT_SIZE * 1.3,
-                                                 x=PREVIOUS_BUTTON_X + DEFAULT_TEXT_SIZE * 1.5,
+                                                 font_name=FONT_FAMILY,
+                                                 font_size=BUTTON_TEXT_SIZE,
+                                                 bold=True,
+                                                 x=PLAY_BUTTON_X + DEFAULT_TEXT_SIZE * 2.8,
                                                  y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                                  color=BLACK_ALPHA,
                                                  batch=t_batch)
         slow_button_text = pyglet.text.Label('<<',
-                                                 font_size=DEFAULT_TEXT_SIZE * 1.3,
-                                                 x=SLOW_BUTTON_X + DEFAULT_TEXT_SIZE * 1.5,
-                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
-                                                 color=BLACK_ALPHA,
-                                                 batch=t_batch)
+                                             font_name=FONT_FAMILY,
+                                             font_size=BUTTON_TEXT_SIZE,
+                                             bold=True,
+                                             x=SLOW_BUTTON_X + DEFAULT_TEXT_SIZE * 1.5,
+                                             y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                             color=BLACK_ALPHA,
+                                             batch=t_batch)
         fast_button_text = pyglet.text.Label('>>',
-                                             font_size=DEFAULT_TEXT_SIZE * 1.3,
+                                             font_name=FONT_FAMILY,
+                                             font_size=BUTTON_TEXT_SIZE,
+                                             bold=True,
                                              x=FAST_BUTTON_X + DEFAULT_TEXT_SIZE * 1.5,
                                              y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                              color=BLACK_ALPHA,
                                              batch=t_batch)
-
+        previous_button_text = pyglet.text.Label('Previous',
+                                                 font_name=FONT_FAMILY,
+                                                 font_size=BUTTON_TEXT_SIZE,
+                                                 bold=True,
+                                                 x=PREVIOUS_BUTTON_X + DEFAULT_TEXT_SIZE * 0.6,
+                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                                 color=BLACK_ALPHA,
+                                                 batch=t_batch)
+        next_button_text = pyglet.text.Label('Next',
+                                             font_name=FONT_FAMILY,
+                                             font_size=BUTTON_TEXT_SIZE,
+                                             bold=True,
+                                             x=NEXT_BUTTON_X + DEFAULT_TEXT_SIZE * 2.8,
+                                             y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                             color=BLACK_ALPHA,
+                                             batch=t_batch)
         restart_button_text = pyglet.text.Label('Restart',
-                                                font_size=DEFAULT_TEXT_SIZE * 1.3,
-                                                x=RESTART_BUTTON_X + DEFAULT_TEXT_SIZE * 2.1,
+                                                font_name=FONT_FAMILY,
+                                                font_size=BUTTON_TEXT_SIZE,
+                                                bold=True,
+                                                x=RESTART_BUTTON_X + DEFAULT_TEXT_SIZE * 1.2,
                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                                 color=BLACK_ALPHA,
                                                 batch=t_batch)
-
-        frame_text = pyglet.text.Label('Frame ' + str(self.frame_num) + '/' + str(self.total_frames),
-                                       font_name='Courier',
-                                       font_size=DEFAULT_TEXT_SIZE,
-                                       x=DEFAULT_TEXT_SIZE/4,
-                                       y=WINDOW_HEIGHT - DEFAULT_TEXT_SIZE,
-                                       color=BLACK_ALPHA,
-                                       batch=t_batch)
-        speed_text = pyglet.text.Label('Speed: ' + str(TEXT_SPEED_ARR[self.curr_speed]),
-                                       font_name='Courier',
-                                       font_size=DEFAULT_TEXT_SIZE,
-                                       x=DEFAULT_TEXT_SIZE / 4,
-                                       y=WINDOW_HEIGHT - DEFAULT_TEXT_SIZE * 2.5,
-                                       color=BLACK_ALPHA,
-                                       batch=t_batch)
+        if self.frames[self.frame_num]['global_dict']['frame_count_visible']:
+            frame_text = pyglet.text.Label('Frame ' + str(self.frame_num) + '/' + str(self.total_frames),
+                                           font_name=FONT_FAMILY,
+                                           font_size=BUTTON_TEXT_SIZE,
+                                           bold=True,
+                                           x=FRAME_INFO_X,
+                                           y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                           color=BLACK_ALPHA,
+                                           batch=t_batch)
+            speed_text = pyglet.text.Label('Speed: ' + str(TEXT_SPEED_ARR[self.curr_speed]),
+                                           font_name=FONT_FAMILY,
+                                           font_size=BUTTON_TEXT_SIZE,
+                                           x=SPEED_INFO_X,
+                                           bold=True,
+                                           y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                           color=BLACK_ALPHA,
+                                           batch=t_batch)
 
         b_batch.draw()
         for curr_key in self.frames[self.frame_num]['box_dict']:
             curr_box = self.frames[self.frame_num]['box_dict'][curr_key]
             if curr_box[4] != '':
                 dummy_arr.append(pyglet.text.Label(curr_box[4],
+                                                   font_name=FONT_FAMILY,
                                                    font_size=DEFAULT_TEXT_SIZE,
                                                    x=curr_box[0] + DEFAULT_TEXT_SIZE,
                                                    y=curr_box[1] + curr_box[3] / 2,

@@ -16,6 +16,7 @@ def read_file(file_to_read):
     lang_file = open(file_to_read)
     box_dict = {}
     arrow_dict = {}
+    global_dict = {'title': ['', BLACK], 'frame_count_visible': True}
 
     reading_frame_num = 0
 
@@ -26,7 +27,7 @@ def read_file(file_to_read):
         elif line.strip().split(' ')[0].lower() != 'frame':
             if line[0] == '$':
                 function_line = line.replace(')', '').replace('\n', '').split('(')
-                if function_line[0] == '$drawBox':
+                if function_line[0] == '$drawBox' or function_line[0] == '$db':
                     box_text = ''
                     box_args = function_line[1].split(',')
                     box_id = box_args[0].replace('\'', '')
@@ -60,7 +61,7 @@ def read_file(file_to_read):
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
                     box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color]
-                elif function_line[0] == '$drawArrow':
+                elif function_line[0] == '$drawArrow' or function_line[0] == '$da':
                     arrow_args = function_line[1].split(',')
                     start_box_id = arrow_args[0].strip().replace('\'', '')
                     end_box_id = arrow_args[1].strip().replace('\'', '')
@@ -95,7 +96,7 @@ def read_file(file_to_read):
                     arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
                                                              start_box_id, end_box_id, curr_arrowhead]
 
-                elif function_line[0] == '$modifyBox':
+                elif function_line[0] == '$modifyBox' or function_line[0] == '$mb':
                     box_args = function_line[1].split(',')
                     box_id = box_args[0].replace('\'', '').strip()
                     if box_id not in box_dict:
@@ -104,7 +105,7 @@ def read_file(file_to_read):
                         attribute_args = box_args[i].split('=')
                         if attribute_args[0].strip().lower() == 'text':
                             box_dict[box_id][4] = attribute_args[1].replace('\'', '')
-                        if attribute_args[0].strip().lower() == 'bold':
+                        elif attribute_args[0].strip().lower() == 'bold':
                             if attribute_args[1].strip('\'').lower() == 'true':
                                 box_dict[box_id][5] = True
                             else:
@@ -121,7 +122,7 @@ def read_file(file_to_read):
                             else:
                                 print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
 
-                elif function_line[0] == '$modifyArrow':
+                elif function_line[0] == '$modifyArrow' or function_line[0] == '$ma':
                     arrow_args = function_line[1].split(',')
                     start_box_id = arrow_args[0].replace('\'', '')
                     end_box_id = arrow_args[1].replace('\'', '')
@@ -152,10 +153,35 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                elif function_line[0] == '$modifyTitle' or function_line[0] == '$mt':
+                    title_args = function_line[1].split(',')
+                    if len(title_args) > 0:
+                        for i in range(0, len(title_args)):
+                            attribute_args = title_args[i].split('=')
+                            if attribute_args[0].strip().lower() == 'text':
+                                global_dict['title'][0] = attribute_args[1].replace('\'', '')
+                            elif attribute_args[0].strip().lower() == 'color':
+                                if attribute_args[1].strip('\'').lower() == 'blue':
+                                    global_dict['title'][1] = BLUE
+                                elif attribute_args[1].strip('\'').lower() == 'green':
+                                    global_dict['title'][1] = GREEN
+                                elif attribute_args[1].strip('\'').lower() == 'red':
+                                    global_dict['title'][1] = RED
+                                elif attribute_args[1].strip('\'').lower() == 'black':
+                                    global_dict['title'][1] = BLACK
+                                else:
+                                    print(
+                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                elif function_line[0] == '$hideFrameCount' or function_line[0] == '$hfc':
+                    global_dict['frame_count_visible'] = False
+                elif function_line[0] == '$showFrameCount' or function_line[0] == '$sfc':
+                    global_dict['frame_count_visible'] = True
+                else:
+                    print('unknown function: ' + function_line[0])
             else:
                 print('error while parsing\ninvalid function at line: \n\t' + line)
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
-            frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict})
+            frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict, 'global_dict': global_dict})
         else:
             old_box_dict = box_dict
             old_arrow_dict = arrow_dict
@@ -276,7 +302,7 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
                        endx - arrowhead_thickness,
                        endy - arrowhead_thickness])
     else:
-        print('Bad Last Arrow: Code Error!' + str(arrow))
+        print('Bad Last Arrow: Code Error!' + str(arrow_lines))
     return points
 
 
