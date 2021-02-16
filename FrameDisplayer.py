@@ -163,7 +163,7 @@ class FrameDisplayer(pyglet.window.Window):
                                            bold=True,
                                            x=FRAME_INFO_X,
                                            y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
-                                           color=BLACK_ALPHA,
+                                           color=WHITE_ALPHA,
                                            batch=t_batch)
             speed_text = pyglet.text.Label('Speed: ' + str(TEXT_SPEED_ARR[self.curr_speed]),
                                            font_name=FONT_FAMILY,
@@ -171,7 +171,7 @@ class FrameDisplayer(pyglet.window.Window):
                                            x=SPEED_INFO_X,
                                            bold=True,
                                            y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
-                                           color=BLACK_ALPHA,
+                                           color=WHITE_ALPHA,
                                            batch=t_batch)
 
         b_batch.draw()
@@ -183,6 +183,7 @@ class FrameDisplayer(pyglet.window.Window):
                                                    font_size=DEFAULT_TEXT_SIZE,
                                                    x=curr_box[0] + DEFAULT_TEXT_SIZE,
                                                    y=curr_box[1] + curr_box[3] / 2,
+                                                   bold=curr_box[5],
                                                    color=curr_box[6] + (255,),
                                                    batch=t_batch))
             dummy_arr.append(shapes.BorderedRectangle(curr_box[0], curr_box[1],

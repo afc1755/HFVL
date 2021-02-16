@@ -60,7 +60,7 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
-                    box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color]
+                    box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color, {}]
                 elif function_line[0] == '$drawArrow' or function_line[0] == '$da':
                     arrow_args = function_line[1].split(',')
                     start_box_id = arrow_args[0].strip().replace('\'', '')
@@ -91,10 +91,11 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
-                    arrow_coords = pathfind_arrow(box_dict, start_box_id, end_box_id, arrow_dict)
-                    curr_arrowhead = create_arrowhead(arrow_coords, arrowhead_thickness)
-                    arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
-                                                             start_box_id, end_box_id, curr_arrowhead]
+                    arrow_coords = pathfind_arrow(box_dict, start_box_id, end_box_id)
+                    if len(arrow_coords) > 0:
+                        curr_arrowhead = create_arrowhead(arrow_coords, arrowhead_thickness)
+                        arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
+                                                                 start_box_id, end_box_id, curr_arrowhead]
 
                 elif function_line[0] == '$modifyBox' or function_line[0] == '$mb':
                     box_args = function_line[1].split(',')
@@ -191,120 +192,219 @@ def read_file(file_to_read):
     return frames
 
 
-def pathfind_arrow(box_dict, start_box_id, end_box_id, arrow_dict):
+def calculate_displacement(arrow_num):
+    if arrow_num == 0:
+        return 0
+    elif arrow_num % 2 == 0:
+        return -ARROW_BOLD_SIZE * (arrow_num - 1)
+    else:
+        return ARROW_BOLD_SIZE * arrow_num
+
+
+def pathfind_arrow(box_dict, start_box_id, end_box_id):
     start_box = box_dict[start_box_id]
     end_box = box_dict[end_box_id]
-    x1 = start_box[0]
-    y1 = start_box[1]
 
     if start_box[0] < end_box[0]:
-        xdiff = start_box[0] + (start_box[2] - end_box[0])
+        x_diff = start_box[0] + (start_box[2] - end_box[0])
     elif start_box[0] > end_box[0]:
-        xdiff = start_box[0] - (end_box[0] + end_box[2])
+        x_diff = start_box[0] - (end_box[0] + end_box[2])
     else:
-        xdiff = 0
+        x_diff = 0
     if start_box[1] > end_box[1]:
-        ydiff = start_box[1] - (end_box[1] + end_box[3])
+        y_diff = start_box[1] - (end_box[1] + end_box[3])
     elif start_box[1] < end_box[1]:
-        ydiff = start_box[1] + (start_box[3] - end_box[1])
+        y_diff = start_box[1] + (start_box[3] - end_box[1])
     else:
-        ydiff = 0
+        y_diff = 0
 
-    bigx = abs(xdiff) > abs(ydiff)
+    big_x = abs(x_diff) > abs(y_diff)
 
-    if abs(xdiff) > abs(ydiff):
-        if xdiff > 0:
-            desiredx = end_box[0] + end_box[2]
-            y1 = y1 + start_box[3] / 2
-            desiredy = end_box[1] + (end_box[3] / 2)
-        else:
-            x1 = x1 + start_box[2]
-            desiredx = end_box[0]
-            y1 = y1 + start_box[3] / 2
-            desiredy = end_box[1] + (end_box[3] / 2)
+    start_left_block = False
+    start_right_block = False
+    start_top_block = False
+    start_bottom_block = False
+    end_left_block = False
+    end_right_block = False
+    end_top_block = False
+    end_bottom_block = False
+
+    for box in box_dict:
+        box_left = box_dict[box][0]
+        box_right = box_dict[box][0] + box_dict[box][2]
+        box_top = box_dict[box][1] + box_dict[box][3]
+        box_bottom = box_dict[box][1]
+        if box != start_box_id:
+            if abs(box_left - (start_box[0] + start_box[2])) < 10 and (box_bottom <= start_box[1] + 2 * start_box[3] / 3 <= box_top):
+                start_right_block = True
+            if abs(start_box[0] - box_right) <= 10 and (box_bottom <= start_box[1] + 2 * start_box[3] / 3 <= box_top):
+                start_left_block = True
+            if abs(box_bottom - (start_box[1] + start_box[3])) <= 10 and (box_left <= start_box[0] + 2 * start_box[2] / 3 <= box_right):
+                start_top_block = True
+            if abs(start_box[1] - box_top) <= 10 and (box_left <= start_box[0] + 2 * start_box[2] / 3 <= box_right):
+                start_bottom_block = True
+        if box != end_box_id:
+            if abs(box_left - (end_box[0] + end_box[2])) < 10 and (box_bottom <= end_box[1] + 2 * end_box[3] / 3 <= box_top):
+                end_right_block = True
+            if abs(end_box[0] - box_right) <= 10 and (box_bottom <= end_box[1] + 2 * end_box[3] / 3 <= box_top):
+                end_left_block = True
+            if abs(box_bottom - (end_box[1] + end_box[3])) <= 10 and (box_left <= end_box[0] + 2 * end_box[2] / 3 <= box_right):
+                end_top_block = True
+            if abs(end_box[1] - box_top) <= 10 and (box_left <= end_box[0] + 2 * end_box[2] / 3 <= box_right):
+                end_bottom_block = True
+
+    x1 = -1
+    y1 = -1
+    desired_x = -1
+    desired_y = -1
+
+    if abs(x_diff) > abs(y_diff):
+        if x_diff > 0 and not start_left_block and not end_right_block:
+            if 'left' in start_box[7]:
+                multi_arrow_displacement_start = calculate_displacement(start_box[7]['left'])
+                start_box[7]['left'] += 1
+            else:
+                multi_arrow_displacement_start = 0
+                start_box[7]['left'] = 1
+            if 'right' in end_box[7]:
+                multi_arrow_displacement_end = calculate_displacement(end_box[7]['right'])
+                end_box[7]['right'] += 1
+            else:
+                multi_arrow_displacement_end = 0
+                end_box[7]['right'] = 1
+            x1 = start_box[0]
+            desired_x = end_box[0] + end_box[2]
+            y1 = start_box[1] + start_box[3] / 2 + multi_arrow_displacement_start
+            desired_y = end_box[1] + (end_box[3] / 2) + multi_arrow_displacement_end
+        elif x_diff <= 0 and not start_right_block and not end_left_block:
+            if 'right' in start_box[7]:
+                multi_arrow_displacement_start = calculate_displacement(start_box[7]['right'])
+                start_box[7]['right'] += 1
+            else:
+                multi_arrow_displacement_start = 0
+                start_box[7]['right'] = 1
+            if 'left' in end_box[7]:
+                multi_arrow_displacement_end = calculate_displacement(end_box[7]['left'])
+                end_box[7]['left'] += 1
+            else:
+                multi_arrow_displacement_end = 0
+                end_box[7]['left'] = 1
+            x1 = start_box[0] + start_box[2]
+            desired_x = end_box[0]
+            y1 = start_box[1] + start_box[3] / 2 + multi_arrow_displacement_start
+            desired_y = end_box[1] + (end_box[3] / 2) + multi_arrow_displacement_end
+    elif x1 == -1:
+        if y_diff > 0 and not start_bottom_block and not end_top_block:
+            if 'top' in start_box[7]:
+                multi_arrow_displacement_start = calculate_displacement(start_box[7]['top'])
+                start_box[7]['top'] += 1
+            else:
+                multi_arrow_displacement_start = 0
+                start_box[7]['top'] = 1
+            if 'bottom' in end_box[7]:
+                multi_arrow_displacement_end = calculate_displacement(end_box[7]['bottom'])
+                end_box[7]['bottom'] += 1
+            else:
+                multi_arrow_displacement_end = 0
+                end_box[7]['bottom'] = 1
+            y1 = start_box[1]
+            x1 = start_box[0] + start_box[2] / 2 + multi_arrow_displacement_start
+            desired_y = end_box[1] + end_box[3]
+            desired_x = end_box[0] + end_box[2] / 2 + multi_arrow_displacement_end
+        elif y_diff <= 0 and not start_top_block and not end_bottom_block:
+            if 'bottom' in start_box[7]:
+                multi_arrow_displacement_start = calculate_displacement(start_box[7]['bottom'])
+                start_box[7]['bottom'] += 1
+            else:
+                multi_arrow_displacement_start = 0
+                start_box[7]['bottom'] = 1
+            if 'top' in end_box[7]:
+                multi_arrow_displacement_end = calculate_displacement(end_box[7]['top'])
+                end_box[7]['top'] += 1
+            else:
+                multi_arrow_displacement_end = 0
+                end_box[7]['top'] = 1
+
+            x1 = start_box[0] + start_box[2] / 2 + multi_arrow_displacement_start
+            y1 = start_box[1] + start_box[3]
+            desired_x = end_box[0] + end_box[2] / 2 + multi_arrow_displacement_end
+            desired_y = end_box[1]
     else:
-        if ydiff > 0:
-            x1 = x1 + start_box[2] / 2
-            desiredy = end_box[1] + end_box[3]
-            desiredx = end_box[0] + end_box[2] / 2
-        else:
-            x1 = x1 + start_box[2] / 2
-            y1 = y1 + start_box[3]
-            desiredx = end_box[0] + end_box[2] / 2
-            desiredy = end_box[1]
+        print('no path able to be created between two boxes: ' + str(end_box_id) + ' and ' + str(start_box_id))
+        return []
 
-    oldx = x1
-    oldy = y1
+    old_x = x1
+    old_y = y1
 
-    currx = x1
-    curry = y1
+    curr_x = x1
+    curr_y = y1
 
     vert_list = []
     displacement = True
-    lasty = False
+    last_y = False
 
-    while currx != desiredx or curry != desiredy:
+    while curr_x != desired_x or curr_y != desired_y:
         if displacement:
             displacement = False
-            if bigx:
-                currx = (desiredx + currx) / 2
-                curry = oldy
-                lasty = False
+            if big_x:
+                curr_x = (desired_x + curr_x) / 2
+                curr_y = old_y
+                last_y = False
             else:
-                curry = (desiredy + curry) / 2
-                currx = oldx
-                lasty = True
+                curr_y = (desired_y + curr_y) / 2
+                curr_x = old_x
+                last_y = True
 
-        elif lasty and currx - desiredx != 0:
-            currx = desiredx
-            curry = oldy
-            lasty = False
+        elif last_y and curr_x - desired_x != 0:
+            curr_x = desired_x
+            curr_y = old_y
+            last_y = False
         else:
-            curry = desiredy
-            currx = oldx
-            lasty = True
+            curr_y = desired_y
+            curr_x = old_x
+            last_y = True
 
-        vert_list.append([oldx, oldy, currx, curry])
-        oldx = currx
-        oldy = curry
+        vert_list.append([old_x, old_y, curr_x, curr_y])
+        old_x = curr_x
+        old_y = curr_y
 
     return vert_list
 
 
 def create_arrowhead(arrow_lines, arrowhead_thickness):
-    startx = arrow_lines[-1][0]
-    starty = arrow_lines[-1][1]
-    endx = arrow_lines[-1][2]
-    endy = arrow_lines[-1][3]
+    start_x = arrow_lines[-1][0]
+    start_y = arrow_lines[-1][1]
+    end_x = arrow_lines[-1][2]
+    end_y = arrow_lines[-1][3]
 
-    points = [endx, endy]
-    diffx = endx - startx
-    diffy = endy - starty
+    points = [end_x, end_y]
+    diff_x = end_x - start_x
+    diff_y = end_y - start_y
 
-    if diffx < 0 and diffy == 0:
-        points.extend([endx + arrowhead_thickness,
-                       endy - arrowhead_thickness,
-                       endx + arrowhead_thickness,
-                       endy + arrowhead_thickness])
-    elif diffx > 0 and diffy == 0:
-        points.extend([endx - arrowhead_thickness,
-                       endy + arrowhead_thickness,
-                       endx - arrowhead_thickness,
-                       endy - arrowhead_thickness])
-    elif diffx == 0 and diffy < 0:
-        points.extend([endx - arrowhead_thickness,
-                       endy + arrowhead_thickness,
-                       endx + arrowhead_thickness,
-                       endy + arrowhead_thickness])
-    elif diffx == 0 and diffy > 0:
-        points.extend([endx + arrowhead_thickness,
-                       endy - arrowhead_thickness,
-                       endx - arrowhead_thickness,
-                       endy - arrowhead_thickness])
+    if diff_x < 0 and diff_y == 0:
+        points.extend([end_x + arrowhead_thickness,
+                       end_y - arrowhead_thickness,
+                       end_x + arrowhead_thickness,
+                       end_y + arrowhead_thickness])
+    elif diff_x > 0 and diff_y == 0:
+        points.extend([end_x - arrowhead_thickness,
+                       end_y + arrowhead_thickness,
+                       end_x - arrowhead_thickness,
+                       end_y - arrowhead_thickness])
+    elif diff_x == 0 and diff_y < 0:
+        points.extend([end_x - arrowhead_thickness,
+                       end_y + arrowhead_thickness,
+                       end_x + arrowhead_thickness,
+                       end_y + arrowhead_thickness])
+    elif diff_x == 0 and diff_y > 0:
+        points.extend([end_x + arrowhead_thickness,
+                       end_y - arrowhead_thickness,
+                       end_x - arrowhead_thickness,
+                       end_y - arrowhead_thickness])
     else:
         print('Bad Last Arrow: Code Error!' + str(arrow_lines))
     return points
 
 
 if __name__ == "__main__":
-    run_frames('fullShaStartFrame')
+    run_frames('frameSHA')

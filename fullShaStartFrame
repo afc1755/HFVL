@@ -1,6 +1,6 @@
 Frame 1:
     $hfc()
-    $modifyTitle(text='SMALL TITLE', color='red')
+    $modifyTitle(text='SHA 0 ROUND 0', color='red')
     $drawBox(w1,100,700,150,100,text='WORD 1 ROUND 0')
     $drawBox(w2,250,700,150,100,text='WORD 2 ROUND 0')
     $drawBox(w3,400,700,150,100,text='WORD 3 ROUND 0')
@@ -8,7 +8,7 @@ Frame 1:
     $drawBox(w5,700,700,150,100,text='WORD 5 ROUND 0')
     $sfc()
 
-    $drawBox(f,550,600,75,75,text='F')
+    $drawBox(f,450,600,150,75,text='F')
 
     $db(am1, 700,625,150,40,text='Addition mod 2^32')
     $db(am2, 700, 495, 150,40,text='Addition mod 2^32')

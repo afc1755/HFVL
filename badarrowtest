@@ -1,5 +1,15 @@
 Frame 1:
-    $drawBox(lb30, 150, 300, 150, 40, text='30 left bit rotation')
-    $drawBox(lb30o, 300, 200, 150, 40, text='Output')
-    $drawArrow(lb30, lb30o)
+    $drawBox(bottom, 200, 100, 100, 100, text='bottom')
+    $drawBox(center, 200, 200, 100, 100, text='center')
+    $drawBox(top, 200, 300, 100, 100, text='top')
+    $drawBox(right, 300, 200, 100, 100, text='right')
+    $drawBox(left, 100, 200, 100, 100, text='left')
+    $drawArrow(center, left)
+    $drawArrow(right, left)
+    $drawArrow(left, bottom)
+    $drawArrow(top, right)
+    $drawArrow(top, bottom)
+    $drawArrow(right, bottom)
+    $drawArrow(top,left)
+
 Frame End
