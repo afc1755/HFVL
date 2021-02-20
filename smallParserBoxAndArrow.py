@@ -91,7 +91,8 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
-                    arrow_coords = pathfind_arrow(box_dict, start_box_id, end_box_id)
+                    arrow_s_x, arrow_e_x, arrow_s_y, arrow_e_y = get_start_end_arrow(box_dict, start_box_id, end_box_id)
+                    arrow_coords = pathfind_arrow(arrow_s_x, arrow_e_x, arrow_s_y, arrow_e_y)
                     if len(arrow_coords) > 0:
                         curr_arrowhead = create_arrowhead(arrow_coords, arrowhead_thickness)
                         arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
@@ -196,70 +197,27 @@ def calculate_displacement(arrow_num):
     if arrow_num == 0:
         return 0
     elif arrow_num % 2 == 0:
-        return -ARROW_BOLD_SIZE * (arrow_num - 1)
+        return -ARROW_BOLD_SIZE * 2 * (arrow_num - 1)
     else:
-        return ARROW_BOLD_SIZE * arrow_num
+        return ARROW_BOLD_SIZE * 2 * arrow_num
 
 
-def pathfind_arrow(box_dict, start_box_id, end_box_id):
+def get_start_end_arrow(box_dict, start_box_id, end_box_id):
     start_box = box_dict[start_box_id]
     end_box = box_dict[end_box_id]
 
-    if start_box[0] < end_box[0]:
-        x_diff = start_box[0] + (start_box[2] - end_box[0])
-    elif start_box[0] > end_box[0]:
-        x_diff = start_box[0] - (end_box[0] + end_box[2])
-    else:
-        x_diff = 0
-    if start_box[1] > end_box[1]:
-        y_diff = start_box[1] - (end_box[1] + end_box[3])
-    elif start_box[1] < end_box[1]:
-        y_diff = start_box[1] + (start_box[3] - end_box[1])
-    else:
-        y_diff = 0
-
-    big_x = abs(x_diff) > abs(y_diff)
-
-    start_left_block = False
-    start_right_block = False
-    start_top_block = False
-    start_bottom_block = False
-    end_left_block = False
-    end_right_block = False
-    end_top_block = False
-    end_bottom_block = False
-
-    for box in box_dict:
-        box_left = box_dict[box][0]
-        box_right = box_dict[box][0] + box_dict[box][2]
-        box_top = box_dict[box][1] + box_dict[box][3]
-        box_bottom = box_dict[box][1]
-        if box != start_box_id:
-            if abs(box_left - (start_box[0] + start_box[2])) < 10 and (box_bottom <= start_box[1] + 2 * start_box[3] / 3 <= box_top):
-                start_right_block = True
-            if abs(start_box[0] - box_right) <= 10 and (box_bottom <= start_box[1] + 2 * start_box[3] / 3 <= box_top):
-                start_left_block = True
-            if abs(box_bottom - (start_box[1] + start_box[3])) <= 10 and (box_left <= start_box[0] + 2 * start_box[2] / 3 <= box_right):
-                start_top_block = True
-            if abs(start_box[1] - box_top) <= 10 and (box_left <= start_box[0] + 2 * start_box[2] / 3 <= box_right):
-                start_bottom_block = True
-        if box != end_box_id:
-            if abs(box_left - (end_box[0] + end_box[2])) < 10 and (box_bottom <= end_box[1] + 2 * end_box[3] / 3 <= box_top):
-                end_right_block = True
-            if abs(end_box[0] - box_right) <= 10 and (box_bottom <= end_box[1] + 2 * end_box[3] / 3 <= box_top):
-                end_left_block = True
-            if abs(box_bottom - (end_box[1] + end_box[3])) <= 10 and (box_left <= end_box[0] + 2 * end_box[2] / 3 <= box_right):
-                end_top_block = True
-            if abs(end_box[1] - box_top) <= 10 and (box_left <= end_box[0] + 2 * end_box[2] / 3 <= box_right):
-                end_bottom_block = True
+    blocked_dict = find_blocking_boxes(start_box_id, end_box_id, box_dict)
+    x_diff, y_diff = get_x_y_diff(start_box, end_box)
 
     x1 = -1
     y1 = -1
     desired_x = -1
     desired_y = -1
 
+    # this code determines what the displacement of an arrow start and end point should be
+    # it finds out how many arrows are already starting or finishing from that arrow
     if abs(x_diff) > abs(y_diff):
-        if x_diff > 0 and not start_left_block and not end_right_block:
+        if x_diff > 0 and not blocked_dict['s_left'] and not blocked_dict['e_right']:
             if 'left' in start_box[7]:
                 multi_arrow_displacement_start = calculate_displacement(start_box[7]['left'])
                 start_box[7]['left'] += 1
@@ -276,7 +234,7 @@ def pathfind_arrow(box_dict, start_box_id, end_box_id):
             desired_x = end_box[0] + end_box[2]
             y1 = start_box[1] + start_box[3] / 2 + multi_arrow_displacement_start
             desired_y = end_box[1] + (end_box[3] / 2) + multi_arrow_displacement_end
-        elif x_diff <= 0 and not start_right_block and not end_left_block:
+        elif x_diff <= 0 and not blocked_dict['s_right'] and not blocked_dict['e_left']:
             if 'right' in start_box[7]:
                 multi_arrow_displacement_start = calculate_displacement(start_box[7]['right'])
                 start_box[7]['right'] += 1
@@ -294,7 +252,7 @@ def pathfind_arrow(box_dict, start_box_id, end_box_id):
             y1 = start_box[1] + start_box[3] / 2 + multi_arrow_displacement_start
             desired_y = end_box[1] + (end_box[3] / 2) + multi_arrow_displacement_end
     elif x1 == -1:
-        if y_diff > 0 and not start_bottom_block and not end_top_block:
+        if y_diff > 0 and not blocked_dict['s_bottom'] and not blocked_dict['e_top']:
             if 'top' in start_box[7]:
                 multi_arrow_displacement_start = calculate_displacement(start_box[7]['top'])
                 start_box[7]['top'] += 1
@@ -311,7 +269,7 @@ def pathfind_arrow(box_dict, start_box_id, end_box_id):
             x1 = start_box[0] + start_box[2] / 2 + multi_arrow_displacement_start
             desired_y = end_box[1] + end_box[3]
             desired_x = end_box[0] + end_box[2] / 2 + multi_arrow_displacement_end
-        elif y_diff <= 0 and not start_top_block and not end_bottom_block:
+        elif y_diff <= 0 and not blocked_dict['s_top'] and not blocked_dict['e_bottom']:
             if 'bottom' in start_box[7]:
                 multi_arrow_displacement_start = calculate_displacement(start_box[7]['bottom'])
                 start_box[7]['bottom'] += 1
@@ -329,38 +287,100 @@ def pathfind_arrow(box_dict, start_box_id, end_box_id):
             y1 = start_box[1] + start_box[3]
             desired_x = end_box[0] + end_box[2] / 2 + multi_arrow_displacement_end
             desired_y = end_box[1]
+        else:
+            print('uh oh no path')
     else:
         print('no path able to be created between two boxes: ' + str(end_box_id) + ' and ' + str(start_box_id))
         return []
+    return x1, y1, desired_x, desired_y
 
-    old_x = x1
-    old_y = y1
 
-    curr_x = x1
-    curr_y = y1
+def find_blocking_boxes(start_box_id, end_box_id, box_dict):
+    blocked = dict.fromkeys(["s_left", "s_right", "s_top", "s_bottom", "e_left", "e_right", "e_top", "e_bottom"], False)
+    start_box = box_dict[start_box_id]
+    end_box = box_dict[end_box_id]
+
+    # below finds other boxes close on every side of the start and end boxes
+    # this tells the arrow not to start on any of those close sides
+    for box in box_dict:
+        box_left = box_dict[box][0]
+        box_right = box_dict[box][0] + box_dict[box][2]
+        box_top = box_dict[box][1] + box_dict[box][3]
+        box_bottom = box_dict[box][1]
+        if box != start_box_id:
+            if abs(box_left - (start_box[0] + start_box[2])) < 10 and (
+                    box_bottom <= start_box[1] + 2 * start_box[3] / 3 <= box_top):
+                blocked['s_right'] = True
+            if abs(start_box[0] - box_right) <= 10 and (box_bottom <= start_box[1] + 2 * start_box[3] / 3 <= box_top):
+                blocked['s_left'] = True
+            if abs(box_bottom - (start_box[1] + start_box[3])) <= 10 and (
+                    box_left <= start_box[0] + 2 * start_box[2] / 3 <= box_right):
+                blocked['s_top'] = True
+            if abs(start_box[1] - box_top) <= 10 and (box_left <= start_box[0] + 2 * start_box[2] / 3 <= box_right):
+                blocked['s_bottom'] = True
+        if box != end_box_id:
+            if abs(box_left - (end_box[0] + end_box[2])) < 10 and (
+                    box_bottom <= end_box[1] + 2 * end_box[3] / 3 <= box_top):
+                blocked['e_right'] = True
+            if abs(end_box[0] - box_right) <= 10 and (box_bottom <= end_box[1] + 2 * end_box[3] / 3 <= box_top):
+                blocked['e_left'] = True
+            if abs(box_bottom - (end_box[1] + end_box[3])) <= 10 and (
+                    box_left <= end_box[0] + 2 * end_box[2] / 3 <= box_right):
+                blocked['e_top'] = True
+            if abs(end_box[1] - box_top) <= 10 and (box_left <= end_box[0] + 2 * end_box[2] / 3 <= box_right):
+                blocked['e_bottom'] = True
+    return blocked
+
+
+def get_x_y_diff(start_box, end_box):
+    if start_box[0] < end_box[0]:
+        x_diff = start_box[0] + (start_box[2] - end_box[0])
+    elif start_box[0] > end_box[0]:
+        x_diff = start_box[0] - (end_box[0] + end_box[2])
+    else:
+        x_diff = 0
+    if start_box[1] > end_box[1]:
+        y_diff = start_box[1] - (end_box[1] + end_box[3])
+    elif start_box[1] < end_box[1]:
+        y_diff = start_box[1] + (start_box[3] - end_box[1])
+    else:
+        y_diff = 0
+    return x_diff, y_diff
+
+
+def pathfind_arrow(start_x, start_y, end_x, end_y):
+    old_x = start_x
+    old_y = start_y
+
+    curr_x = start_x
+    curr_y = start_y
+
+    x_diff = start_x - end_x
+    y_diff = start_y - end_y
+    big_x = abs(x_diff) > abs(y_diff)
 
     vert_list = []
     displacement = True
     last_y = False
 
-    while curr_x != desired_x or curr_y != desired_y:
+    while curr_x != end_x or curr_y != end_y:
         if displacement:
             displacement = False
             if big_x:
-                curr_x = (desired_x + curr_x) / 2
+                curr_x = (end_x + curr_x) / 2
                 curr_y = old_y
                 last_y = False
             else:
-                curr_y = (desired_y + curr_y) / 2
+                curr_y = (end_y + curr_y) / 2
                 curr_x = old_x
                 last_y = True
 
-        elif last_y and curr_x - desired_x != 0:
-            curr_x = desired_x
+        elif last_y and curr_x - end_x != 0:
+            curr_x = end_x
             curr_y = old_y
             last_y = False
         else:
-            curr_y = desired_y
+            curr_y = end_y
             curr_x = old_x
             last_y = True
 
@@ -407,4 +427,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('frameSHA')
+    run_frames('badarrowtest')
