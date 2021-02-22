@@ -1,11 +1,7 @@
 Frame 1:
     $modifyTitle(text='SHA 0 ROUND 0', color='red')
-    $drawBox(w1,100,700,150,100,text='WORD 1 ROUND 0')
 
-    $db(lb5, 100, 495, 150, 40, text ='5 << rotation')
-    $drawBox(ow2,250,60,150,100,text='WORD 2 ROUND 1')
-
-    $drawArrow(w1,ow2)
-    $drawArrow(ow2, w1)
-
+    $drawBox(w3,400,700,150,100,text='WORD 3 ROUND 0')
+    $drawBox(f,450,550,150,75,text='F')
+    $drawArrow(w3,f)
 Frame End
