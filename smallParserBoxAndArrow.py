@@ -2,8 +2,10 @@ import pyglet
 from pyglet.gl import *
 from FrameDisplayer import FrameDisplayer
 import copy
+import numpy as np
 from hashConstants import *
-
+from collections import deque
+from Node import Node
 
 def run_frames(file_to_read):
     frames = read_file(file_to_read)
@@ -93,7 +95,8 @@ def read_file(file_to_read):
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
                     start_end_arrow = get_start_end_arrow(box_dict, start_box_id, end_box_id)
                     if len(start_end_arrow) > 0:
-                        arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict)
+                        arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict, arrow_dict)
+                        #arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict)
                         if len(arrow_coords) > 0:
                             curr_arrowhead = create_arrowhead(arrow_coords, arrowhead_thickness)
                             arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
@@ -194,13 +197,83 @@ def read_file(file_to_read):
     return frames
 
 
-def calculate_displacement(arrow_num):
-    if arrow_num == 0:
-        return 0
-    elif arrow_num % 2 == 0:
-        return -ARROW_BOLD_SIZE * 2 * (arrow_num - 1)
-    else:
-        return ARROW_BOLD_SIZE * 2 * arrow_num
+def get_start_end_arrow(box_dict, start_box_id, end_box_id):
+    box_id_arr = [start_box_id, end_box_id]
+    arrow_info = []
+    for box_id in box_id_arr:
+        box = box_dict[box_id]
+        blocked_dict = find_blocking_boxes(box_id, box_dict)
+        x_diff, y_diff = get_x_y_diff(box_dict[start_box_id], box_dict[end_box_id])
+        if box_id != start_box_id:
+            x_diff = -x_diff
+            y_diff = -y_diff
+        if abs(x_diff) > abs(y_diff):
+            if x_diff < 0 and not blocked_dict['left']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'left')
+            elif x_diff >= 0 and not blocked_dict['right']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'right')
+            elif y_diff >= 0 and not blocked_dict['top']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'top')
+            elif y_diff < 0 and not blocked_dict['bottom']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
+            elif y_diff >= 0 and not blocked_dict['bottom']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
+            elif y_diff < 0 and not blocked_dict['top']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'top')
+            elif x_diff < 0 and not blocked_dict['right']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'right')
+            elif x_diff >= 0 and not blocked_dict['left']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'left')
+            else:
+                print('can\'t find a good point for this arrow!')
+                return []
+        else:
+            if y_diff > 0 and not blocked_dict['top']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'top')
+            elif y_diff <= 0 and not blocked_dict['bottom']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
+            elif x_diff < 0 and not blocked_dict['left']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'left')
+            elif x_diff >= 0 and not blocked_dict['right']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'right')
+            elif x_diff < 0 and not blocked_dict['right']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'right')
+            elif x_diff >= 0 and not blocked_dict['left']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'left')
+            elif y_diff >= 0 and not blocked_dict['bottom']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
+            elif y_diff < 0 and not blocked_dict['top']:
+                curr_x, curr_y, curr_loc = get_placements(box, 'top')
+            else:
+                print('can\'t find a good point for this arrow!')
+                return []
+        arrow_info.append([curr_x, curr_y, curr_loc])
+    return int(arrow_info[0][0]), int(arrow_info[0][1]), arrow_info[0][2], int(arrow_info[1][0]), int(arrow_info[1][1]), arrow_info[1][2]
+
+
+def find_blocking_boxes(box_id, box_dict):
+    # below finds other boxes close on every side of the start and end boxes
+    # this tells the arrow not to start on any of those close sides
+    blocked = dict.fromkeys(['left', 'right', 'top', 'bottom'], False)
+    curr_box = box_dict[box_id]
+
+    for box in box_dict:
+        box_left = box_dict[box][0]
+        box_right = box_dict[box][0] + box_dict[box][2]
+        box_top = box_dict[box][1] + box_dict[box][3]
+        box_bottom = box_dict[box][1]
+        if box != box_id:
+            if abs(box_left - (curr_box[0] + curr_box[2])) < 10 and (
+                    box_bottom <= curr_box[1] + 2 * curr_box[3] / 3 <= box_top):
+                blocked['right'] = True
+            if abs(curr_box[0] - box_right) <= 10 and (box_bottom <= curr_box[1] + 2 * curr_box[3] / 3 <= box_top):
+                blocked['left'] = True
+            if abs(box_bottom - (curr_box[1] + curr_box[3])) <= 10 and (
+                    box_left <= curr_box[0] + 2 * curr_box[2] / 3 <= box_right):
+                blocked['top'] = True
+            if abs(curr_box[1] - box_top) <= 10 and (box_left <= curr_box[0] + 2 * curr_box[2] / 3 <= box_right):
+                blocked['bottom'] = True
+    return blocked
 
 
 def get_placements(curr_box, curr_dir):
@@ -231,95 +304,25 @@ def get_placements(curr_box, curr_dir):
     return curr_x, curr_y, curr_loc
 
 
-def get_start_end_arrow(box_dict, start_box_id, end_box_id):
-    box_id_arr = [start_box_id, end_box_id]
-    arrow_info = []
-    for box_id in box_id_arr:
-        box = box_dict[box_id]
-        blocked_dict = find_blocking_boxes(box_id, box_dict)
-        x_diff, y_diff = get_x_y_diff(box_dict[start_box_id], box_dict[end_box_id])
-        if box_id != start_box_id:
-            x_diff = -x_diff
-            y_diff = -y_diff
-        if abs(x_diff) > abs(y_diff):
-            if x_diff < 0 and not blocked_dict['left']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'left')
-            elif x_diff >= 0 and not blocked_dict['right']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'right')
-            elif y_diff >= 0 and not blocked_dict['top']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'top')
-            elif y_diff < 0 and not blocked_dict['bottom']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
-            elif y_diff >= 0 and not blocked_dict['bottom']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
-            elif y_diff < 0 and not blocked_dict['top']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'top')
-            elif x_diff < 0 and not blocked_dict['right']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'right')
-            elif x_diff >= 0 and not blocked_dict['left']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'left')
-            else:
-                print('can\'t find a good point for this arrow!')
-                break
-        else:
-            if y_diff > 0 and not blocked_dict['top']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'top')
-            elif y_diff <= 0 and not blocked_dict['bottom']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
-            elif x_diff < 0 and not blocked_dict['left']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'left')
-            elif x_diff >= 0 and not blocked_dict['right']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'right')
-            elif x_diff < 0 and not blocked_dict['right']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'right')
-            elif x_diff >= 0 and not blocked_dict['left']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'left')
-            elif y_diff >= 0 and not blocked_dict['bottom']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'bottom')
-            elif y_diff < 0 and not blocked_dict['top']:
-                curr_x, curr_y, curr_loc = get_placements(box, 'top')
-            else:
-                print('can\'t find a good point for this arrow!')
-                return []
-        arrow_info.append([curr_x, curr_y, curr_loc])
-    return arrow_info[0][0], arrow_info[0][1], arrow_info[0][2], arrow_info[1][0], arrow_info[1][1], arrow_info[1][2]
-
-
-def find_blocking_boxes(box_id, box_dict):
-    blocked = dict.fromkeys(['left', 'right', 'top', 'bottom'], False)
-    curr_box = box_dict[box_id]
-
-    # below finds other boxes close on every side of the start and end boxes
-    # this tells the arrow not to start on any of those close sides
-    for box in box_dict:
-        box_left = box_dict[box][0]
-        box_right = box_dict[box][0] + box_dict[box][2]
-        box_top = box_dict[box][1] + box_dict[box][3]
-        box_bottom = box_dict[box][1]
-        if box != box_id:
-            if abs(box_left - (curr_box[0] + curr_box[2])) < 10 and (
-                    box_bottom <= curr_box[1] + 2 * curr_box[3] / 3 <= box_top):
-                blocked['right'] = True
-            if abs(curr_box[0] - box_right) <= 10 and (box_bottom <= curr_box[1] + 2 * curr_box[3] / 3 <= box_top):
-                blocked['left'] = True
-            if abs(box_bottom - (curr_box[1] + curr_box[3])) <= 10 and (
-                    box_left <= curr_box[0] + 2 * curr_box[2] / 3 <= box_right):
-                blocked['top'] = True
-            if abs(curr_box[1] - box_top) <= 10 and (box_left <= curr_box[0] + 2 * curr_box[2] / 3 <= box_right):
-                blocked['bottom'] = True
-    return blocked
+def calculate_displacement(arrow_num):
+    if arrow_num == 0:
+        return 0
+    elif arrow_num % 2 == 0:
+        return -ARROW_BOLD_SIZE * 2 * (arrow_num - 1)
+    else:
+        return ARROW_BOLD_SIZE * 2 * arrow_num
 
 
 def get_x_y_diff(start_box, end_box):
     if start_box[0] < end_box[0]:
         x_diff = min(end_box[0] - (start_box[0] + start_box[2]), end_box[0] - start_box[0])
     elif start_box[0] > end_box[0]:
-        x_diff = min((end_box[0] + end_box[2]) - start_box[0], end_box[0] - start_box[0])
+        x_diff = -min(abs((end_box[0] + end_box[2]) - start_box[0]), abs(end_box[0] - start_box[0]))
     else:
         x_diff = 0
-    if start_box[1] > end_box[1]:
-        y_diff = min((end_box[1] + end_box[3]) - start_box[1], end_box[1] - start_box[1])
-    elif start_box[1] < end_box[1]:
+    if start_box[1] < end_box[1]:
+        y_diff = -min(abs((end_box[1] + end_box[3])) - start_box[1], abs(end_box[1] - start_box[1]))
+    elif start_box[1] > end_box[1]:
         y_diff = min(end_box[1] - (start_box[1] + start_box[3]), end_box[1] - start_box[1])
     else:
         y_diff = 0
@@ -334,130 +337,178 @@ def point_in_box(p_x, p_y, box):
 
 
 def point_near_box(p_x, p_y, box):
-    if box[0] - 10 <= p_x <= box[0] + box[2] + 10 and box[1] - 10 <= p_y <= box[1] + box[3] + 10:
+    if box[0] - BOX_NEARNESS <= p_x <= box[0] + box[2] + BOX_NEARNESS and box[1] - BOX_NEARNESS <= p_y <= box[1] + box[3] + BOX_NEARNESS:
         return True
     else:
         return False
 
 
-def pathfind_arrow(start_x, start_y, s_loc, end_x, end_y, e_loc, s_box_id, e_box_id, box_dict):
-    return [[start_x, start_y, end_x, end_y]]
-    old_x = start_x
-    old_y = start_y
+def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict, arrow_dict):
+    out_mat = np.zeros((WINDOW_WIDTH//MATRIX_RESOLUTION, WINDOW_HEIGHT//MATRIX_RESOLUTION))
+    for x in range(0, WINDOW_WIDTH//MATRIX_RESOLUTION):
+        for y in range(0, WINDOW_HEIGHT//MATRIX_RESOLUTION):
+            if check_colliding(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, box_dict, boxes_to_ignore):
+                out_mat[x][y] = 2
+            if check_colliding_arrow(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, arrow_dict):
+                out_mat[x][y] = 1
+    for i in range(0, 2):
+        if special_box_loc[i] == 'top':
+            extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
+            extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
+            for extra_space in range(1, int(20 // MATRIX_RESOLUTION)):
+                out_mat[extra_x - 1][extra_y + extra_space] = 2
+                out_mat[extra_x + 1][extra_y + extra_space] = 2
+        elif special_box_loc[i] == 'bottom':
+            extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
+            extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
+            for extra_space in range(1, int(20//MATRIX_RESOLUTION)):
+                out_mat[extra_x - 1][extra_y - extra_space] = 2
+                out_mat[extra_x + 1][extra_y - extra_space] = 2
+        elif special_box_loc[i] == 'left':
+            extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
+            extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
+            for extra_space in range(1, int(20//MATRIX_RESOLUTION)):
+                out_mat[extra_x - extra_space][extra_y - 1] = 2
+                out_mat[extra_x - extra_space][extra_y + 1] = 2
+        elif special_box_loc[i] == 'right':
+            extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
+            extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
+            for extra_space in range(1, int(20 // MATRIX_RESOLUTION)):
+                out_mat[extra_x + extra_space][extra_y - 1] = 2
+                out_mat[extra_x + extra_space][extra_y + 1] = 2
+    return out_mat
 
-    curr_x = start_x
-    curr_y = start_y
 
-    x_diff = end_x - start_x
-    y_diff = end_y - start_y
+def is_inside_matrix(x, y):
+    if 0 <= (x * MATRIX_RESOLUTION) < WINDOW_WIDTH and 0 <= (y * MATRIX_RESOLUTION) < WINDOW_HEIGHT:
+        return True
+    return False
 
-    x_inc = 10
-    y_inc = 10
 
-    if x_diff != 0:
-        x_inc = (x_diff/abs(x_diff)) * 10
+def pathfind_arrow(start_x, start_y, s_loc, end_x, end_y, e_loc, s_box_id, e_box_id, box_dict, arrow_dict):
+    matrix = create_matrix([[start_x, start_y], [end_x, end_y]], [s_loc, e_loc], [s_box_id, e_box_id], box_dict, arrow_dict)
+    old_node = pathfind_arrow_dijkstras(matrix, int(start_x//MATRIX_RESOLUTION), int(start_y//MATRIX_RESOLUTION), int(end_x//MATRIX_RESOLUTION), int(end_y//MATRIX_RESOLUTION))
 
-    if y_diff != 0:
-        y_inc = (y_diff/abs(y_diff)) * 10
+    if not old_node:
+        return []
 
-    vert_list = []
-
-    # priority 1: move in a direction different than last move, move away from boxes and towards destination box
-    # if x is already right, try to move towards in y.
-    # if we can't move towards in y, try to change x and see if we can move y now
-    # if x is not right, try to move in an x direction
-    # if we can't move in x direction, move in y direction either way
-    #
-    # priority 2: move towards the end box in either direction if not hitting other boxes
-    # priority 3: move away from other boxes to get more space
-
-    if s_loc == 'top' or s_loc == 'bottom':
-        last_move_y = False
-    else:
-        last_move_y = True
-
-    if e_loc == 'top' or e_loc == 'bottom':
-        final_move_y = True
-    else:
-        final_move_y = False
-
-    while curr_x != end_x or curr_y != end_y:
-        colliding = False
-        moving = False
-        currently_moving_neg = False
-        currently_moving_pos = False
-        if last_move_y:
-            while not colliding:
-                if curr_x != end_x and end_x - 10 <= curr_x <= end_x + 10:
-                    curr_x = end_x
-                    break
-                if not currently_moving_neg:
-                    for box_id in box_dict:
-                        if box_id != s_box_id and box_id != e_box_id:
-                            if point_near_box(curr_x + x_inc, curr_x, box_dict[box_id]):
-                                colliding = True
-                                break
-                    if not colliding:
-                        currently_moving_pos = True
-                        curr_x = curr_x + x_inc
-                if not currently_moving_pos:
-                    for box_id in box_dict:
-                        if box_id != s_box_id and box_id != e_box_id:
-                            if point_near_box(curr_x - x_inc, curr_x, box_dict[box_id]):
-                                colliding = True
-                                break
-                    if not colliding:
-                        currently_moving_neg = True
-                        curr_x = curr_x - x_inc
-                if room_to_go(curr_x, curr_y, False, x_diff, box_dict):
-                    break
-            last_move_y = False
+    point_list = []
+    moving_y = False
+    first_run = True
+    last_node = old_node
+    curr_node = last_node.parent
+    while curr_node.parent:
+        if last_node.x == curr_node.x:
+            if moving_y or first_run:
+                last_node = curr_node
+                curr_node = curr_node.parent
+                first_run = False
+            else:
+                point_list.append([last_node.x * MATRIX_RESOLUTION, last_node.y * MATRIX_RESOLUTION, old_node.x * MATRIX_RESOLUTION, old_node.y * MATRIX_RESOLUTION])
+                old_node = last_node
+            moving_y = True
         else:
-            while not colliding:
-                if curr_y != end_y and end_y - 10 <= curr_y <= end_y + 10:
-                    curr_y = end_y
-                    break
-                if not currently_moving_neg:
-                    for box_id in box_dict:
-                        if box_id != s_box_id and box_id != e_box_id:
-                            if point_near_box(curr_x, curr_y + y_inc, box_dict[box_id]):
-                                colliding = True
-                                break
-                    if not colliding:
-                        currently_moving_pos = True
-                        curr_y = curr_y + y_inc
-                if not currently_moving_pos:
-                    for box_id in box_dict:
-                        if box_id != s_box_id and box_id != e_box_id:
-                            if point_near_box(curr_x, curr_y - y_inc, box_dict[box_id]):
-                                colliding = True
-                                break
-                    if not colliding:
-                        currently_moving_neg = True
-                        curr_y = curr_y - y_inc
-                if room_to_go(curr_x, curr_y, True, y_diff, box_dict):
-                    break
-            last_move_y = True
-        vert_list.append([old_x, old_y, curr_x, curr_y])
-        old_x = curr_x
-        old_y = curr_y
-    print('good arrow')
-    return vert_list
+            if not moving_y or first_run:
+                last_node = curr_node
+                curr_node = curr_node.parent
+                first_run = False
+            else:
+                point_list.append([last_node.x * MATRIX_RESOLUTION, last_node.y * MATRIX_RESOLUTION, old_node.x * MATRIX_RESOLUTION, old_node.y * MATRIX_RESOLUTION])
+                old_node = last_node
+            moving_y = False
+    point_list.append([curr_node.x * MATRIX_RESOLUTION, curr_node.y * MATRIX_RESOLUTION, old_node.x * MATRIX_RESOLUTION, old_node.y * MATRIX_RESOLUTION])
+    point_list.reverse()
+    return point_list
 
 
-def room_to_go(curr_x, curr_y, y_dir, plus_minus, box_dict):
-    if y_dir and plus_minus < 0:
-        # we are trying to move down
+def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
+    # create a queue and enqueue the first node
+    q = deque()
+    src = Node(start_x, start_y, None, 0)
+    q.append(src)
+
+    # set to check if the matrix cell is visited before or not
+    visited = set()
+
+    key = (src.x, src.y)
+    visited.add(key)
+    row = [-1, 0, 0, 1]
+    col = [0, -1, 1, 0]
+    fin_results = []
+
+    # loop till queue is empty
+    while q:
+        # dequeue front node and process it
+        curr = q.popleft()
+        i = curr.x
+        j = curr.y
+
+        # return if the destination is found
+        if i == end_x and j == end_y:
+            if curr.score < 2:
+                return curr
+            fin_results.append(curr)
+            continue
+
+        # check all four possible movements from the current cell
+        # and recur for each valid movement
+        for k in range(4):
+            # get next position coordinates using the value of the current cell
+            x = i + row[k]
+            y = j + col[k]
+
+            # check if it is possible to go to the next position
+            # from the current position
+            if is_inside_matrix(x, y) and (int(matrix[x][y]) != 2 or (x == end_x and y == end_y)):
+                # construct the next cell node
+                curr.score += int(matrix[x][y])
+                next = Node(x, y, curr, curr.score)
+                key = (next.x, next.y)
+
+                # enqueue it and mark it as visited
+                q.append(next)
+                visited.add(key)
+
+    if len(fin_results) == 0:
+        # return None if the path is not possible
+        return None
+    else:
+        curr_min = np.inf
+        curr_res = None
+        for res in fin_results:
+            if res.score < curr_min:
+                curr_min = res.score
+                curr_res = res
+        return curr_res
+
+
+def check_colliding(loc_x, loc_y, box_dict, boxes_to_ignore):
+    for box_id in box_dict:
+        if box_id in boxes_to_ignore:
+            if point_in_box(loc_x, loc_y, box_dict[box_id]):
+                return True
+        else:
+            if point_near_box(loc_x, loc_y, box_dict[box_id]):
+                return True
+
+    return False
+
+
+def check_colliding_arrow(loc_x, loc_y, arrow_dict):
+    for arrow_id in arrow_dict:
+        for coord in arrow_dict[arrow_id][0]:
+            if point_near_arrow(loc_x, loc_y, coord):
+                return True
+    return False
+
+
+def point_near_arrow(loc_x, loc_y, coord):
+    loc_x *= 10
+    loc_y *= 10
+    if (coord[0] - MATRIX_RESOLUTION) <= loc_x <= (coord[2] + MATRIX_RESOLUTION) and \
+            (coord[1] - MATRIX_RESOLUTION) <= loc_y <= (coord[3] + MATRIX_RESOLUTION):
         return True
-    elif y_dir and plus_minus >= 0:
-        # we are trying to move up
-        return True
-    elif not y_dir and plus_minus < 0:
-        # we are trying to move left
-        return True
-    elif y_dir and plus_minus >= 0:
-        # we are trying to move right
-        return True
+    return False
 
 
 def create_arrowhead(arrow_lines, arrowhead_thickness):
@@ -500,4 +551,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('fullShaStartFrame')
+    run_frames('badarrowtest')
