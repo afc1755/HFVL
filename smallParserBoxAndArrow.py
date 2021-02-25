@@ -355,32 +355,32 @@ def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict
         if special_box_loc[i] == 'top':
             extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
             extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
-            for extra_space in range(1, int(20 // MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(30 // MATRIX_RESOLUTION)):
                 out_mat[extra_x - 1][extra_y + extra_space] = 2
                 out_mat[extra_x + 1][extra_y + extra_space] = 2
         elif special_box_loc[i] == 'bottom':
             extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
             extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
-            for extra_space in range(1, int(20//MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(30//MATRIX_RESOLUTION)):
                 out_mat[extra_x - 1][extra_y - extra_space] = 2
                 out_mat[extra_x + 1][extra_y - extra_space] = 2
         elif special_box_loc[i] == 'left':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(1, int(20//MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(30//MATRIX_RESOLUTION)):
                 out_mat[extra_x - extra_space][extra_y - 1] = 2
                 out_mat[extra_x - extra_space][extra_y + 1] = 2
         elif special_box_loc[i] == 'right':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(1, int(20 // MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(30 // MATRIX_RESOLUTION)):
                 out_mat[extra_x + extra_space][extra_y - 1] = 2
                 out_mat[extra_x + extra_space][extra_y + 1] = 2
     return out_mat
 
 
 def is_inside_matrix(x, y):
-    if 0 <= (x * MATRIX_RESOLUTION) < WINDOW_WIDTH and 0 <= (y * MATRIX_RESOLUTION) < WINDOW_HEIGHT:
+    if 0 <= x < int(WINDOW_WIDTH//MATRIX_RESOLUTION) and 0 <= y < int(WINDOW_HEIGHT//MATRIX_RESOLUTION):
         return True
     return False
 
@@ -424,7 +424,7 @@ def pathfind_arrow(start_x, start_y, s_loc, end_x, end_y, e_loc, s_box_id, e_box
 def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
     # create a queue and enqueue the first node
     q = deque()
-    src = Node(start_x, start_y, None, 0)
+    src = Node(start_x, start_y, None, 0, set())
     q.append(src)
 
     # set to check if the matrix cell is visited before or not
@@ -434,7 +434,7 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
     visited.add(key)
     row = [-1, 0, 0, 1]
     col = [0, -1, 1, 0]
-    fin_results = []
+    candidates = []
 
     # loop till queue is empty
     while q:
@@ -445,9 +445,10 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
 
         # return if the destination is found
         if i == end_x and j == end_y:
-            if curr.score < 2:
+            if curr.score <= 1:
                 return curr
-            fin_results.append(curr)
+            candidates.append(curr)
+            print(len(q))
             continue
 
         # check all four possible movements from the current cell
@@ -462,24 +463,26 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
             if is_inside_matrix(x, y) and (int(matrix[x][y]) != 2 or (x == end_x and y == end_y)):
                 # construct the next cell node
                 curr.score += int(matrix[x][y])
-                next = Node(x, y, curr, curr.score)
+                next = Node(x, y, curr, curr.score, copy.deepcopy(curr.visited))
                 key = (next.x, next.y)
 
-                # enqueue it and mark it as visited
-                q.append(next)
-                visited.add(key)
+                # if it is not visited yet
+                if key not in next.visited:
+                    # enqueue it and mark it as visited
+                    q.append(next)
+                    next.visited.add(key)
 
-    if len(fin_results) == 0:
+    if len(candidates) == 0:
         # return None if the path is not possible
         return None
     else:
         curr_min = np.inf
-        curr_res = None
-        for res in fin_results:
-            if res.score < curr_min:
-                curr_min = res.score
-                curr_res = res
-        return curr_res
+        curr_can = None
+        for candidate in candidates:
+            if candidate.score < curr_min:
+                curr_min = candidate.score
+                curr_can = candidate
+        return curr_can
 
 
 def check_colliding(loc_x, loc_y, box_dict, boxes_to_ignore):
@@ -503,8 +506,6 @@ def check_colliding_arrow(loc_x, loc_y, arrow_dict):
 
 
 def point_near_arrow(loc_x, loc_y, coord):
-    loc_x *= 10
-    loc_y *= 10
     if (coord[0] - MATRIX_RESOLUTION) <= loc_x <= (coord[2] + MATRIX_RESOLUTION) and \
             (coord[1] - MATRIX_RESOLUTION) <= loc_y <= (coord[3] + MATRIX_RESOLUTION):
         return True
@@ -551,4 +552,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('badarrowtest')
+    run_frames('fullShaStartFrame')

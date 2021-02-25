@@ -44,10 +44,12 @@ Frame 1:
     $drawArrow(lb30,lb30o)
     $drawArrow(lb30o,ow3)
 
+    $drawArrow(w4, f)
+
     $drawArrow(w3,ow4)
     $drawArrow(w3, f)
 
-    $drawArrow(w4, f)
+
     $drawArrow(w4, ow5)
 
     $drawArrow(w5, am1)

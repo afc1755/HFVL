@@ -4,25 +4,6 @@ Frame 1:
     $drawBox(w3,400,700,150,100,text='WORD ala 1')
     $drawBox(w4,550,700,150,100,text='WORD 1')
     $drawBox(w5,700,700,150,100,text='WORD 1')
-
-    $drawBox(fbox,550,500,75,75,text='F')
-
-    $drawBox(ow1,100,60,150,100,text='OUT WORD 1')
-    $drawBox(ow2,250,60,150,100,text='OUT WORD 2')
-    $drawBox(ow3,400,60,150,100,text='OUT WORD 3')
-    $drawBox(ow4,550,60,150,100,text='OUT WORD 4')
-    $drawBox(ow5,700,60,150,100,text='OUT WORD 5')
-
-    $drawArrow(w1,ow2)
-    $drawArrow(w2,ow3)
-    $drawArrow(w3,ow4)
-    $drawArrow(w4,ow5)
-    $drawArrow(w5,fbox)
-    $drawArrow(w4,fbox)
-    $drawArrow(w3,fbox)
-    $drawArrow(fbox,ow1)
-Frame End
-
 Frame 2:
     $modifyBox(w1, text='aa bb cc dd', color='blue',bold=True)
     $modifyBox(w2, text='aa bb cc dd', color='blue',bold=True)
