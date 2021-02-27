@@ -40,15 +40,13 @@ Frame 1:
     $drawArrow(lb5o,am2)
 
     $drawArrow(w2,lb30)
-    $drawArrow(w2,f)
     $drawArrow(lb30,lb30o)
     $drawArrow(lb30o,ow3)
 
-    $drawArrow(w4, f)
-
     $drawArrow(w3,ow4)
     $drawArrow(w3, f)
-
+    $drawArrow(w4, f)
+    $drawArrow(w2,f)
 
     $drawArrow(w4, ow5)
 
@@ -64,6 +62,5 @@ Frame 1:
     $drawArrow(am4,ow1)
     $drawArrow(exw, am3)
     $drawArrow(rc, am4)
-
 Frame End
 
