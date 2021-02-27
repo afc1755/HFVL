@@ -2,7 +2,7 @@ import time
 
 import pyglet
 from pyglet.gl import *
-from FrameDisplayer import FrameDisplayer
+import FrameDisplayer
 import copy
 import numpy as np
 from hashConstants import *
@@ -12,7 +12,7 @@ from Node import Node
 
 def run_frames(file_to_read):
     frames = read_file(file_to_read)
-    fd = FrameDisplayer(frames, len(frames) - 1)
+    fd = FrameDisplayer.FrameDisplayer(frames, len(frames) - 1)
     pyglet.app.run()
 
 
@@ -22,6 +22,7 @@ def read_file(file_to_read):
     box_dict = {}
     arrow_dict = {}
     global_dict = {'title': ['', BLACK], 'frame_count_visible': True}
+    link_array = []
 
     reading_frame_num = 0
 
@@ -48,7 +49,7 @@ def read_file(file_to_read):
                             attribute_args = box_args[i].split('=')
                             if attribute_args[0].strip().lower() == 'text':
                                 box_text = attribute_args[1].replace('\'', '')
-                            if attribute_args[0].strip().lower() == 'bold':
+                            elif attribute_args[0].strip().lower() == 'bold':
                                 if attribute_args[1].strip('\'').lower() == 'true':
                                     box_bold = True
                                 else:
@@ -65,6 +66,12 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                            elif attribute_args[0].strip().lower() == 'link':
+                                link_file = open(attribute_args[1].strip('\'').lower())
+                                if not link_file:
+                                    print('invalid link file found for box:' + box_id)
+                                    link_file = ''
+                                link_array.append((x, y, x + width, y + height, attribute_args[1].strip('\'').lower()))
                     box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color, {}]
                 elif function_line[0] == '$drawArrow' or function_line[0] == '$da':
                     arrow_args = function_line[1].split(',')
@@ -99,11 +106,12 @@ def read_file(file_to_read):
                     start_end_arrow = get_start_end_arrow(box_dict, start_box_id, end_box_id)
                     if len(start_end_arrow) > 0:
                         arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict, arrow_dict)
-                        #arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict)
+                        curr_time = time.time()
                         if len(arrow_coords) > 0:
                             curr_arrowhead = create_arrowhead(arrow_coords, arrowhead_thickness)
                             arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
                                                                      start_box_id, end_box_id, curr_arrowhead]
+                        print('arrowhead time = ' + str(time.time() - curr_time))
 
                 elif function_line[0] == '$modifyBox' or function_line[0] == '$mb':
                     box_args = function_line[1].split(',')
@@ -181,6 +189,8 @@ def read_file(file_to_read):
                                 else:
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                elif function_line[0] == '$createTextBox' or function_line[0] == '$ctb':
+                    print('text box drawing')
                 elif function_line[0] == '$hideFrameCount' or function_line[0] == '$hfc':
                     global_dict['frame_count_visible'] = False
                 elif function_line[0] == '$showFrameCount' or function_line[0] == '$sfc':
@@ -190,7 +200,8 @@ def read_file(file_to_read):
             else:
                 continue
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
-            frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict, 'global_dict': global_dict})
+            frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict,
+                           'global_dict': global_dict, 'link_array': link_array})
         else:
             old_box_dict = box_dict
             old_arrow_dict = arrow_dict
@@ -353,7 +364,7 @@ def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict
             if check_colliding(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, box_dict, boxes_to_ignore):
                 out_mat[x][y] = -1
             elif check_colliding_arrow(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, arrow_dict):
-                out_mat[x][y] = 200
+                out_mat[x][y] = 500
             else:
                 out_mat[x][y] = 1
     for i in range(0, 2):
@@ -395,7 +406,8 @@ def pathfind_arrow(start_x, start_y, s_loc, end_x, end_y, e_loc, s_box_id, e_box
     matrix = create_matrix([[start_x, start_y], [end_x, end_y]], [s_loc, e_loc], [s_box_id, e_box_id], box_dict, arrow_dict)
     print('matrix creation:' + str(time.time() - curr_time))
     curr_time = time.time()
-    old_node = pathfind_arrow_dijkstras(matrix, int(start_x//MATRIX_RESOLUTION), int(start_y//MATRIX_RESOLUTION), int(end_x//MATRIX_RESOLUTION), int(end_y//MATRIX_RESOLUTION))
+    old_node = pathfind_arrow_dijkstras(matrix, int(start_x//MATRIX_RESOLUTION), int(start_y//MATRIX_RESOLUTION),
+                                        int(end_x//MATRIX_RESOLUTION), int(end_y//MATRIX_RESOLUTION))
 
     if not old_node:
         return []

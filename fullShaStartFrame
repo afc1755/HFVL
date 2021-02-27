@@ -8,7 +8,7 @@ Frame 1:
     $drawBox(w5,700,700,150,100,text='WORD 5 ROUND 0')
     $sfc()
 
-    $drawBox(f,450,550,150,75,text='F')
+    $drawBox(f,450,550,150,75,text='F',link='badarrowtest')
 
     $db(am1, 700,625,150,40,text='Addition mod 2^32')
     $db(am2, 700, 495, 150,40,text='Addition mod 2^32')

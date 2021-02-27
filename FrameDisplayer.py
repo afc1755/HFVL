@@ -3,6 +3,7 @@ from pyglet import clock
 from pyglet.gl import *
 from hashConstants import *
 import time
+import smallParserBoxAndArrow
 
 
 class FrameDisplayer(pyglet.window.Window):
@@ -15,6 +16,9 @@ class FrameDisplayer(pyglet.window.Window):
         self.is_playing = False
         self.time_diff = 0
         self.old_time = time.time()
+
+    def load_new_window(self, file_name):
+        smallParserBoxAndArrow.run_frames(file_name)
 
     def next_frame(self):
         if self.frame_num == self.total_frames:
@@ -221,3 +225,7 @@ class FrameDisplayer(pyglet.window.Window):
             self.increase_speed()
         elif RESTART_BUTTON_X <= x <= RESTART_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
             self.restart()
+        else:
+            for lb_tuple in self.frames[self.frame_num]['link_array']:
+                if lb_tuple[0] <= x <= lb_tuple[2] and lb_tuple[1] <= y <= lb_tuple[3]:
+                    self.load_new_window(lb_tuple[4])
