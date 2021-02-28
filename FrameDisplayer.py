@@ -14,15 +14,16 @@ class FrameDisplayer(pyglet.window.Window):
         self.total_frames = total_frames
         self.curr_speed = 5
         self.is_playing = False
-        self.time_diff = 0
         self.old_time = time.time()
 
-    def load_new_window(self, file_name):
-        smallParserBoxAndArrow.run_frames(file_name)
+    def load_new_window(self, file_name, window_args):
+        smallParserBoxAndArrow.run_frames(file_name, window_args)
 
     def next_frame(self):
         if self.frame_num == self.total_frames:
             print('Can\'t go past the last frame!')
+            if self.is_playing:
+                self.start_stop_frames()
         else:
             self.frame_num += 1
         print('next frame!')
@@ -58,7 +59,7 @@ class FrameDisplayer(pyglet.window.Window):
             print('stopping frames!')
         else:
             clock.unschedule(self.call_draw)
-            clock.schedule_interval(self.call_draw, (0.8 / SPEED_ARR[self.curr_speed]))
+            clock.schedule(self.call_draw)
             self.is_playing = True
             print('playing frames at ' + str(SPEED_ARR[self.curr_speed]) + 'x speed')
 
@@ -68,9 +69,8 @@ class FrameDisplayer(pyglet.window.Window):
 
     def on_draw(self):
         dummy_arr = []
-        if self.is_playing and (time.time() - self.old_time) + self.time_diff >= (0.8 / SPEED_ARR[self.curr_speed]):
+        if self.is_playing and (time.time() - self.old_time) >= (2.0 / SPEED_ARR[self.curr_speed]):
             self.next_frame()
-            self.time_diff = 0
             self.old_time = time.time()
 
         self.clear()
@@ -94,11 +94,15 @@ class FrameDisplayer(pyglet.window.Window):
         restart_button = shapes.Rectangle(RESTART_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
                                           batch=b_batch)
 
+        title_text_len = 16 * len(self.frames[self.frame_num]['global_dict']['title'][0])
+        if WINDOW_WIDTH > title_text_len:
+            x_displacement = WINDOW_WIDTH/2 - (8 * len(self.frames[self.frame_num]['global_dict']['title'][0]))
+        else:
+            x_displacement = DEFAULT_TEXT_SIZE * 2
         title_text = pyglet.text.Label(self.frames[self.frame_num]['global_dict']['title'][0],
                                        font_name=FONT_FAMILY,
                                        font_size=TITLE_TEXT_SIZE,
-                                       x=WINDOW_WIDTH / 2 -
-                                         (8 * len(self.frames[self.frame_num]['global_dict']['title'][0])),
+                                       x=x_displacement,
                                        y=TITLE_Y,
                                        color=self.frames[self.frame_num]['global_dict']['title'][1] + (255,),
                                        batch=t_batch)
@@ -182,14 +186,47 @@ class FrameDisplayer(pyglet.window.Window):
         for curr_key in self.frames[self.frame_num]['box_dict']:
             curr_box = self.frames[self.frame_num]['box_dict'][curr_key]
             if curr_box[4] != '':
-                dummy_arr.append(pyglet.text.Label(curr_box[4],
-                                                   font_name=FONT_FAMILY,
-                                                   font_size=DEFAULT_TEXT_SIZE,
-                                                   x=curr_box[0] + DEFAULT_TEXT_SIZE,
-                                                   y=curr_box[1] + curr_box[3] / 2,
-                                                   bold=curr_box[5],
-                                                   color=curr_box[6] + (255,),
-                                                   batch=t_batch))
+                word_size = DEFAULT_TEXT_SIZE * 0.8 * len(curr_box[4])
+                if word_size > curr_box[2]:
+                    split = curr_box[2]//(DEFAULT_TEXT_SIZE * 0.9)
+                    last_word_index = 0
+                    full_text = curr_box[4]
+                    curr_y_displacement = 0
+                    start_line_index = 0
+                    for curr_text_index in range(0, len(full_text)):
+                        curr_char = full_text[curr_text_index]
+                        if curr_char == ' ' or curr_char == '\\':
+                            last_word_index = curr_text_index
+                        if curr_char == '\\' or (curr_text_index - start_line_index) == split:
+                            dummy_arr.append(pyglet.text.Label(full_text[start_line_index:last_word_index],
+                                                               font_name=FONT_FAMILY,
+                                                               font_size=DEFAULT_TEXT_SIZE,
+                                                               x=curr_box[0] + DEFAULT_TEXT_SIZE,
+                                                               y=curr_box[1] + curr_box[3] - (DEFAULT_TEXT_SIZE * 1.8) - curr_y_displacement,
+                                                               bold=curr_box[5],
+                                                               color=curr_box[6] + (255,),
+                                                               batch=t_batch))
+                            start_line_index = last_word_index + 1
+                            curr_y_displacement += DEFAULT_TEXT_SIZE * 1.3
+                        elif curr_text_index + 1 == len(full_text):
+                            dummy_arr.append(pyglet.text.Label(full_text[start_line_index:],
+                                                               font_name=FONT_FAMILY,
+                                                               font_size=DEFAULT_TEXT_SIZE,
+                                                               x=curr_box[0] + DEFAULT_TEXT_SIZE,
+                                                               y=curr_box[1] + curr_box[3] - (
+                                                                           DEFAULT_TEXT_SIZE * 2) - curr_y_displacement,
+                                                               bold=curr_box[5],
+                                                               color=curr_box[6] + (255,),
+                                                               batch=t_batch))
+                else:
+                    dummy_arr.append(pyglet.text.Label(curr_box[4],
+                                                       font_name=FONT_FAMILY,
+                                                       font_size=DEFAULT_TEXT_SIZE,
+                                                       x=curr_box[0] + DEFAULT_TEXT_SIZE,
+                                                       y=curr_box[1] + curr_box[3] / 2,
+                                                       bold=curr_box[5],
+                                                       color=curr_box[6] + (255,),
+                                                       batch=t_batch))
             dummy_arr.append(shapes.BorderedRectangle(curr_box[0], curr_box[1],
                                                       curr_box[2], curr_box[3],
                                                       border=SMALL_BOX_BORDER_BOLD if curr_box[5]
@@ -226,6 +263,7 @@ class FrameDisplayer(pyglet.window.Window):
         elif RESTART_BUTTON_X <= x <= RESTART_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
             self.restart()
         else:
-            for lb_tuple in self.frames[self.frame_num]['link_array']:
+            for curr_lb in self.frames[self.frame_num]['link_dict']:
+                lb_tuple = self.frames[self.frame_num]['link_dict'][curr_lb]
                 if lb_tuple[0] <= x <= lb_tuple[2] and lb_tuple[1] <= y <= lb_tuple[3]:
-                    self.load_new_window(lb_tuple[4])
+                    self.load_new_window(lb_tuple[4], lb_tuple[5])

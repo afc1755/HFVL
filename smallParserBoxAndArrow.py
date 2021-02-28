@@ -10,19 +10,22 @@ from collections import deque
 from Node import Node
 
 
-def run_frames(file_to_read):
+def run_frames(file_to_read, window_args):
     frames = read_file(file_to_read)
-    fd = FrameDisplayer.FrameDisplayer(frames, len(frames) - 1)
-    pyglet.app.run()
+    if frames:
+        fd = FrameDisplayer.FrameDisplayer(frames, len(frames) - 1)
+        pyglet.app.run()
 
 
 def read_file(file_to_read):
     frames = []
     lang_file = open(file_to_read)
+    if not lang_file:
+        return []
     box_dict = {}
     arrow_dict = {}
     global_dict = {'title': ['', BLACK], 'frame_count_visible': True}
-    link_array = []
+    link_dict = {}
 
     reading_frame_num = 0
 
@@ -32,7 +35,7 @@ def read_file(file_to_read):
             continue
         elif line.strip().split(' ')[0].lower() != 'frame':
             if line[0] == '$':
-                function_line = line.replace(')', '').replace('\n', '').split('(')
+                function_line = line.replace(')', '').replace('\n', '').split('(', 1)
                 if function_line[0] == '$drawBox' or function_line[0] == '$db':
                     box_text = ''
                     box_args = function_line[1].split(',')
@@ -70,8 +73,19 @@ def read_file(file_to_read):
                                 link_file = open(attribute_args[1].strip('\'').lower())
                                 if not link_file:
                                     print('invalid link file found for box:' + box_id)
-                                    link_file = ''
-                                link_array.append((x, y, x + width, y + height, attribute_args[1].strip('\'').lower()))
+                                else:
+                                    link_dict[box_id] = [x, y,
+                                                         x + width, y + height,
+                                                         attribute_args[1].strip('\'').lower()]
+                            elif attribute_args[0].strip().lower() == 'input':
+                                if box_id in link_dict:
+                                    input_arr = []
+                                    for input_arg in attribute_args[1].strip().lower().split(';'):
+                                        input_arr.append(input_arg.strip())
+                                    link_dict[box_id].append(input_arr)
+                            else:
+                                print('invalid attribute found when creating box ' + box_id + ': ' +
+                                      attribute_args[0].strip())
                     box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color, {}]
                 elif function_line[0] == '$drawArrow' or function_line[0] == '$da':
                     arrow_args = function_line[1].split(',')
@@ -112,7 +126,6 @@ def read_file(file_to_read):
                             arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
                                                                      start_box_id, end_box_id, curr_arrowhead]
                         print('arrowhead time = ' + str(time.time() - curr_time))
-
                 elif function_line[0] == '$modifyBox' or function_line[0] == '$mb':
                     box_args = function_line[1].split(',')
                     box_id = box_args[0].replace('\'', '').strip()
@@ -138,7 +151,24 @@ def read_file(file_to_read):
                                 box_dict[box_id][6] = BLACK
                             else:
                                 print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
-
+                        elif attribute_args[0].strip().lower() == 'link':
+                            link_file = open(attribute_args[1].strip('\'').lower())
+                            if not link_file:
+                                print('invalid link file found for box:' + box_id)
+                            else:
+                                link_box = box_dict[box_dict]
+                                link_dict[box_id] = (link_box[0], link_box[1],
+                                                     link_box[0] + link_box[2], link_box[1] + link_box[3],
+                                                     attribute_args[1].strip('\'').lower())
+                        elif attribute_args[0].strip().lower() == 'input':
+                            if box_id in link_dict:
+                                input_arr = []
+                                for input_arg in attribute_args[1].strip().lower().split(','):
+                                    input_arr.append(input_arg.strip())
+                                link_dict[box_id].append(input_arr)
+                        else:
+                            print('invalid attribute found when modifying box ' + box_id + ': ' +
+                                  attribute_args[0].strip())
                 elif function_line[0] == '$modifyArrow' or function_line[0] == '$ma':
                     arrow_args = function_line[1].split(',')
                     start_box_id = arrow_args[0].replace('\'', '')
@@ -190,6 +220,51 @@ def read_file(file_to_read):
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
                 elif function_line[0] == '$createTextBox' or function_line[0] == '$ctb':
+                    box_text = ''
+                    box_args = function_line[1].split(',')
+                    box_id = box_args[0].replace('\'', '')
+                    x = int(box_args[1])
+                    y = int(box_args[2])
+                    width = int(box_args[3])
+                    height = int(box_args[4])
+                    user_box_color = BLACK
+                    box_bold = False
+
+                    if len(box_args) > 5:
+                        for i in range(5, len(box_args)):
+                            attribute_args = box_args[i].split('=')
+                            if attribute_args[0].strip().lower() == 'text':
+                                box_text = attribute_args[1].replace('\'', '')
+                            elif attribute_args[0].strip().lower() == 'bold':
+                                if attribute_args[1].strip('\'').lower() == 'true':
+                                    box_bold = True
+                                else:
+                                    box_bold = False
+                            elif attribute_args[0].strip().lower() == 'color':
+                                if attribute_args[1].strip('\'').lower() == 'blue':
+                                    user_box_color = BLUE
+                                elif attribute_args[1].strip('\'').lower() == 'green':
+                                    user_box_color = GREEN
+                                elif attribute_args[1].strip('\'').lower() == 'red':
+                                    user_box_color = RED
+                                elif attribute_args[1].strip('\'').lower() == 'black':
+                                    user_box_color = BLACK
+                                else:
+                                    print(
+                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                            elif attribute_args[0].strip().lower() == 'link':
+                                link_file = open(attribute_args[1].strip('\'').lower())
+                                if not link_file:
+                                    print('invalid link file found for box:' + box_id)
+                                else:
+                                    link_dict[box_id] = (x, y,
+                                                         x + width, y + height,
+                                                         attribute_args[1].strip('\'').lower())
+                            else:
+                                print('invalid attribute found when creating box ' + box_id + ': ' +
+                                      attribute_args[0].strip())
+                    box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color, {}]
+
                     print('text box drawing')
                 elif function_line[0] == '$hideFrameCount' or function_line[0] == '$hfc':
                     global_dict['frame_count_visible'] = False
@@ -201,7 +276,7 @@ def read_file(file_to_read):
                 continue
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
             frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict,
-                           'global_dict': global_dict, 'link_array': link_array})
+                           'global_dict': global_dict, 'link_dict': link_dict})
         else:
             old_box_dict = box_dict
             old_arrow_dict = arrow_dict
@@ -574,4 +649,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('fullShaStartFrame')
+    run_frames('fbox1viz', [])
