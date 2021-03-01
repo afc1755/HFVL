@@ -402,19 +402,16 @@ def calculate_displacement(arrow_num):
         return ARROW_BOLD_SIZE * 1.8 * arrow_num
 
 
-def get_x_y_diff(start_box, end_box):
-    if start_box[0] < end_box[0]:
-        x_diff = min((end_box[0] + end_box[2]) - start_box[0], abs(end_box[0] - start_box[0]))
-    elif start_box[0] > end_box[0]:
-        x_diff = -min(abs(end_box[0] - (start_box[0] + start_box[2])), abs(end_box[0] - start_box[0]))
-    else:
-        x_diff = 0
-    if start_box[1] < end_box[1]:
-        y_diff = min((end_box[1] - (start_box[1] + start_box[3])), end_box[1] - start_box[1])
-    elif start_box[1] > end_box[1]:
-        y_diff = -min(abs((end_box[1] + end_box[3]) - start_box[1]), abs(end_box[1] - start_box[1]))
-    else:
-        y_diff = 0
+def get_x_y_diff(s_b, e_b):
+    x_diff = min(abs((e_b[0] + e_b[2]) - s_b[0]), abs(e_b[0] - s_b[0]),
+                 abs(e_b[0] - (s_b[0] + s_b[2])), abs((e_b[0] + e_b[2]) - (s_b[0] + s_b[2])))
+    if s_b[0] > e_b[0]:
+        x_diff = -x_diff
+
+    y_diff = min(abs(e_b[1] - (s_b[1] + s_b[3])), abs(e_b[1] - s_b[1]),
+                 abs((e_b[1] + e_b[3]) - s_b[1]), abs((e_b[1] + e_b[3]) - (s_b[1] + s_b[3])))
+    if s_b[1] > e_b[1]:
+        y_diff = -y_diff
     return x_diff, y_diff
 
 
