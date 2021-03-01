@@ -13,7 +13,7 @@ from Node import Node
 def run_frames(file_to_read, window_args):
     frames = read_file(file_to_read)
     if frames:
-        fd = FrameDisplayer.FrameDisplayer(frames, len(frames) - 1)
+        fd = FrameDisplayer.FrameDisplayer(frames, len(frames))
         pyglet.app.run()
 
 
@@ -35,7 +35,7 @@ def read_file(file_to_read):
             continue
         elif line.strip().split(' ')[0].lower() != 'frame':
             if line[0] == '$':
-                function_line = line.replace(')', '').replace('\n', '').split('(', 1)
+                function_line = line.rsplit(')', 1)[0].replace('\n', '').split('(', 1)
                 if function_line[0] == '$drawBox' or function_line[0] == '$db':
                     box_text = ''
                     box_args = function_line[1].split(',')
@@ -397,22 +397,22 @@ def calculate_displacement(arrow_num):
     if arrow_num == 0:
         return 0
     elif arrow_num % 2 == 0:
-        return -ARROW_BOLD_SIZE * 3 * (arrow_num - 1)
+        return -ARROW_BOLD_SIZE * 1.8 * (arrow_num - 1)
     else:
-        return ARROW_BOLD_SIZE * 3 * arrow_num
+        return ARROW_BOLD_SIZE * 1.8 * arrow_num
 
 
 def get_x_y_diff(start_box, end_box):
     if start_box[0] < end_box[0]:
-        x_diff = min(end_box[0] - (start_box[0] + start_box[2]), end_box[0] - start_box[0])
+        x_diff = min((end_box[0] + end_box[2]) - start_box[0], abs(end_box[0] - start_box[0]))
     elif start_box[0] > end_box[0]:
-        x_diff = -min(abs((end_box[0] + end_box[2]) - start_box[0]), abs(end_box[0] - start_box[0]))
+        x_diff = -min(abs(end_box[0] - (start_box[0] + start_box[2])), abs(end_box[0] - start_box[0]))
     else:
         x_diff = 0
     if start_box[1] < end_box[1]:
-        y_diff = -min(abs((end_box[1] + end_box[3])) - start_box[1], abs(end_box[1] - start_box[1]))
+        y_diff = min((end_box[1] - (start_box[1] + start_box[3])), end_box[1] - start_box[1])
     elif start_box[1] > end_box[1]:
-        y_diff = min(end_box[1] - (start_box[1] + start_box[3]), end_box[1] - start_box[1])
+        y_diff = -min(abs((end_box[1] + end_box[3]) - start_box[1]), abs(end_box[1] - start_box[1]))
     else:
         y_diff = 0
     return x_diff, y_diff
@@ -446,25 +446,25 @@ def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict
         if special_box_loc[i] == 'top':
             extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
             extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
-            for extra_space in range(1, int(30 // MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(ARROW_END_GAP// MATRIX_RESOLUTION)):
                 out_mat[extra_x - 1][extra_y + extra_space] = -1
                 out_mat[extra_x + 1][extra_y + extra_space] = -1
         elif special_box_loc[i] == 'bottom':
             extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
             extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
-            for extra_space in range(1, int(30//MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(ARROW_END_GAP//MATRIX_RESOLUTION)):
                 out_mat[extra_x - 1][extra_y - extra_space] = -1
                 out_mat[extra_x + 1][extra_y - extra_space] = -1
         elif special_box_loc[i] == 'left':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(1, int(30//MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(ARROW_END_GAP//MATRIX_RESOLUTION)):
                 out_mat[extra_x - extra_space][extra_y - 1] = -1
                 out_mat[extra_x - extra_space][extra_y + 1] = -1
         elif special_box_loc[i] == 'right':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(1, int(30 // MATRIX_RESOLUTION)):
+            for extra_space in range(1, int(ARROW_END_GAP// MATRIX_RESOLUTION)):
                 out_mat[extra_x + extra_space][extra_y - 1] = -1
                 out_mat[extra_x + extra_space][extra_y + 1] = -1
     return out_mat
@@ -603,8 +603,8 @@ def check_colliding_arrow(loc_x, loc_y, arrow_dict):
 
 
 def point_near_arrow(loc_x, loc_y, coord):
-    if (coord[0] - (MATRIX_RESOLUTION * 4)) <= loc_x <= (coord[2] + (MATRIX_RESOLUTION * 4)) and \
-            (coord[1] - (MATRIX_RESOLUTION * 4)) <= loc_y <= (coord[3] + (MATRIX_RESOLUTION * 4)):
+    if (coord[0] - (MATRIX_RESOLUTION * ARROW_NEARNESS)) <= loc_x <= (coord[2] + (MATRIX_RESOLUTION * ARROW_NEARNESS)) and \
+            (coord[1] - (MATRIX_RESOLUTION * ARROW_NEARNESS)) <= loc_y <= (coord[3] + (MATRIX_RESOLUTION * ARROW_NEARNESS)):
         return True
     return False
 
@@ -649,4 +649,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('fbox1viz', [])
+    run_frames('fullShaStartFrame', [])

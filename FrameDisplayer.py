@@ -20,7 +20,7 @@ class FrameDisplayer(pyglet.window.Window):
         smallParserBoxAndArrow.run_frames(file_name, window_args)
 
     def next_frame(self):
-        if self.frame_num == self.total_frames:
+        if self.frame_num == self.total_frames - 1:
             print('Can\'t go past the last frame!')
             if self.is_playing:
                 self.start_stop_frames()
@@ -165,7 +165,7 @@ class FrameDisplayer(pyglet.window.Window):
                                                 color=BLACK_ALPHA,
                                                 batch=t_batch)
         if self.frames[self.frame_num]['global_dict']['frame_count_visible']:
-            frame_text = pyglet.text.Label('Frame ' + str(self.frame_num) + '/' + str(self.total_frames),
+            frame_text = pyglet.text.Label('Frame ' + str(self.frame_num + 1) + '/' + str(self.total_frames),
                                            font_name=FONT_FAMILY,
                                            font_size=BUTTON_TEXT_SIZE,
                                            bold=True,

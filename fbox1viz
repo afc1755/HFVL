@@ -1,0 +1,147 @@
+# (W2 or W3) or ((not W2) and W4)
+# boxes w2, w3, and w4 are input
+
+Frame 1:
+    $modifyTitle(text='F Function Bit Visualization', color='red')
+    $drawBox(w21,370,615,170,50,text='W2')
+    $drawBox(w3,370,535,170,50,text='W3')
+    $drawBox(or1,590,575,50,50,text='OR')
+    $drawBox(w2orw3,690,575,170,50,text='(W2 or W3)')
+
+    $drawBox(w22,50,320,170,50,text='W2')
+    $drawBox(not,270,320,50,50,text='NOT')
+    $drawBox(notw2,370,320,170,50,text='(not W2)')
+    $drawBox(w4,370,240,170,50,text='W4')
+    $drawBox(and,590,280,50,50,text='AND')
+    $drawBox(notw2andw4,690,280,170,50,text='(not W2) and W4')
+
+    $drawBox(or2,750,425,50,50,text='OR')
+    $drawBox(w2orw3ornotw2andw4,850,425,170,50,text='(W2 or W3) or ((not W2) and W4)')
+
+    $drawArrow(w3,or1)
+    $drawArrow(w21,or1)
+    $da(or1,w2orw3)
+    $da(w2orw3,or2)
+
+    $da(w22,not)
+    $da(not,notw2)
+    $da(w4,and)
+    $da(notw2,and)
+
+    $da(and,notw2andw4)
+    $da(notw2andw4,or2)
+
+    $da(or2,w2orw3ornotw2andw4)
+Frame End
+
+Frame 2:
+    $modifyTitle(text='F Function Bit Visualization', color='black')
+    $modifyBox(w21,text='0010 0111 1010 1100',color='blue',bold=True)
+    $modifyBox(w3,text='0100 1011 1011 0100',color='blue',bold=True)
+Frame End
+
+Frame 3:
+    $modifyBox(w22,text='0010 0111 1010 1100',color='blue',bold=True)
+    $modifyBox(w4,text='0100 1011 1011 0100',color='blue',bold=True)
+Frame End
+
+Frame 4:
+    $modifyBox(w21,color='green')
+    $modifyBox(w3,color='green')
+    $modifyArrow(w21,or1,color='green')
+    $modifyArrow(w3,or1,color='green')
+    $modifyBox(w22,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+Frame End
+
+Frame 5:
+    $modifyBox(or1,color='red',bold=True)
+    $modifyArrow(or1,w2orw3,color='red')
+Frame End
+
+Frame 6:
+    $modifyBox(w2orw3,text='0110 1111 1011 1100',color='red',bold=True)
+Frame End
+
+Frame 7:
+    $modifyBox(w21,color='black',bold=False)
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(or1,color='black',bold=False)
+    $modifyArrow(w21,or1,color='black')
+    $modifyArrow(w3,or1,color='black')
+    $modifyArrow(or1,w2orw3,color='black')
+    $modifyBox(w2orw3,color='black',bold=False)
+Frame End
+
+Frame 8:
+    $modifyBox(w22,color='green',bold=True)
+    $modifyArrow(w22,not,color='green')
+Frame End
+
+Frame 9:
+    $modifyBox(not,color='red',bold=True)
+    $modifyArrow(not,notw2,color='red')
+Frame End
+
+Frame 10:
+    $modifyBox(notw2,text='1001 0000 0100 0011',color='red',bold=True)
+Frame End
+
+Frame 11:
+    $modifyBox(w22,color='black',bold=False)
+    $modifyBox(not,color='black',bold=False)
+    $modifyBox(notw2,color='black',bold=False)
+    $modifyArrow(w22,not,color='black')
+    $modifyArrow(not,notw2,color='black')
+Frame End
+
+Frame 12:
+    $modifyBox(notw2,color='green',bold=True)
+    $modifyBox(w4,color='green',bold=True)
+    $modifyArrow(notw2,and,color='green')
+    $modifyArrow(w4,and,color='green')
+Frame End
+
+Frame 13:
+    $modifyBox(and,color='red',bold=True)
+    $modifyArrow(and,notw2andw4,color='red')
+Frame End
+
+Frame 14:
+    $modifyBox(notw2andw4,text='0100 0010 1101 0111',color='red',bold=True)
+Frame End
+
+Frame 15:
+    $modifyBox(notw2andw4,color='black',bold=False)
+    $modifyBox(and,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+    $modifyBox(notw2,color='black',bold=False)
+    $modifyArrow(and,notw2andw4,color='black')
+    $modifyArrow(w4,and,color='black')
+    $modifyArrow(notw2,and,color='black')
+Frame End
+
+Frame 16:
+    $modifyBox(w2orw3,color='green',bold=True)
+    $modifyBox(notw2andw4,color='green',bold=True)
+    $modifyArrow(notw2andw4,or2,color='green')
+    $modifyArrow(w2orw3,or2,color='green')
+Frame End
+
+Frame 17:
+    $modifyBox(or2,color='red',bold=True)
+    $modifyArrow(or2,w2orw3ornotw2andw4,color='red')
+Frame End
+
+Frame 18:
+    $modifyBox(w2orw3ornotw2andw4,text='1110 1111 0111 0110',color='red',bold=True)
+Frame End
+
+Frame 19:
+    $modifyBox(notw2andw4,color='black',bold=False)
+    $modifyBox(or2,color='black',bold=False)
+    $modifyBox(w2orw3,color='black',bold=False)
+    $modifyArrow(or2,w2orw3ornotw2andw4,color='black')
+    $modifyArrow(notw2andw4,or2,color='black')
+    $modifyArrow(w2orw3,or2,color='black')
+Frame End
