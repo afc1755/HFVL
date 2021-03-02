@@ -1,0 +1,17 @@
+# visualization for the 5 left bit shift of word 1
+# input: w1
+
+Frame 1:
+    $modifyTitle(text='5 Bit Shift Left Visualization', color='red')
+    $drawBox(w1by,50,300,150,50,text='w1 byte')
+    $drawBox(w1bi,250,300,170,50,text='w1 bits')
+    $drawBox(5bl,470,300,100,50,text='5 bit <<')
+    $drawBox(w1bio,620,300,170,50,text='w1 5 << bit')
+    $drawBox(w1byo,840,300,150,50,text='w1 5 << byte')
+
+    $drawArrow(w1by,w1bi)
+    $drawArrow(w1bi,5bl)
+    $da(5bl,w1bio)
+    $da(w1bio,w1byo)
+Frame End
+

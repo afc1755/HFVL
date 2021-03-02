@@ -1,40 +1,40 @@
 Frame 1:
-    $modifyTitle(text='SHA 0 ROUND 0 ', color='red')
-    $drawBox(w1,100,700,150,100,text='WORD 1 ROUND 0')
-    $drawBox(w2,250,700,150,100,text='WORD 2 ROUND 0')
-    $drawBox(w3,400,700,150,100,text='WORD 3 ROUND 0')
-    $drawBox(w4,550,700,150,100,text='WORD 4 ROUND 0')
-    $drawBox(w5,700,700,150,100,text='WORD 5 ROUND 0')
+    $modifyTitle(text='SHA 0 ROUND 0', color='red')
+    $drawBox(w1,50,700,150,100,text='WORD 1 ROUND 0')
+    $drawBox(w2,200,700,150,100,text='WORD 2 ROUND 0')
+    $drawBox(w3,350,700,150,100,text='WORD 3 ROUND 0')
+    $drawBox(w4,500,700,150,100,text='WORD 4 ROUND 0')
+    $drawBox(w5,650,700,150,100,text='WORD 5 ROUND 0')
 
-    $drawBox(f,450,550,150,75,text='F',link='fbox1viz',input=w1;w3;w4)
+    $drawBox(f,400,550,150,75,text='F')
 
-    $db(am1, 700,625,150,40,text='Addition mod 2^32',link='amviz',input=f;w5)
-    $db(am2, 700, 495, 150,40,text='Addition mod 2^32',link='amviz',input=lb5o;am1o)
-    $drawBox(am3, 700, 365, 150,40,text='Addition mod 2^32',link='amviz',input=exw;am2o)
-    $drawBox(am4, 700, 235, 150,40,text='Addition mod 2^32',link='amviz',input=rc;am3o)
+    $db(am1, 650,625,150,40,text='Addition mod 2^32')
+    $db(am2, 650, 495, 150,40,text='Addition mod 2^32',link='amviz',input=lb5o;am1o)
+    $drawBox(am3, 650, 365, 150,40,text='Addition mod 2^32',link='amviz',input=exw;am2o)
+    $drawBox(am4, 650, 235, 150,40,text='Addition mod 2^32',link='amviz',input=rc;am3o)
 
-    $db(am1o, 700, 560, 150, 40,text='Output:')
-    $drawBox(am2o, 700, 430, 150, 40,text='Output:')
-    $drawBox(am3o, 700, 300, 150, 40,text='Output:')
+    $db(am1o, 650, 560, 150, 40,text='Output:')
+    $drawBox(am2o, 650, 430, 150, 40,text='Output:')
+    $drawBox(am3o, 650, 300, 150, 40,text='Output:')
 
-    $db(lb5, 100, 495, 150, 40, text ='5 << rotation',link='lb5viz',input=w1)
-    $drawBox(lb5o, 400, 495, 150, 40, text ='Output:',link='lb5viz',input=w1)
+    $db(lb5, 50, 495, 150, 40, text ='5 << rotation',link='lb5viz',input=w1)
+    $drawBox(lb5o, 350, 495, 150, 40, text ='Output:',link='lb5viz',input=w1)
 
-    $db(lb30, 250, 300, 150, 40, text='30 << rotation',link='lb30viz',input=w2)
-    $drawBox(lb30o, 400, 200, 150, 40, text='Output:',link='lb30viz',input=w2)
+    $db(lb30, 200, 300, 150, 40, text='30 << rotation',link='lb30viz',input=w2)
+    $drawBox(lb30o, 350, 200, 150, 40, text='Output:',link='lb30viz',input=w2)
 
-    $drawBox(exw, 900, 365, 150, 40,text='Expanded Word:')
-    $drawBox(rc, 900, 235, 150, 40,text='Round Constant:')
+    $drawBox(exw, 850, 365, 150, 40,text='Expanded Word:')
+    $drawBox(rc, 850, 235, 150, 40,text='Round Constant:')
 
-    $drawBox(ow1,100,60,150,100,text='WORD 1 ROUND 1')
-    $drawBox(ow2,250,60,150,100,text='WORD 2 ROUND 1')
-    $drawBox(ow3,400,60,150,100,text='WORD 3 ROUND 1')
-    $drawBox(ow4,550,60,150,100,text='WORD 4 ROUND 1')
-    $drawBox(ow5,700,60,150,100,text='WORD 5 ROUND 1')
+    $drawBox(ow1,50,60,150,100,text='WORD 1 ROUND 1')
+    $drawBox(ow2,200,60,150,100,text='WORD 2 ROUND 1')
+    $drawBox(ow3,350,60,150,100,text='WORD 3 ROUND 1')
+    $drawBox(ow4,500,60,150,100,text='WORD 4 ROUND 1')
+    $drawBox(ow5,650,60,150,100,text='WORD 5 ROUND 1')
 
-    $drawBox(td1,880,700,300,100,text='Current F function \Round 0-19: (W2 or W3) or ((not W2) and W4)\Round 20-39: W2 xor W3 xor W4\Round 40-59: (W2 and W3) or (W2 and W4) or (W3 and W4)\Round 60-79: W2 xor W3 xor W4')
-    $drawBox(td2,880,590,300,100,text='Current Round Constant\Round 0-19: 5a 82 79 99 \Round 20-39: 6e d9 eb a1\Round 40-59: 8f 1b bc dc\Round 60-79: ca 62 c1 d6')
-    $drawBox(td3,880,480,300,100,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
+    $drawBox(td1,830,700,350,100,text='Current F function \Round 0-19: (W2 or W3) or ((not W2) and W4)\Round 20-39: W2 xor W3 xor W4\Round 40-59: (W2 and W3) or (W2 and W4) or (W3 and W4)\Round 60-79: W2 xor W3 xor W4')
+    $drawBox(td2,830,590,350,100,text='Current Round Constant\Round 0-19: 5a 82 79 99 \Round 20-39: 6e d9 eb a1\Round 40-59: 8f 1b bc dc\Round 60-79: ca 62 c1 d6')
+    $drawBox(td3,830,480,350,100,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
 
     $drawArrow(w1,lb5)
     $drawArrow(w1,ow2)
@@ -76,67 +76,74 @@ Frame 2:
 Frame End
 
 Frame 3:
-    $modifyArrow(w1,ow2,color='blue',bold=True)
-    $modifyArrow(w3,ow4,color='blue',bold=True)
-    $modifyArrow(w4,ow5,color='blue',bold=True)
+    $modifyBox(w2,color='black',bold=False)
+    $modifyBox(w5,color='black',bold=False)
 Frame End
 
 Frame 4:
-    $modifyBox(w1, text='aa bb cc dd', color='black',bold=False)
-    $modifyBox(w2, text='aa bb cc dd', color='black',bold=False)
-    $modifyBox(w3, text='aa bb cc dd', color='black',bold=False)
-    $modifyBox(w4, text='aa bb cc dd', color='black',bold=False)
-    $modifyBox(w5, text='aa bb cc dd', color='black',bold=False)
-    $modifyBox(ow2,color='blue',bold=True, text='aa bb cc dd')
-    $modifyBox(ow3,color='blue',bold=True, text='aa bb cc dd')
-    $modifyBox(ow4,color='blue',bold=True, text='aa bb cc dd')
-    $modifyBox(ow5,color='blue',bold=True, text='aa bb cc dd')
+    $modifyArrow(w1,ow2,color='blue')
+    $modifyArrow(w3,ow4,color='blue')
+    $modifyArrow(w4,ow5,color='blue')
 Frame End
 
 Frame 5:
-    $modifyArrow(w1,ow2,color='black',bold=False)
-    $modifyArrow(w3,ow4,color='black',bold=False)
-    $modifyArrow(w4,ow5,color='black',bold=False)
+    $modifyBox(ow2,color='blue',bold=True, text='17 62 a1 9e')
+    $modifyBox(ow4,color='blue',bold=True, text='11 b0 4a 33')
+    $modifyBox(ow5,color='blue',bold=True, text='32 5b 6e 2a')
+Frame End
+
+Frame 6:
+    $modifyBox(w1,color='black',bold=False)
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+Frame End
+
+Frame 7:
+    $modifyArrow(w1,ow2,color='black')
+    $modifyArrow(w3,ow4,color='black')
+    $modifyArrow(w4,ow5,color='black')
     $modifyBox(ow2, color='black',bold=False)
     $modifyBox(ow3, color='black',bold=False)
     $modifyBox(ow4, color='black',bold=False)
     $modifyBox(ow5, color='black',bold=False)
 Frame End
 
-Frame 5:
-    $modifyBox(w3, text='aa bb cc dd', color='red',bold=True)
-    $modifyBox(w4, text='aa bb cc dd', color='red',bold=True)
-    $modifyBox(w5, text='aa bb cc dd', color='red',bold=True)
-    $modifyArrow(w4,f,color='red',bold=True)
-    $modifyArrow(w3,f,color='red',bold=True)
-    $modifyArrow(w2,f,color='red',bold=True)
-Frame End
-
-Frame 6:
-    $modifyBox(f,color='red',bold=True,text='DO MATH')
-Frame End
-
-Frame 7:
-    $modifyBox(f,color='green',bold=True)
-Frame End
-
 Frame 8:
-    $modifyArrow(w2,f,color='black',bold=False)
-    $modifyArrow(w4,f,color='black',bold=False)
-    $modifyArrow(w3,f,color='black',bold=False)
-    $modifyBox(w3, text='aa bb cc dd',color='black',bold=False)
-    $modifyBox(w4, text='aa bb cc dd',color='black',bold=False)
-    $modifyBox(w2, text='aa bb cc dd',color='black',bold=False)
-    $modifyBox(ow1,text='41 1f 63 29',color='green',bold=True)
+    $modifyBox(w3,color='green',bold=True)
+    $modifyBox(w4,color='green',bold=True)
+    $modifyBox(w2,color='green',bold=True)
+    $modifyArrow(w4,f,color='green')
+    $modifyArrow(w3,f,color='green')
+    $modifyArrow(w2,f,color='green')
 Frame End
 
 Frame 9:
-    $modifyBox(f,color='black',bold=False,text='F')
-    $modifyArrow(f,am1,color='black',bold=False)
+    $modifyBox(f,color='red',bold=True,text='(W2 or W3) or ((not W2) and W4)',link='fbox1viz',input=w1;w3;w4)
 Frame End
 
 Frame 10:
-    $modifyBox(ow1,color='black',bold=False)
+    $modifyBox(f,text='a6 6e 3a 4a\Click to view')
 Frame End
+
+Frame 11:
+    $modifyArrow(w2,f,color='black')
+    $modifyArrow(w4,f,color='black')
+    $modifyArrow(w3,f,color='black')
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(w2,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+    $modifyBox(f,color='black',text='a6 6e 3a 4a',bold=False,link='',input=)
+Frame End
+
+Frame 12:
+    $modifyBox(f,color='green',bold=True)
+    $modifyArrow(f,am1,color='green',bold=False)
+Frame End
+
+Frame 13:
+    $modifyBox(am1,color='red',bold=True)
+Frame End
+
+
 
 

@@ -70,13 +70,15 @@ def read_file(file_to_read):
                                     print(
                                         "invalid color used, defaulting to black\ncolor options are: blue, green, red")
                             elif attribute_args[0].strip().lower() == 'link':
-                                link_file = open(attribute_args[1].strip('\'').lower())
-                                if not link_file:
-                                    print('invalid link file found for box:' + box_id)
-                                else:
+                                try:
+                                    link_file = open(attribute_args[1].strip('\'').lower())
                                     link_dict[box_id] = [x, y,
                                                          x + width, y + height,
                                                          attribute_args[1].strip('\'').lower()]
+                                except FileNotFoundError:
+                                    print('invalid link file found for box:' + box_id)
+                                    if box_id in link_dict:
+                                        link_dict.pop(box_id)
                             elif attribute_args[0].strip().lower() == 'input':
                                 if box_id in link_dict:
                                     input_arr = []
@@ -120,12 +122,10 @@ def read_file(file_to_read):
                     start_end_arrow = get_start_end_arrow(box_dict, start_box_id, end_box_id)
                     if len(start_end_arrow) > 0:
                         arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict, arrow_dict)
-                        curr_time = time.time()
                         if len(arrow_coords) > 0:
                             curr_arrowhead = create_arrowhead(arrow_coords, arrowhead_thickness)
                             arrow_dict[start_box_id + end_box_id] = [arrow_coords, arr_bold, user_arr_color,
                                                                      start_box_id, end_box_id, curr_arrowhead]
-                        print('arrowhead time = ' + str(time.time() - curr_time))
                 elif function_line[0] == '$modifyBox' or function_line[0] == '$mb':
                     box_args = function_line[1].split(',')
                     box_id = box_args[0].replace('\'', '').strip()
@@ -152,14 +152,16 @@ def read_file(file_to_read):
                             else:
                                 print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
                         elif attribute_args[0].strip().lower() == 'link':
-                            link_file = open(attribute_args[1].strip('\'').lower())
-                            if not link_file:
-                                print('invalid link file found for box:' + box_id)
-                            else:
-                                link_box = box_dict[box_dict]
-                                link_dict[box_id] = (link_box[0], link_box[1],
+                            try:
+                                link_file = open(attribute_args[1].strip('\'').lower())
+                                link_box = box_dict[box_id]
+                                link_dict[box_id] = [link_box[0], link_box[1],
                                                      link_box[0] + link_box[2], link_box[1] + link_box[3],
-                                                     attribute_args[1].strip('\'').lower())
+                                                     attribute_args[1].strip('\'').lower()]
+                            except FileNotFoundError:
+                                print('invalid link file found for box:' + box_id)
+                                if box_id in link_dict:
+                                    link_dict.pop(box_id)
                         elif attribute_args[0].strip().lower() == 'input':
                             if box_id in link_dict:
                                 input_arr = []
@@ -282,6 +284,8 @@ def read_file(file_to_read):
             old_arrow_dict = arrow_dict
             box_dict = copy.deepcopy(old_box_dict)
             arrow_dict = copy.deepcopy(old_arrow_dict)
+            global_dict = copy.deepcopy(global_dict)
+            link_dict = copy.deepcopy(link_dict)
             reading_frame_num += 1
     return frames
 
