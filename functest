@@ -3,8 +3,8 @@
 
 Frame 1:
     $modifyTitle(text='F Function Bit Visualization', color='red')
-    $drawBox(w21f,370,615,170,50,text='W2')
-    $drawBox(w3f,370,535,170,50,text='W3')
+    $drawBox(w21f,370,615,170,50,text=@bytebit('stinky'))
+    $drawBox(w3f,370,535,170,50,text=*w2)
     $drawBox(or1,590,575,50,50,text='OR')
     $drawBox(w2orw3,690,575,170,50,text='(W2 or W3)')
 
@@ -36,13 +36,13 @@ Frame End
 
 Frame 2:
     $modifyTitle(text='F Function Bit Visualization', color='black')
-    $modifyBox(w21f,text=@bytebit(*w2),color='blue',bold=True)
-    $modifyBox(w3f,text=@bytebit(*w3),color='blue',bold=True)
+    $modifyBox(w21f,text=@bytebit(#w2),color='blue',bold=True)
+    $modifyBox(w3f,text='0100 1011 1011 0100',color='blue',bold=True)
 Frame End
 
 Frame 3:
-    $modifyBox(w22f,text=@bytebit(*w2),color='blue',bold=True)
-    $modifyBox(w4f,text=@bytebit(*w4),color='blue',bold=True)
+    $modifyBox(w22f,text=@bytebit(#w2),color='blue',bold=True)
+    $modifyBox(w4f,text='0100 1011 1011 0100',color='blue',bold=True)
 Frame End
 
 Frame 4:
@@ -60,7 +60,7 @@ Frame 5:
 Frame End
 
 Frame 6:
-    $modifyBox(w2orw3,text=@or(*w21f;*w3f),color='red',bold=True)
+    $modifyBox(w2orw3,text='0110 1111 1011 1100',color='red',bold=True)
 Frame End
 
 Frame 7:
@@ -84,7 +84,7 @@ Frame 9:
 Frame End
 
 Frame 10:
-    $modifyBox(notw2,text=@not(*w22f),color='red',bold=True)
+    $modifyBox(notw2,text='1001 0000 0100 0011',color='red',bold=True)
 Frame End
 
 Frame 11:
@@ -108,7 +108,7 @@ Frame 13:
 Frame End
 
 Frame 14:
-    $modifyBox(notw2andw4,text=@and(*notw2;*w4f),color='red',bold=True)
+    $modifyBox(notw2andw4,text='0100 0010 1101 0111',color='red',bold=True)
 Frame End
 
 Frame 15:
@@ -134,7 +134,7 @@ Frame 17:
 Frame End
 
 Frame 18:
-    $modifyBox(w2orw3ornotw2andw4,text=@or(*notw2andw4;*w2orw3),color='red',bold=True)
+    $modifyBox(w2orw3ornotw2andw4,text='1110 1111 0111 0110',color='red',bold=True)
 Frame End
 
 Frame 19:

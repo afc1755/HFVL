@@ -15,3 +15,50 @@ Frame 1:
     $da(w1bio,w1byo)
 Frame End
 
+Frame 2:
+    $modifyTitle(color='black')
+    $modifyBox(w1by,text=*w1,color=blue,bold=True)
+Frame End
+
+Frame 3:
+    $ma(w1by,w1bi,color=blue)
+Frame End
+
+Frame 4:
+    $modifyBox(w1bi,text=@bytebit(*w1by),color=blue,bold=True)
+Frame End
+
+Frame 5:
+    $ma(w1by,w1bi,color=black)
+    $modifyBox(w1by,color=black,bold=False)
+    $modifyBox(w1bi,color=green)
+    $modifyArrow(w1bi,5bl,color=green)
+Frame End
+
+Frame 6:
+    $modifyBox(5bl,color=red,bold=True)
+    $modifyArrow(5bl,w1bio,color=red)
+Frame End
+
+Frame 7:
+    $modifyBox(w1bio,text=@bitshift5(*w1bi),color=red,bold=True)
+Frame End
+
+Frame 8:
+    $modifyBox(w1bio,color=blue)
+    $modifyBox(5bl,color=black,bold=False)
+    $modifyBox(w1bi,color=black,bold=False)
+    $resetArrow(w1bi,5bl)
+    $resetArrow(5bl,w1bio)
+Frame End
+
+Frame 9:
+    $modifyBox(w1byo,color=blue,text=@bitbyte(*w1bio),bold=True)
+    $modifyArrow(w1bio,w1byo,color=blue)
+Frame End
+
+Frame 10:
+    $modifyBox(w1byo,color=red)
+    $resetArrow(w1bio,w1byo)
+    $rb(w1bio)
+Frame End

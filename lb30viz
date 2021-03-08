@@ -1,16 +1,64 @@
-# visualization for the 30 left bit shift of word 1
-# input: w1
+# visualization for the 30 left bit shift of word 2
+# input: w2
 
 Frame 1:
     $modifyTitle(text='30 Bit Shift Left Visualization', color='red')
-    $drawBox(w1by,50,300,150,50,text='w1 byte')
-    $drawBox(w1bi,250,300,170,50,text='w1 bits')
-    $drawBox(5bl,470,300,100,50,text='30 bit <<')
-    $drawBox(w1bio,620,300,170,50,text='w1 30 << bit')
-    $drawBox(w1byo,840,300,150,50,text='w1 30 << byte')
+    $drawBox(w2by,50,300,150,50,text='w2 byte')
+    $drawBox(w2bi,250,300,170,50,text='w2 bits')
+    $drawBox(30bl,470,300,100,50,text='30 bit <<')
+    $drawBox(w2bio,620,300,170,50,text='w2 30 << bit')
+    $drawBox(w2byo,840,300,150,50,text='w2 30 << byte')
 
-    $drawArrow(w1by,w1bi)
-    $drawArrow(w1bi,5bl)
-    $da(5bl,w1bio)
-    $da(w1bio,w1byo)
+    $drawArrow(w2by,w2bi)
+    $drawArrow(w2bi,30bl)
+    $da(30bl,w2bio)
+    $da(w2bio,w2byo)
+Frame End
+
+Frame 2:
+    $modifyTitle(color='black')
+    $modifyBox(w2by,text=*w2,color=blue,bold=True)
+Frame End
+
+Frame 3:
+    $ma(w2by,w2bi,color=blue)
+Frame End
+
+Frame 4:
+    $modifyBox(w2bi,text=@bytebit(*w2by),color=blue,bold=True)
+Frame End
+
+Frame 5:
+    $ma(w2by,w2bi,color=black)
+    $modifyBox(w2by,color=black,bold=False)
+    $modifyBox(w2bi,color=green)
+    $modifyArrow(w2bi,30bl,color=green)
+Frame End
+
+Frame 6:
+    $modifyBox(30bl,color=red,bold=True)
+    $modifyArrow(30bl,w2bio,color=red)
+Frame End
+
+Frame 7:
+    $modifyBox(w2bio,text=@bitshift30(*w2bi),color=red,bold=True)
+Frame End
+
+Frame 8:
+    $modifyBox(w2bio,color=blue)
+    $modifyBox(30bl,color=black,bold=False)
+    $modifyBox(w2bi,color=black,bold=False)
+    $resetArrow(w2bi,30bl)
+    $resetArrow(30bl,w2bio)
+Frame End
+
+Frame 9:
+    $modifyBox(w2byo,color=blue,text=@bitbyte(*w2bio),bold=True)
+    $modifyArrow(w2bio,w2byo,color=blue)
+Frame End
+
+Frame 10:
+    $modifyBox(w2byo,color=red)
+    $resetArrow(w2bio,w2byo)
+    $rb(w2bio)
 Frame End

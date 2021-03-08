@@ -118,7 +118,7 @@ Frame 8:
 Frame End
 
 Frame 9:
-    $modifyBox(f,color='red',bold=True,text='(W2 or W3) or ((not W2) and W4)',link='fbox1viz',input=w1;w3;w4)
+    $modifyBox(f,color='red',bold=True,text='(W2 or W3) or ((not W2) and W4)',link='fbox1viz',input=w2;w3;w4)
 Frame End
 
 Frame 10:
@@ -132,7 +132,7 @@ Frame 11:
     $modifyBox(w3,color='black',bold=False)
     $modifyBox(w2,color='black',bold=False)
     $modifyBox(w4,color='black',bold=False)
-    $modifyBox(f,color='black',text='a6 6e 3a 4a',bold=False,link='',input=)
+    $modifyBox(f,color='black',text='a6 6e 3a 4a',bold=False)
 Frame End
 
 Frame 12:

@@ -8,16 +8,17 @@ import numpy as np
 from hashConstants import *
 from collections import deque
 from Node import Node
+import bitFunctions
 
 
-def run_frames(file_to_read, window_args):
-    frames = read_file(file_to_read)
+def run_frames(file_to_read, prev_window_dict):
+    frames = read_file(file_to_read, prev_window_dict)
     if frames:
         fd = FrameDisplayer.FrameDisplayer(frames, len(frames))
         pyglet.app.run()
 
 
-def read_file(file_to_read):
+def read_file(file_to_read, prev_window_dict):
     frames = []
     lang_file = open(file_to_read)
     if not lang_file:
@@ -52,23 +53,40 @@ def read_file(file_to_read):
                             attribute_args = box_args[i].split('=')
                             if attribute_args[0].strip().lower() == 'text':
                                 box_text = attribute_args[1].replace('\'', '')
+                                if box_text[0] == '@':
+                                    # function found
+                                    func_name, func_args = box_text.split('(', 1)
+                                    func_args = func_args.replace(')', '').split(';')
+                                    real_func_args = []
+                                    for func_arg in func_args:
+                                        if func_arg[0] == '*':
+                                            # input argument or current box id
+                                            try:
+                                                func_arg = box_dict[func_arg.replace('*', '')][4]
+                                            except KeyError:
+                                                try:
+                                                    func_arg = prev_window_dict[func_arg.replace('*', '')]
+                                                except KeyError:
+                                                    print('invalid input argument: ' + func_arg)
+                                                    break
+                                        real_func_args.append(func_arg)
+                                    box_text = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
+                                elif box_text[0] == '*':
+                                    # input argument or current box id
+                                    try:
+                                        box_text = box_dict[box_text.replace('*', '')][4]
+                                    except KeyError:
+                                        try:
+                                            box_text = prev_window_dict[box_text.replace('*', '')]
+                                        except KeyError:
+                                            print('invalid input argument ' + box_text)
                             elif attribute_args[0].strip().lower() == 'bold':
                                 if attribute_args[1].strip('\'').lower() == 'true':
                                     box_bold = True
                                 else:
                                     box_bold = False
                             elif attribute_args[0].strip().lower() == 'color':
-                                if attribute_args[1].strip('\'').lower() == 'blue':
-                                    user_box_color = BLUE
-                                elif attribute_args[1].strip('\'').lower() == 'green':
-                                    user_box_color = GREEN
-                                elif attribute_args[1].strip('\'').lower() == 'red':
-                                    user_box_color = RED
-                                elif attribute_args[1].strip('\'').lower() == 'black':
-                                    user_box_color = BLACK
-                                else:
-                                    print(
-                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                                user_box_color = find_color(attribute_args[1].strip('\'').lower())
                             elif attribute_args[0].strip().lower() == 'link':
                                 try:
                                     link_file = open(attribute_args[1].strip('\'').lower())
@@ -108,17 +126,7 @@ def read_file(file_to_read):
                                     arr_bold = False
                                     arrowhead_thickness = ARROW_NORMAL_SIZE
                             elif attribute_args[0].strip().lower() == 'color':
-                                if attribute_args[1].strip('\'').lower() == 'blue':
-                                    user_arr_color = BLUE
-                                elif attribute_args[1].strip('\'').lower() == 'green':
-                                    user_arr_color = GREEN
-                                elif attribute_args[1].strip('\'').lower() == 'red':
-                                    user_arr_color = RED
-                                elif attribute_args[1].strip('\'').lower() == 'black':
-                                    user_arr_color = BLACK
-                                else:
-                                    print(
-                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                                user_arr_color = find_color(attribute_args[1].strip('\'').lower())
                     start_end_arrow = get_start_end_arrow(box_dict, start_box_id, end_box_id)
                     if len(start_end_arrow) > 0:
                         arrow_coords = pathfind_arrow(*start_end_arrow, start_box_id, end_box_id, box_dict, arrow_dict)
@@ -134,23 +142,43 @@ def read_file(file_to_read):
                     for i in range(1, len(box_args)):
                         attribute_args = box_args[i].split('=')
                         if attribute_args[0].strip().lower() == 'text':
-                            box_dict[box_id][4] = attribute_args[1].replace('\'', '')
+                            box_text = attribute_args[1].replace('\'', '')
+                            if box_text[0] == '@':
+                                # function found
+                                func_name, func_args = box_text.split('(', 1)
+                                func_args = func_args.replace(')', '').split(';')
+                                real_func_args = []
+                                for func_arg in func_args:
+                                    if func_arg[0] == '*':
+                                        # input argument or current box id
+                                        try:
+                                            func_arg = box_dict[func_arg.replace('*', '')][4]
+                                        except KeyError:
+                                            try:
+                                                func_arg = prev_window_dict[func_arg.replace('*', '')]
+                                            except KeyError:
+                                                print('invalid input argument: ' + func_arg)
+                                                break
+                                    real_func_args.append(func_arg)
+                                box_dict[box_id][4] = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
+                            elif box_text[0] == '*':
+                                # input argument or current box id
+                                try:
+                                    box_dict[box_id][4] = box_dict[box_text.replace('*', '')][4]
+                                except KeyError:
+                                    try:
+                                        box_dict[box_id][4] = prev_window_dict[box_text.replace('*', '')]
+                                    except KeyError:
+                                        print('invalid input argument ' + box_text)
+                            else:
+                                box_dict[box_id][4] = box_text
                         elif attribute_args[0].strip().lower() == 'bold':
                             if attribute_args[1].strip('\'').lower() == 'true':
                                 box_dict[box_id][5] = True
                             else:
                                 box_dict[box_id][5] = False
                         elif attribute_args[0].strip().lower() == 'color':
-                            if attribute_args[1].strip('\'').lower() == 'blue':
-                                box_dict[box_id][6] = BLUE
-                            elif attribute_args[1].strip('\'').lower() == 'green':
-                                box_dict[box_id][6] = GREEN
-                            elif attribute_args[1].strip('\'').lower() == 'red':
-                                box_dict[box_id][6] = RED
-                            elif attribute_args[1].strip('\'').lower() == 'black':
-                                box_dict[box_id][6] = BLACK
-                            else:
-                                print("invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                            box_dict[box_id][6] = find_color(attribute_args[1].strip('\'').lower())
                         elif attribute_args[0].strip().lower() == 'link':
                             try:
                                 link_file = open(attribute_args[1].strip('\'').lower())
@@ -165,12 +193,32 @@ def read_file(file_to_read):
                         elif attribute_args[0].strip().lower() == 'input':
                             if box_id in link_dict:
                                 input_arr = []
-                                for input_arg in attribute_args[1].strip().lower().split(','):
+                                for input_arg in attribute_args[1].strip().lower().split(';'):
                                     input_arr.append(input_arg.strip())
                                 link_dict[box_id].append(input_arr)
                         else:
                             print('invalid attribute found when modifying box ' + box_id + ': ' +
                                   attribute_args[0].strip())
+                elif function_line[0] == '$resetBox' or function_line[0] == '$rb':
+                    # helper for me to remove all color and bold and link
+                    box_args = function_line[1].split(',')
+                    box_id = box_args[0].replace('\'', '').strip()
+                    box_dict[box_id] = [box_dict[box_id][0], box_dict[box_id][1],
+                                        box_dict[box_id][2], box_dict[box_id][3],
+                                        box_dict[box_id][4], False, BLACK, {}]
+                elif function_line[0] == '$resetArrow' or function_line[0] == '$ra':
+                    # helper for me to remove all color and bold and link
+                    arrow_args = function_line[1].split(',')
+                    start_box_id = arrow_args[0].replace('\'', '')
+                    end_box_id = arrow_args[1].replace('\'', '')
+                    if (start_box_id + end_box_id) not in arrow_dict:
+                        print(
+                            'boxes not found for arrow to go between\nbox ids: ' + start_box_id + ' and ' + end_box_id)
+                    arrow_dict[start_box_id + end_box_id] = [arrow_dict[start_box_id + end_box_id][0],
+                                                             False, BLACK, start_box_id, end_box_id,
+                                                             create_arrowhead(arrow_dict[start_box_id + end_box_id][0],
+                                                                              ARROW_NORMAL_SIZE)
+                                                             ]
                 elif function_line[0] == '$modifyArrow' or function_line[0] == '$ma':
                     arrow_args = function_line[1].split(',')
                     start_box_id = arrow_args[0].replace('\'', '')
@@ -191,17 +239,7 @@ def read_file(file_to_read):
                                     arrow_dict[start_box_id + end_box_id][5] = \
                                         create_arrowhead(arrow_dict[start_box_id + end_box_id][0], ARROW_NORMAL_SIZE)
                             elif attribute_args[0].strip().lower() == 'color':
-                                if attribute_args[1].strip('\'').lower() == 'blue':
-                                    arrow_dict[start_box_id + end_box_id][2] = BLUE
-                                elif attribute_args[1].strip('\'').lower() == 'green':
-                                    arrow_dict[start_box_id + end_box_id][2] = GREEN
-                                elif attribute_args[1].strip('\'').lower() == 'red':
-                                    arrow_dict[start_box_id + end_box_id][2] = RED
-                                elif attribute_args[1].strip('\'').lower() == 'black':
-                                    arrow_dict[start_box_id + end_box_id][2] = BLACK
-                                else:
-                                    print(
-                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+                                arrow_dict[start_box_id + end_box_id][2] = find_color(attribute_args[1].strip('\'').lower())
                 elif function_line[0] == '$modifyTitle' or function_line[0] == '$mt':
                     title_args = function_line[1].split(',')
                     if len(title_args) > 0:
@@ -210,64 +248,7 @@ def read_file(file_to_read):
                             if attribute_args[0].strip().lower() == 'text':
                                 global_dict['title'][0] = attribute_args[1].replace('\'', '')
                             elif attribute_args[0].strip().lower() == 'color':
-                                if attribute_args[1].strip('\'').lower() == 'blue':
-                                    global_dict['title'][1] = BLUE
-                                elif attribute_args[1].strip('\'').lower() == 'green':
-                                    global_dict['title'][1] = GREEN
-                                elif attribute_args[1].strip('\'').lower() == 'red':
-                                    global_dict['title'][1] = RED
-                                elif attribute_args[1].strip('\'').lower() == 'black':
-                                    global_dict['title'][1] = BLACK
-                                else:
-                                    print(
-                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
-                elif function_line[0] == '$createTextBox' or function_line[0] == '$ctb':
-                    box_text = ''
-                    box_args = function_line[1].split(',')
-                    box_id = box_args[0].replace('\'', '')
-                    x = int(box_args[1])
-                    y = int(box_args[2])
-                    width = int(box_args[3])
-                    height = int(box_args[4])
-                    user_box_color = BLACK
-                    box_bold = False
-
-                    if len(box_args) > 5:
-                        for i in range(5, len(box_args)):
-                            attribute_args = box_args[i].split('=')
-                            if attribute_args[0].strip().lower() == 'text':
-                                box_text = attribute_args[1].replace('\'', '')
-                            elif attribute_args[0].strip().lower() == 'bold':
-                                if attribute_args[1].strip('\'').lower() == 'true':
-                                    box_bold = True
-                                else:
-                                    box_bold = False
-                            elif attribute_args[0].strip().lower() == 'color':
-                                if attribute_args[1].strip('\'').lower() == 'blue':
-                                    user_box_color = BLUE
-                                elif attribute_args[1].strip('\'').lower() == 'green':
-                                    user_box_color = GREEN
-                                elif attribute_args[1].strip('\'').lower() == 'red':
-                                    user_box_color = RED
-                                elif attribute_args[1].strip('\'').lower() == 'black':
-                                    user_box_color = BLACK
-                                else:
-                                    print(
-                                        "invalid color used, defaulting to black\ncolor options are: blue, green, red")
-                            elif attribute_args[0].strip().lower() == 'link':
-                                link_file = open(attribute_args[1].strip('\'').lower())
-                                if not link_file:
-                                    print('invalid link file found for box:' + box_id)
-                                else:
-                                    link_dict[box_id] = (x, y,
-                                                         x + width, y + height,
-                                                         attribute_args[1].strip('\'').lower())
-                            else:
-                                print('invalid attribute found when creating box ' + box_id + ': ' +
-                                      attribute_args[0].strip())
-                    box_dict[box_id] = [x, y, width, height, box_text, box_bold, user_box_color, {}]
-
-                    print('text box drawing')
+                                global_dict['title'][1] = find_color(attribute_args[1].strip('\'').lower())
                 elif function_line[0] == '$hideFrameCount' or function_line[0] == '$hfc':
                     global_dict['frame_count_visible'] = False
                 elif function_line[0] == '$showFrameCount' or function_line[0] == '$sfc':
@@ -288,6 +269,21 @@ def read_file(file_to_read):
             link_dict = copy.deepcopy(link_dict)
             reading_frame_num += 1
     return frames
+
+
+def find_color(in_color):
+    if in_color == 'blue':
+        return BLUE
+    elif in_color == 'green':
+        return GREEN
+    elif in_color == 'red':
+        return RED
+    elif in_color == 'black':
+        return BLACK
+    else:
+        print(
+            "invalid color used, defaulting to black\ncolor options are: blue, green, red")
+    return in_color
 
 
 def get_start_end_arrow(box_dict, start_box_id, end_box_id):

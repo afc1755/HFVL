@@ -17,7 +17,13 @@ class FrameDisplayer(pyglet.window.Window):
         self.old_time = time.time()
 
     def load_new_window(self, file_name, window_args):
-        smallParserBoxAndArrow.run_frames(file_name, window_args)
+        prev_window_dict = {}
+        for window_arg in window_args:
+            try:
+                prev_window_dict[window_arg] = self.frames[self.frame_num]['box_dict'][window_arg][4]
+            except KeyError:
+                print('issues with argument from current window to function window for window arg: ' + window_arg)
+        smallParserBoxAndArrow.run_frames(file_name, prev_window_dict)
 
     def next_frame(self):
         if self.frame_num == self.total_frames - 1:
