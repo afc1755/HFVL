@@ -1,5 +1,5 @@
 Frame 1:
-    $modifyTitle(text='SHA 0 ROUND 0', color='red')
+    $modifyTitle(text='SHA-1 ROUND 0', color='red')
     $drawBox(w1,50,700,150,100,text='WORD 1 ROUND 0')
     $drawBox(w2,200,700,150,100,text='WORD 2 ROUND 0')
     $drawBox(w3,350,700,150,100,text='WORD 3 ROUND 0')
@@ -9,22 +9,21 @@ Frame 1:
     $drawBox(f,400,550,150,75,text='F')
 
     $db(am1, 650,625,150,40,text='Addition mod 2^32')
-    $db(am2, 650, 495, 150,40,text='Addition mod 2^32',link='amviz',input=lb5o;am1o)
-    $drawBox(am3, 650, 365, 150,40,text='Addition mod 2^32',link='amviz',input=exw;am2o)
-    $drawBox(am4, 650, 235, 150,40,text='Addition mod 2^32',link='amviz',input=rc;am3o)
+    $db(am2, 650, 495, 150,40,text='Addition mod 2^32')
+    $drawBox(am3, 650, 365, 150,40,text='Addition mod 2^32')
+    $drawBox(am4, 650, 235, 150,40,text='Addition mod 2^32')
 
-    $db(am1o, 650, 560, 150, 40,text='Output:')
-    $drawBox(am2o, 650, 430, 150, 40,text='Output:')
-    $drawBox(am3o, 650, 300, 150, 40,text='Output:')
+    $db(am1o, 650, 560, 150, 40,text='Output')
+    $drawBox(am2o, 650, 430, 150, 40,text='Output')
+    $drawBox(am3o, 650, 300, 150, 40,text='Output')
 
-    $db(lb5, 50, 495, 150, 40, text ='5 << rotation',link='lb5viz',input=w1)
-    $drawBox(lb5o, 350, 495, 150, 40, text ='Output:',link='lb5viz',input=w1)
+    $db(lb5, 50, 495, 150, 40, text ='5 << rotation')
+    $drawBox(lb5o, 350, 495, 150, 40, text ='Output')
 
-    $db(lb30, 200, 300, 150, 40, text='30 << rotation',link='lb30viz',input=w2)
-    $drawBox(lb30o, 350, 200, 150, 40, text='Output:',link='lb30viz',input=w2)
+    $db(lb30, 350, 300, 150, 40, text='30 << rotation')
 
-    $drawBox(exw, 850, 365, 150, 40,text='Expanded Word:')
-    $drawBox(rc, 850, 235, 150, 40,text='Round Constant:')
+    $drawBox(exw, 850, 365, 150, 40,text='Expanded Word')
+    $drawBox(rc, 850, 235, 150, 40,text='Round Constant')
 
     $drawBox(ow1,50,60,150,100,text='WORD 1 ROUND 1')
     $drawBox(ow2,200,60,150,100,text='WORD 2 ROUND 1')
@@ -42,8 +41,7 @@ Frame 1:
     $drawArrow(lb5o,am2)
 
     $drawArrow(w2,lb30)
-    $drawArrow(lb30,lb30o)
-    $drawArrow(lb30o,ow3)
+    $drawArrow(lb30,ow3)
 
     $drawArrow(w3,ow4)
     $drawArrow(w3, f)
@@ -67,12 +65,12 @@ Frame 1:
 Frame End
 
 Frame 2:
-    $modifyTitle(text='SHA 0 ROUND 0', color='black')
-    $mb(w1,text='17 62 a1 9e',color='blue')
-    $mb(w2,text='63 8a 2b 7c',color='blue')
-    $mb(w3,text='72 3a d2 01',color='blue')
-    $mb(w4,text='11 b0 4a 33',color='blue')
-    $mb(w5,text='32 5b 6e 2a',color='blue')
+    $modifyTitle(color='black')
+    $mb(w1,text='17 62 a1 9e',color='blue',bold=True)
+    $mb(w2,text='63 8a 2b 7c',color='blue',bold=True)
+    $mb(w3,text='72 3a d2 01',color='blue',bold=True)
+    $mb(w4,text='11 b0 4a 33',color='blue',bold=True)
+    $mb(w5,text='32 5b 6e 2a',color='blue',bold=True)
 Frame End
 
 Frame 3:
@@ -87,18 +85,15 @@ Frame 4:
 Frame End
 
 Frame 5:
-    $modifyBox(ow2,color='blue',bold=True, text='17 62 a1 9e')
-    $modifyBox(ow4,color='blue',bold=True, text='11 b0 4a 33')
-    $modifyBox(ow5,color='blue',bold=True, text='32 5b 6e 2a')
+    $modifyBox(ow2,color='blue',bold=True, text=*w1)
+    $modifyBox(ow4,color='blue',bold=True, text=*w3)
+    $modifyBox(ow5,color='blue',bold=True, text=*w4)
 Frame End
 
 Frame 6:
     $modifyBox(w1,color='black',bold=False)
     $modifyBox(w3,color='black',bold=False)
     $modifyBox(w4,color='black',bold=False)
-Frame End
-
-Frame 7:
     $modifyArrow(w1,ow2,color='black')
     $modifyArrow(w3,ow4,color='black')
     $modifyArrow(w4,ow5,color='black')
@@ -108,7 +103,7 @@ Frame 7:
     $modifyBox(ow5, color='black',bold=False)
 Frame End
 
-Frame 8:
+Frame 7:
     $modifyBox(w3,color='green',bold=True)
     $modifyBox(w4,color='green',bold=True)
     $modifyBox(w2,color='green',bold=True)
@@ -117,32 +112,748 @@ Frame 8:
     $modifyArrow(w2,f,color='green')
 Frame End
 
+Frame 8:
+    $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
+Frame End
+
 Frame 9:
-    $modifyBox(f,color='red',bold=True,text='(W2 or W3) or ((not W2) and W4)',link='fbox1viz',input=w2;w3;w4)
+    $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
 Frame End
 
 Frame 10:
-    $modifyBox(f,text='a6 6e 3a 4a\Click to view')
-Frame End
-
-Frame 11:
     $modifyArrow(w2,f,color='black')
     $modifyArrow(w4,f,color='black')
     $modifyArrow(w3,f,color='black')
     $modifyBox(w3,color='black',bold=False)
     $modifyBox(w2,color='black',bold=False)
     $modifyBox(w4,color='black',bold=False)
-    $modifyBox(f,color='black',text='a6 6e 3a 4a',bold=False)
+    $resetBox(f)
+Frame End
+
+Frame 11:
+    $modifyBox(f,color='green',bold=True)
+    $modifyArrow(f,am1,color='green',bold=False)
+    $mb(w5,color='green',bold=True)
+    $ma(w5,am1,color='green')
 Frame End
 
 Frame 12:
-    $modifyBox(f,color='green',bold=True)
-    $modifyArrow(f,am1,color='green',bold=False)
+    $modifyBox(am1,color='red',bold=True,link='amviz1',input=f;w5)
+    $ma(am1,am1o,color='red')
 Frame End
 
 Frame 13:
-    $modifyBox(am1,color='red',bold=True)
+    $mb(am1o,color='red',bold=True,text=@bitbyte(@mod(@add(@bytebit(*f);@bytebit(*w5)))),link='amviz1',input=f;w5)
 Frame End
+
+Frame 14:
+    $rb(f)
+    $rb(w5)
+    $ra(f,am1)
+    $ra(w5,am1)
+    $rb(am1)
+    $ra(am1,am1o)
+Frame End
+
+Frame 15:
+    $mb(w1,color='green',bold=True)
+    $ma(w1,lb5,color='green')
+Frame End
+
+Frame 16:
+    $mb(lb5,color='red',bold=True,link='lb5viz',input=w1)
+    $ma(lb5,lb5o,color='red')
+Frame End
+
+Frame 17:
+    $mb(lb5o,color='red',bold=True,text=@bitbyte(@bitshift5(@bytebit(*w1))),link='lb5viz',input=w1)
+Frame End
+
+Frame 18:
+    $rb(lb5)
+    $rb(w1)
+    $rb(lb5o)
+    $ra(w1,lb5)
+    $ra(lb5,lb5o)
+Frame End
+
+Frame 19:
+    $mb(lb5o,color=green,bold=True)
+    $mb(am1o,color=green,bold=True)
+    $ma(lb5o,am2,color=green)
+    $ma(am1o,am2,color=green)
+Frame End
+
+Frame 20:
+    $mb(am2,color=red,bold=True,link='amviz2',input=lb5o;am1o)
+    $ma(am2,am2o,color=red)
+Frame End
+
+Frame 21:
+    $mb(am2o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='amviz2',input=lb5o;am1o)
+Frame End
+
+Frame 22:
+    $rb(lb5o)
+    $rb(am1o)
+    $rb(am2)
+    $ra(lb5o,am2)
+    $ra(am1o,am2)
+    $ra(am2,am2o)
+Frame End
+
+Frame 23:
+    $mb(exw,color=blue,bold=True,text='d7 dc 7b b2')
+Frame End
+
+Frame 24:
+    $mb(am2o,color=green)
+    $ma(am2o,am3,color=green)
+    $ma(exw,am3,color=green)
+    $mb(exw,color=green)
+Frame End
+
+Frame 25:
+    $mb(am3,color=red, bold=True,link='amviz3',input=exw;am2o)
+    $ma(am3,am3o,color=red)
+Frame End
+
+Frame 26:
+    $mb(am3o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*exw);@bytebit(*am2o))),link='amviz3',input=exw;am2o)
+Frame End
+
+Frame 27:
+    $rb(am2o)
+    $rb(exw)
+    $ra(am2o,am3)
+    $ra(exw,am3)
+    $rb(am3)
+    $ra(am3,am3o)
+Frame End
+
+Frame 28:
+    $mb(rc,color=blue,bold=True,text='5a 82 79 99')
+Frame End
+
+Frame 29:
+    $mb(rc,color=green)
+    $ma(rc,am4,color=green)
+    $ma(am3o,am4,color=green)
+    $mb(am3o,color=green)
+Frame End
+
+Frame 30:
+    $mb(am4,color=red,bold=True,link='amviz4',input=rc;am3o)
+    $ma(am4,ow1,color=red)
+Frame End
+
+Frame 31:
+    $mb(ow1,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*rc);@bytebit(*am3o))),link='amviz4',input=rc;am3o)
+Frame End
+
+Frame 32:
+    $rb(am4)
+    $rb(am3o)
+    $rb(rc)
+    $ra(rc,am4)
+    $ra(am3o,am4)
+    $ra(am4,ow1)
+    $rb(ow1)
+Frame End
+
+Frame 33:
+    $mb(w2,color=green,bold=True)
+    $ma(w2,lb30,color=green)
+Frame End
+
+Frame 34:
+    $mb(lb30,color=red,bold=True,link='lb30viz',input=w2)
+    $ma(lb30,ow3,color=red)
+Frame End
+
+Frame 35:
+    $mb(ow3,color=red,bold=True,text=@bitbyte(@bitshift30(@bytebit(*w2)))),link='lb30viz',input=w2)
+Frame End
+
+Frame 36:
+    $rb(lb30)
+    $rb(w2)
+    $ra(w2,lb30)
+    $ra(lb30,ow3)
+    $rb(ow3)
+Frame End
+
+Frame 37:
+    $mt(text='SHA-1 ROUND 1',color=blue)
+    $mb(ow1,color=blue,bold=True)
+    $mb(ow2,color=blue,bold=True)
+    $mb(ow3,color=blue,bold=True)
+    $mb(ow4,color=blue,bold=True)
+    $mb(ow5,color=blue,bold=True)
+Frame End
+
+Frame 38:
+    $mt(text='SHA-1 ROUND 1',color=blue)
+    $mb(w1,color=blue,bold=True,text='WORD 1 ROUND 1')
+    $mb(w2,color=blue,bold=True,text='WORD 2 ROUND 1')
+    $mb(w3,color=blue,bold=True,text='WORD 3 ROUND 1')
+    $mb(w4,color=blue,bold=True,text='WORD 4 ROUND 1')
+    $mb(w5,color=blue,bold=True,text='WORD 5 ROUND 1')
+Frame End
+
+Frame 39:
+    $mb(w1,text=*ow1)
+    $mb(w2,text=*ow2)
+    $mb(w3,text=*ow3)
+    $mb(w4,text=*ow4)
+    $mb(w5,text=*ow5)
+Frame End
+
+# round 1 start
+Frame 40:
+    $mt(color=red)
+    $rb(w1)
+    $rb(w2)
+    $rb(w3)
+    $rb(w4)
+    $rb(w5)
+    $mb(am1o,text='Output')
+    $mb(am2o,text='Output')
+    $mb(am3o,text='Output')
+    $mb(lb5o,text='Output')
+    $mb(f,text='F')
+    $rb(ow1)
+    $rb(ow2)
+    $rb(ow3)
+    $rb(ow4)
+    $rb(ow5)
+    $mb(ow1,text='WORD 1 ROUND 2')
+    $mb(ow2,text='WORD 2 ROUND 2')
+    $mb(ow3,text='WORD 3 ROUND 2')
+    $mb(ow4,text='WORD 4 ROUND 2')
+    $mb(ow5,text='WORD 5 ROUND 2')
+    $mb(exw,text='Expanded Word')
+    $mb(rc,text='Round Constant')
+Frame End
+
+Frame 4:
+    $modifyArrow(w1,ow2,color='blue')
+    $modifyArrow(w3,ow4,color='blue')
+    $modifyArrow(w4,ow5,color='blue')
+Frame End
+
+Frame 5:
+    $modifyBox(ow2,color='blue',bold=True, text=*w1)
+    $modifyBox(ow4,color='blue',bold=True, text=*w3)
+    $modifyBox(ow5,color='blue',bold=True, text=*w4)
+Frame End
+
+Frame 6:
+    $modifyBox(w1,color='black',bold=False)
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+    $modifyArrow(w1,ow2,color='black')
+    $modifyArrow(w3,ow4,color='black')
+    $modifyArrow(w4,ow5,color='black')
+    $modifyBox(ow2, color='black',bold=False)
+    $modifyBox(ow3, color='black',bold=False)
+    $modifyBox(ow4, color='black',bold=False)
+    $modifyBox(ow5, color='black',bold=False)
+Frame End
+
+Frame 7:
+    $modifyBox(w3,color='green',bold=True)
+    $modifyBox(w4,color='green',bold=True)
+    $modifyBox(w2,color='green',bold=True)
+    $modifyArrow(w4,f,color='green')
+    $modifyArrow(w3,f,color='green')
+    $modifyArrow(w2,f,color='green')
+Frame End
+
+Frame 8:
+    $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
+Frame End
+
+Frame 9:
+    $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
+Frame End
+
+Frame 10:
+    $modifyArrow(w2,f,color='black')
+    $modifyArrow(w4,f,color='black')
+    $modifyArrow(w3,f,color='black')
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(w2,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+    $resetBox(f)
+Frame End
+
+Frame 11:
+    $modifyBox(f,color='green',bold=True)
+    $modifyArrow(f,am1,color='green',bold=False)
+    $mb(w5,color='green',bold=True)
+    $ma(w5,am1,color='green')
+Frame End
+
+Frame 12:
+    $modifyBox(am1,color='red',bold=True,link='amviz1',input=f;w5)
+    $ma(am1,am1o,color='red')
+Frame End
+
+Frame 13:
+    $mb(am1o,color='red',bold=True,text=@bitbyte(@mod(@add(@bytebit(*f);@bytebit(*w5)))),link='amviz1',input=f;w5)
+Frame End
+
+Frame 14:
+    $rb(f)
+    $rb(w5)
+    $ra(f,am1)
+    $ra(w5,am1)
+    $rb(am1)
+    $ra(am1,am1o)
+Frame End
+
+Frame 15:
+    $mb(w1,color='green',bold=True)
+    $ma(w1,lb5,color='green')
+Frame End
+
+Frame 16:
+    $mb(lb5,color='red',bold=True,link='lb5viz',input=w1)
+    $ma(lb5,lb5o,color='red')
+Frame End
+
+Frame 17:
+    $mb(lb5o,color='red',bold=True,text=@bitbyte(@bitshift5(@bytebit(*w1))),link='lb5viz',input=w1)
+Frame End
+
+Frame 18:
+    $rb(lb5)
+    $rb(w1)
+    $rb(lb5o)
+    $ra(w1,lb5)
+    $ra(lb5,lb5o)
+Frame End
+
+Frame 19:
+    $mb(lb5o,color=green,bold=True)
+    $mb(am1o,color=green,bold=True)
+    $ma(lb5o,am2,color=green)
+    $ma(am1o,am2,color=green)
+Frame End
+
+Frame 20:
+    $mb(am2,color=red,bold=True,link='amviz2',input=lb5o;am1o)
+    $ma(am2,am2o,color=red)
+Frame End
+
+Frame 21:
+    $mb(am2o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='amviz2',input=lb5o;am1o)
+Frame End
+
+Frame 22:
+    $rb(lb5o)
+    $rb(am1o)
+    $rb(am2)
+    $ra(lb5o,am2)
+    $ra(am1o,am2)
+    $ra(am2,am2o)
+Frame End
+
+Frame 23:
+    $mb(exw,color=blue,bold=True,text='d7 dc 7b b2')
+Frame End
+
+Frame 24:
+    $mb(am2o,color=green)
+    $ma(am2o,am3,color=green)
+    $ma(exw,am3,color=green)
+    $mb(exw,color=green)
+Frame End
+
+Frame 25:
+    $mb(am3,color=red, bold=True,link='amviz3',input=exw;am2o)
+    $ma(am3,am3o,color=red)
+Frame End
+
+Frame 26:
+    $mb(am3o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*exw);@bytebit(*am2o))),link='amviz3',input=exw;am2o)
+Frame End
+
+Frame 27:
+    $rb(am2o)
+    $rb(exw)
+    $ra(am2o,am3)
+    $ra(exw,am3)
+    $rb(am3)
+    $ra(am3,am3o)
+Frame End
+
+Frame 28:
+    $mb(rc,color=blue,bold=True,text='5a 82 79 99')
+Frame End
+
+Frame 29:
+    $mb(rc,color=green)
+    $ma(rc,am4,color=green)
+    $ma(am3o,am4,color=green)
+    $mb(am3o,color=green)
+Frame End
+
+Frame 30:
+    $mb(am4,color=red,bold=True,link='amviz4',input=rc;am3o)
+    $ma(am4,ow1,color=red)
+Frame End
+
+Frame 31:
+    $mb(ow1,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*rc);@bytebit(*am3o))),link='amviz4',input=rc;am3o)
+Frame End
+
+Frame 32:
+    $rb(am4)
+    $rb(am3o)
+    $rb(rc)
+    $ra(rc,am4)
+    $ra(am3o,am4)
+    $ra(am4,ow1)
+    $rb(ow1)
+Frame End
+
+Frame 33:
+    $mb(w2,color=green,bold=True)
+    $ma(w2,lb30,color=green)
+Frame End
+
+Frame 34:
+    $mb(lb30,color=red,bold=True,link='lb30viz',input=w2)
+    $ma(lb30,ow3,color=red)
+Frame End
+
+Frame 35:
+    $mb(ow3,color=red,bold=True,text=@bitbyte(@bitshift30(@bytebit(*w2)))),link='lb30viz',input=w2)
+Frame End
+
+Frame 36:
+    $rb(lb30)
+    $rb(w2)
+    $ra(w2,lb30)
+    $ra(lb30,ow3)
+    $rb(ow3)
+Frame End
+
+Frame 37:
+    $mt(text='SHA-1 ROUND 1',color=blue)
+    $mb(ow1,color=blue,bold=True)
+    $mb(ow2,color=blue,bold=True)
+    $mb(ow3,color=blue,bold=True)
+    $mb(ow4,color=blue,bold=True)
+    $mb(ow5,color=blue,bold=True)
+Frame End
+
+Frame 38:
+    $mt(text='SHA-1 ROUND 2',color=blue)
+    $mb(w1,color=blue,bold=True,text='WORD 1 ROUND 2')
+    $mb(w2,color=blue,bold=True,text='WORD 2 ROUND 2')
+    $mb(w3,color=blue,bold=True,text='WORD 3 ROUND 2')
+    $mb(w4,color=blue,bold=True,text='WORD 4 ROUND 2')
+    $mb(w5,color=blue,bold=True,text='WORD 5 ROUND 2')
+Frame End
+
+Frame 39:
+    $mb(w1,text=*ow1)
+    $mb(w2,text=*ow2)
+    $mb(w3,text=*ow3)
+    $mb(w4,text=*ow4)
+    $mb(w5,text=*ow5)
+Frame End
+
+# round 2 start
+Frame 40:
+    $mt(color=red)
+    $rb(w1)
+    $rb(w2)
+    $rb(w3)
+    $rb(w4)
+    $rb(w5)
+    $mb(am1o,text='Output')
+    $mb(am2o,text='Output')
+    $mb(am3o,text='Output')
+    $mb(lb5o,text='Output')
+    $mb(f,text='F')
+    $rb(ow1)
+    $rb(ow2)
+    $rb(ow3)
+    $rb(ow4)
+    $rb(ow5)
+    $mb(ow1,text='WORD 1 ROUND 3')
+    $mb(ow2,text='WORD 2 ROUND 3')
+    $mb(ow3,text='WORD 3 ROUND 3')
+    $mb(ow4,text='WORD 4 ROUND 3')
+    $mb(ow5,text='WORD 5 ROUND 3')
+    $mb(exw,text='Expanded Word')
+    $mb(rc,text='Round Constant')
+Frame End
+
+Frame 4:
+    $modifyArrow(w1,ow2,color='blue')
+    $modifyArrow(w3,ow4,color='blue')
+    $modifyArrow(w4,ow5,color='blue')
+Frame End
+
+Frame 5:
+    $modifyBox(ow2,color='blue',bold=True, text=*w1)
+    $modifyBox(ow4,color='blue',bold=True, text=*w3)
+    $modifyBox(ow5,color='blue',bold=True, text=*w4)
+Frame End
+
+Frame 6:
+    $modifyBox(w1,color='black',bold=False)
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+    $modifyArrow(w1,ow2,color='black')
+    $modifyArrow(w3,ow4,color='black')
+    $modifyArrow(w4,ow5,color='black')
+    $modifyBox(ow2, color='black',bold=False)
+    $modifyBox(ow3, color='black',bold=False)
+    $modifyBox(ow4, color='black',bold=False)
+    $modifyBox(ow5, color='black',bold=False)
+Frame End
+
+Frame 7:
+    $modifyBox(w3,color='green',bold=True)
+    $modifyBox(w4,color='green',bold=True)
+    $modifyBox(w2,color='green',bold=True)
+    $modifyArrow(w4,f,color='green')
+    $modifyArrow(w3,f,color='green')
+    $modifyArrow(w2,f,color='green')
+Frame End
+
+Frame 8:
+    $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
+Frame End
+
+Frame 9:
+    $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
+Frame End
+
+Frame 10:
+    $modifyArrow(w2,f,color='black')
+    $modifyArrow(w4,f,color='black')
+    $modifyArrow(w3,f,color='black')
+    $modifyBox(w3,color='black',bold=False)
+    $modifyBox(w2,color='black',bold=False)
+    $modifyBox(w4,color='black',bold=False)
+    $resetBox(f)
+Frame End
+
+Frame 11:
+    $modifyBox(f,color='green',bold=True)
+    $modifyArrow(f,am1,color='green',bold=False)
+    $mb(w5,color='green',bold=True)
+    $ma(w5,am1,color='green')
+Frame End
+
+Frame 12:
+    $modifyBox(am1,color='red',bold=True,link='amviz1',input=f;w5)
+    $ma(am1,am1o,color='red')
+Frame End
+
+Frame 13:
+    $mb(am1o,color='red',bold=True,text=@bitbyte(@mod(@add(@bytebit(*f);@bytebit(*w5)))),link='amviz1',input=f;w5)
+Frame End
+
+Frame 14:
+    $rb(f)
+    $rb(w5)
+    $ra(f,am1)
+    $ra(w5,am1)
+    $rb(am1)
+    $ra(am1,am1o)
+Frame End
+
+Frame 15:
+    $mb(w1,color='green',bold=True)
+    $ma(w1,lb5,color='green')
+Frame End
+
+Frame 16:
+    $mb(lb5,color='red',bold=True,link='lb5viz',input=w1)
+    $ma(lb5,lb5o,color='red')
+Frame End
+
+Frame 17:
+    $mb(lb5o,color='red',bold=True,text=@bitbyte(@bitshift5(@bytebit(*w1))),link='lb5viz',input=w1)
+Frame End
+
+Frame 18:
+    $rb(lb5)
+    $rb(w1)
+    $rb(lb5o)
+    $ra(w1,lb5)
+    $ra(lb5,lb5o)
+Frame End
+
+Frame 19:
+    $mb(lb5o,color=green,bold=True)
+    $mb(am1o,color=green,bold=True)
+    $ma(lb5o,am2,color=green)
+    $ma(am1o,am2,color=green)
+Frame End
+
+Frame 20:
+    $mb(am2,color=red,bold=True,link='amviz2',input=lb5o;am1o)
+    $ma(am2,am2o,color=red)
+Frame End
+
+Frame 21:
+    $mb(am2o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='amviz2',input=lb5o;am1o)
+Frame End
+
+Frame 22:
+    $rb(lb5o)
+    $rb(am1o)
+    $rb(am2)
+    $ra(lb5o,am2)
+    $ra(am1o,am2)
+    $ra(am2,am2o)
+Frame End
+
+Frame 23:
+    $mb(exw,color=blue,bold=True,text='d7 dc 7b b2')
+Frame End
+
+Frame 24:
+    $mb(am2o,color=green)
+    $ma(am2o,am3,color=green)
+    $ma(exw,am3,color=green)
+    $mb(exw,color=green)
+Frame End
+
+Frame 25:
+    $mb(am3,color=red, bold=True,link='amviz3',input=exw;am2o)
+    $ma(am3,am3o,color=red)
+Frame End
+
+Frame 26:
+    $mb(am3o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*exw);@bytebit(*am2o))),link='amviz3',input=exw;am2o)
+Frame End
+
+Frame 27:
+    $rb(am2o)
+    $rb(exw)
+    $ra(am2o,am3)
+    $ra(exw,am3)
+    $rb(am3)
+    $ra(am3,am3o)
+Frame End
+
+Frame 28:
+    $mb(rc,color=blue,bold=True,text='5a 82 79 99')
+Frame End
+
+Frame 29:
+    $mb(rc,color=green)
+    $ma(rc,am4,color=green)
+    $ma(am3o,am4,color=green)
+    $mb(am3o,color=green)
+Frame End
+
+Frame 30:
+    $mb(am4,color=red,bold=True,link='amviz4',input=rc;am3o)
+    $ma(am4,ow1,color=red)
+Frame End
+
+Frame 31:
+    $mb(ow1,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*rc);@bytebit(*am3o))),link='amviz4',input=rc;am3o)
+Frame End
+
+Frame 32:
+    $rb(am4)
+    $rb(am3o)
+    $rb(rc)
+    $ra(rc,am4)
+    $ra(am3o,am4)
+    $ra(am4,ow1)
+    $rb(ow1)
+Frame End
+
+Frame 33:
+    $mb(w2,color=green,bold=True)
+    $ma(w2,lb30,color=green)
+Frame End
+
+Frame 34:
+    $mb(lb30,color=red,bold=True,link='lb30viz',input=w2)
+    $ma(lb30,ow3,color=red)
+Frame End
+
+Frame 35:
+    $mb(ow3,color=red,bold=True,text=@bitbyte(@bitshift30(@bytebit(*w2)))),link='lb30viz',input=w2)
+Frame End
+
+Frame 36:
+    $rb(lb30)
+    $rb(w2)
+    $ra(w2,lb30)
+    $ra(lb30,ow3)
+    $rb(ow3)
+Frame End
+
+Frame 37:
+    $mt(text='SHA-1 ROUND 3',color=blue)
+    $mb(ow1,color=blue,bold=True)
+    $mb(ow2,color=blue,bold=True)
+    $mb(ow3,color=blue,bold=True)
+    $mb(ow4,color=blue,bold=True)
+    $mb(ow5,color=blue,bold=True)
+Frame End
+
+Frame 38:
+    $mt(text='SHA-1 ROUND 3',color=blue)
+    $mb(w1,color=blue,bold=True,text='WORD 1 ROUND 3')
+    $mb(w2,color=blue,bold=True,text='WORD 2 ROUND 3')
+    $mb(w3,color=blue,bold=True,text='WORD 3 ROUND 3')
+    $mb(w4,color=blue,bold=True,text='WORD 4 ROUND 3')
+    $mb(w5,color=blue,bold=True,text='WORD 5 ROUND 3')
+Frame End
+
+Frame 39:
+    $mb(w1,text=*ow1)
+    $mb(w2,text=*ow2)
+    $mb(w3,text=*ow3)
+    $mb(w4,text=*ow4)
+    $mb(w5,text=*ow5)
+Frame End
+
+# round 4 start
+Frame 40:
+    $mt(color=red)
+    $rb(w1)
+    $rb(w2)
+    $rb(w3)
+    $rb(w4)
+    $rb(w5)
+    $mb(am1o,text='Output')
+    $mb(am2o,text='Output')
+    $mb(am3o,text='Output')
+    $mb(lb5o,text='Output')
+    $mb(f,text='F')
+    $rb(ow1)
+    $rb(ow2)
+    $rb(ow3)
+    $rb(ow4)
+    $rb(ow5)
+    $mb(ow1,text='WORD 1 ROUND 4')
+    $mb(ow2,text='WORD 2 ROUND 4')
+    $mb(ow3,text='WORD 3 ROUND 4')
+    $mb(ow4,text='WORD 4 ROUND 4')
+    $mb(ow5,text='WORD 5 ROUND 4')
+    $mb(exw,text='Expanded Word')
+    $mb(rc,text='Round Constant')
+Frame End
+
+
+
 
 
 

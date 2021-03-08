@@ -1,5 +1,0 @@
-Frame 1:
-    $drawBox(box1,200,400,100,100)
-    $drawBox(box2,200,200,100,100,text='here is box2')
-    $drawArrow(box1,box2)
-Frame End

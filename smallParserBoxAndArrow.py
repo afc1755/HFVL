@@ -53,33 +53,7 @@ def read_file(file_to_read, prev_window_dict):
                             attribute_args = box_args[i].split('=')
                             if attribute_args[0].strip().lower() == 'text':
                                 box_text = attribute_args[1].replace('\'', '')
-                                if box_text[0] == '@':
-                                    # function found
-                                    func_name, func_args = box_text.split('(', 1)
-                                    func_args = func_args.replace(')', '').split(';')
-                                    real_func_args = []
-                                    for func_arg in func_args:
-                                        if func_arg[0] == '*':
-                                            # input argument or current box id
-                                            try:
-                                                func_arg = box_dict[func_arg.replace('*', '')][4]
-                                            except KeyError:
-                                                try:
-                                                    func_arg = prev_window_dict[func_arg.replace('*', '')]
-                                                except KeyError:
-                                                    print('invalid input argument: ' + func_arg)
-                                                    break
-                                        real_func_args.append(func_arg)
-                                    box_text = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
-                                elif box_text[0] == '*':
-                                    # input argument or current box id
-                                    try:
-                                        box_text = box_dict[box_text.replace('*', '')][4]
-                                    except KeyError:
-                                        try:
-                                            box_text = prev_window_dict[box_text.replace('*', '')]
-                                        except KeyError:
-                                            print('invalid input argument ' + box_text)
+                                box_text = solve_text(box_text, box_dict, prev_window_dict)
                             elif attribute_args[0].strip().lower() == 'bold':
                                 if attribute_args[1].strip('\'').lower() == 'true':
                                     box_bold = True
@@ -92,7 +66,7 @@ def read_file(file_to_read, prev_window_dict):
                                     link_file = open(attribute_args[1].strip('\'').lower())
                                     link_dict[box_id] = [x, y,
                                                          x + width, y + height,
-                                                         attribute_args[1].strip('\'').lower()]
+                                                         attribute_args[1].strip('\'').lower(), []]
                                 except FileNotFoundError:
                                     print('invalid link file found for box:' + box_id)
                                     if box_id in link_dict:
@@ -102,7 +76,7 @@ def read_file(file_to_read, prev_window_dict):
                                     input_arr = []
                                     for input_arg in attribute_args[1].strip().lower().split(';'):
                                         input_arr.append(input_arg.strip())
-                                    link_dict[box_id].append(input_arr)
+                                    link_dict[box_id][5] = input_arr
                             else:
                                 print('invalid attribute found when creating box ' + box_id + ': ' +
                                       attribute_args[0].strip())
@@ -143,35 +117,7 @@ def read_file(file_to_read, prev_window_dict):
                         attribute_args = box_args[i].split('=')
                         if attribute_args[0].strip().lower() == 'text':
                             box_text = attribute_args[1].replace('\'', '')
-                            if box_text[0] == '@':
-                                # function found
-                                func_name, func_args = box_text.split('(', 1)
-                                func_args = func_args.replace(')', '').split(';')
-                                real_func_args = []
-                                for func_arg in func_args:
-                                    if func_arg[0] == '*':
-                                        # input argument or current box id
-                                        try:
-                                            func_arg = box_dict[func_arg.replace('*', '')][4]
-                                        except KeyError:
-                                            try:
-                                                func_arg = prev_window_dict[func_arg.replace('*', '')]
-                                            except KeyError:
-                                                print('invalid input argument: ' + func_arg)
-                                                break
-                                    real_func_args.append(func_arg)
-                                box_dict[box_id][4] = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
-                            elif box_text[0] == '*':
-                                # input argument or current box id
-                                try:
-                                    box_dict[box_id][4] = box_dict[box_text.replace('*', '')][4]
-                                except KeyError:
-                                    try:
-                                        box_dict[box_id][4] = prev_window_dict[box_text.replace('*', '')]
-                                    except KeyError:
-                                        print('invalid input argument ' + box_text)
-                            else:
-                                box_dict[box_id][4] = box_text
+                            box_dict[box_id][4] = solve_text(box_text, box_dict, prev_window_dict)
                         elif attribute_args[0].strip().lower() == 'bold':
                             if attribute_args[1].strip('\'').lower() == 'true':
                                 box_dict[box_id][5] = True
@@ -186,6 +132,7 @@ def read_file(file_to_read, prev_window_dict):
                                 link_dict[box_id] = [link_box[0], link_box[1],
                                                      link_box[0] + link_box[2], link_box[1] + link_box[3],
                                                      attribute_args[1].strip('\'').lower()]
+                                # if we want to pre-load, do it here
                             except FileNotFoundError:
                                 print('invalid link file found for box:' + box_id)
                                 if box_id in link_dict:
@@ -206,6 +153,8 @@ def read_file(file_to_read, prev_window_dict):
                     box_dict[box_id] = [box_dict[box_id][0], box_dict[box_id][1],
                                         box_dict[box_id][2], box_dict[box_id][3],
                                         box_dict[box_id][4], False, BLACK, {}]
+                    if box_id in link_dict:
+                        link_dict.pop(box_id)
                 elif function_line[0] == '$resetArrow' or function_line[0] == '$ra':
                     # helper for me to remove all color and bold and link
                     arrow_args = function_line[1].split(',')
@@ -269,6 +218,43 @@ def read_file(file_to_read, prev_window_dict):
             link_dict = copy.deepcopy(link_dict)
             reading_frame_num += 1
     return frames
+
+
+def solve_text(box_text, box_dict, prev_window_dict):
+    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@bitshift5', '@bitshift30']
+    if box_text[0] == '@':
+        # function found
+        func_name, func_args = box_text.split('(', 1)
+        if func_name in no_slice:
+            func_args = [func_args]
+        else:
+            balance = 0
+            split_num = -1
+            for i in range(0, len(func_args)):
+                if func_args[i] == ';' and balance == 0:
+                    split_num = i
+                    break
+                elif func_args[i] == '(':
+                    balance += 1
+                elif func_args[i] == ')':
+                    balance -= 1
+            func_args = [func_args[:split_num], func_args[split_num+1:]]
+        real_func_args = []
+        for func_arg in func_args:
+            func_arg = solve_text(func_arg, box_dict, prev_window_dict)
+            real_func_args.append(func_arg)
+        box_text = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
+    elif box_text[0] == '*':
+        # input argument or current box id
+        try:
+
+            box_text = box_dict[box_text.replace('*', '').replace(')', '')][4]
+        except KeyError:
+            try:
+                box_text = prev_window_dict[box_text.replace('*', '').replace(')', '')]
+            except KeyError:
+                print('invalid input argument ' + box_text)
+    return box_text
 
 
 def find_color(in_color):
