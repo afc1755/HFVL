@@ -1,5 +1,4 @@
 import time
-
 import pyglet
 from pyglet.gl import *
 import FrameDisplayer
@@ -204,7 +203,14 @@ def read_file(file_to_read, prev_window_dict):
                     global_dict['frame_count_visible'] = True
                 else:
                     print('error while parsing\ninvalid function at line: \n\t' + line)
+            elif line[0] == '_':
+                # variable declaration*
+                global_dict[line.strip().split('=')[0].lower()] = line.strip().split('=')[1].lower()
+            elif line.strip().split(' ')[0].lower() == 'for':
+                # for loop
+                continue
             else:
+                print('invalid line found: ' + line)
                 continue
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
             frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict,
