@@ -11,9 +11,9 @@ import bitFunctions
 
 
 def run_frames(file_to_read, prev_window_dict):
-    frames = read_file(file_to_read, prev_window_dict)
+    frames, r_splits = read_file(file_to_read, prev_window_dict)
     if frames:
-        fd = FrameDisplayer.FrameDisplayer(frames, len(frames))
+        fd = FrameDisplayer.FrameDisplayer(frames, len(frames), r_splits)
         pyglet.app.run()
 
 
@@ -24,8 +24,10 @@ def read_file(file_to_read, prev_window_dict):
         return []
     box_dict = {}
     arrow_dict = {}
+    round_splits = []
     global_dict = {'title': ['', BLACK], 'frame_count_visible': True}
     link_dict = {}
+    var_dict = {}
 
     reading_frame_num = 0
 
@@ -52,7 +54,7 @@ def read_file(file_to_read, prev_window_dict):
                             attribute_args = box_args[i].split('=')
                             if attribute_args[0].strip().lower() == 'text':
                                 box_text = attribute_args[1].replace('\'', '')
-                                box_text = solve_text(box_text, box_dict, prev_window_dict)
+                                box_text = solve_text(box_text, box_dict, prev_window_dict, var_dict)
                             elif attribute_args[0].strip().lower() == 'bold':
                                 if attribute_args[1].strip('\'').lower() == 'true':
                                     box_bold = True
@@ -116,7 +118,7 @@ def read_file(file_to_read, prev_window_dict):
                         attribute_args = box_args[i].split('=')
                         if attribute_args[0].strip().lower() == 'text':
                             box_text = attribute_args[1].replace('\'', '')
-                            box_dict[box_id][4] = solve_text(box_text, box_dict, prev_window_dict)
+                            box_dict[box_id][4] = solve_text(box_text, box_dict, prev_window_dict, var_dict)
                         elif attribute_args[0].strip().lower() == 'bold':
                             if attribute_args[1].strip('\'').lower() == 'true':
                                 box_dict[box_id][5] = True
@@ -204,16 +206,19 @@ def read_file(file_to_read, prev_window_dict):
                 else:
                     print('error while parsing\ninvalid function at line: \n\t' + line)
             elif line[0] == '_':
-                # variable declaration*
-                global_dict[line.strip().split('=')[0].lower()] = line.strip().split('=')[1].lower()
-            elif line.strip().split(' ')[0].lower() == 'for':
-                # for loop
+                # variable declaration
+                var_strip = line.strip().split('=')
+                var_dict[var_strip[0].strip()] = solve_text(var_strip[1].strip(), box_dict, prev_window_dict, var_dict)
+            elif line.strip().split(' ')[0].lower() == 'while':
+                # while loop
                 continue
+            elif line.strip().lower() == 'round':
+                round_splits.append(reading_frame_num)
             else:
                 print('invalid line found: ' + line)
                 continue
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
-            frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict,
+            frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict, 'var_dict': var_dict,
                            'global_dict': global_dict, 'link_dict': link_dict})
         else:
             old_box_dict = box_dict
@@ -222,11 +227,12 @@ def read_file(file_to_read, prev_window_dict):
             arrow_dict = copy.deepcopy(old_arrow_dict)
             global_dict = copy.deepcopy(global_dict)
             link_dict = copy.deepcopy(link_dict)
+            var_dict = copy.deepcopy(var_dict)
             reading_frame_num += 1
-    return frames
+    return frames, round_splits
 
 
-def solve_text(box_text, box_dict, prev_window_dict):
+def solve_text(box_text, box_dict, prev_window_dict, var_dict):
     no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@bitshift5', '@bitshift30']
     if box_text[0] == '@':
         # function found
@@ -247,14 +253,27 @@ def solve_text(box_text, box_dict, prev_window_dict):
             func_args = [func_args[:split_num], func_args[split_num+1:]]
         real_func_args = []
         for func_arg in func_args:
-            func_arg = solve_text(func_arg, box_dict, prev_window_dict)
+            func_arg = solve_text(func_arg, box_dict, prev_window_dict, var_dict)
             real_func_args.append(func_arg)
-        box_text = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
+        func_result = bitFunctions.apply_function(func_name.replace('@', ''), real_func_args)
+        if isinstance(func_result, str):
+            box_text = func_result
+        else:
+            return box_text
     elif box_text[0] == '*':
         # input argument or current box id
         try:
 
             box_text = box_dict[box_text.replace('*', '').replace(')', '')][4]
+        except KeyError:
+            try:
+                box_text = prev_window_dict[box_text.replace('*', '').replace(')', '')]
+            except KeyError:
+                print('invalid input argument ' + box_text)
+    elif box_text[0] == '_':
+        # input argument or current box id
+        try:
+            box_text = var_dict[box_text]
         except KeyError:
             try:
                 box_text = prev_window_dict[box_text.replace('*', '').replace(')', '')]

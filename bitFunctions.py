@@ -9,7 +9,7 @@ BYTE_BIT = {'0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100', '5'
 def apply_function(func_name, in_args):
     func_args = []
     for func_arg in in_args:
-        func_args.append(func_arg.replace('(', '').replace('*', ''))
+        func_args.append(func_arg.replace('(', '').replace('*', '').replace(')', ''))
     if func_name == 'bytebit':
         if len(func_args) == 1:
             return byte_to_bit(func_args[0])
@@ -60,6 +60,16 @@ def apply_function(func_name, in_args):
             return xor_bit(func_args[0], func_args[1])
         else:
             print('wrong number of args for xor, expected 2 got ' + str(len(func_args)))
+    elif func_name == '+':
+        if len(func_args) == 2:
+            return number_add(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for numerical add, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'lt' or func_name == 'lessthan':
+        if len(func_args) == 2:
+            return less_than(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for numerical less than, expected 2 got ' + str(len(func_args)))
     return func_name
 
 
@@ -193,3 +203,20 @@ def not_bit(in_bit):
         if (i + 1) % 8 == 0 and (i + 1) != len(in_bit):
             not_bit_out += ' '
     return not_bit_out
+
+
+def number_add(num1, num2):
+    try:
+        return str(int(num1) + int(num2))
+    except ValueError:
+        print('not an acceptable integer expression: ' + num1 + ' + ' + num2)
+        return '0'
+
+
+def less_than(num1, num2):
+    try:
+        return int(num1) < int(num2)
+    except ValueError:
+        print('not an acceptable integer expression: ' + num1 + ' < ' + num2)
+        return False
+

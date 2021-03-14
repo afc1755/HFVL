@@ -7,7 +7,7 @@ import smallParserBoxAndArrow
 
 
 class FrameDisplayer(pyglet.window.Window):
-    def __init__(self, frames, total_frames):
+    def __init__(self, frames, total_frames, round_splits):
         super(FrameDisplayer, self).__init__(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.frames = frames
         self.frame_num = 0
@@ -15,6 +15,7 @@ class FrameDisplayer(pyglet.window.Window):
         self.curr_speed = 5
         self.is_playing = False
         self.old_time = time.time()
+        self.round_splits = round_splits
 
     def load_new_window(self, file_name, window_args):
         prev_window_dict = {}
@@ -40,6 +41,24 @@ class FrameDisplayer(pyglet.window.Window):
         else:
             self.frame_num -= 1
         print('previous frame!')
+
+    def next_round(self):
+        for i in range(0, len(self.round_splits)):
+            if self.round_splits[i] > self.frame_num:
+                self.frame_num = self.round_splits[i]
+                break
+            if i == (len(self.round_splits) - 1):
+                print('already on the last round!')
+
+    def previous_round(self):
+        if self.round_splits[0] >= self.frame_num:
+            print('already on the first round!')
+        else:
+            for i in range(0, len(self.round_splits)):
+                if self.round_splits[i] >= self.frame_num:
+                    if i != 0:
+                        self.frame_num = self.round_splits[i - 1]
+                        break
 
     def call_draw(self, dt):
         self.on_draw()
@@ -91,6 +110,10 @@ class FrameDisplayer(pyglet.window.Window):
                                        batch=b_batch)
         previous_button = shapes.Rectangle(PREVIOUS_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
                                            batch=b_batch)
+        next_f_button = shapes.Rectangle(NEXT_F_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
+                                         batch=b_batch)
+        previous_f_button = shapes.Rectangle(PREVIOUS_F_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
+                                             batch=b_batch)
         play_pause_button = shapes.Rectangle(PLAY_BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
                                              batch=b_batch)
         faster_up_button = shapes.Rectangle(FAST_BUTTON_X, BUTTON_Y, SMALL_BUTTON_WIDTH, BUTTON_HEIGHT, color=WHITE,
@@ -159,6 +182,22 @@ class FrameDisplayer(pyglet.window.Window):
                                              font_size=BUTTON_TEXT_SIZE,
                                              bold=True,
                                              x=NEXT_BUTTON_X + DEFAULT_TEXT_SIZE * 2.8,
+                                             y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                             color=BLACK_ALPHA,
+                                             batch=t_batch)
+        previous_f_button_text = pyglet.text.Label('Round <',
+                                                 font_name=FONT_FAMILY,
+                                                 font_size=BUTTON_TEXT_SIZE,
+                                                 bold=True,
+                                                 x=PREVIOUS_F_BUTTON_X + DEFAULT_TEXT_SIZE * 1.2,
+                                                 y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
+                                                 color=BLACK_ALPHA,
+                                                 batch=t_batch)
+        next_f_button_text = pyglet.text.Label('Round >',
+                                             font_name=FONT_FAMILY,
+                                             font_size=BUTTON_TEXT_SIZE,
+                                             bold=True,
+                                             x=NEXT_F_BUTTON_X + DEFAULT_TEXT_SIZE * 1.2,
                                              y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                              color=BLACK_ALPHA,
                                              batch=t_batch)
@@ -260,6 +299,10 @@ class FrameDisplayer(pyglet.window.Window):
             self.next_frame()
         elif PREVIOUS_BUTTON_X <= x <= PREVIOUS_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
             self.previous_frame()
+        elif NEXT_F_BUTTON_X <= x <= NEXT_F_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
+            self.next_round()
+        elif PREVIOUS_F_BUTTON_X <= x <= PREVIOUS_F_BUTTON_X+BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
+            self.previous_round()
         elif PLAY_BUTTON_X <= x <= PLAY_BUTTON_X + BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
             self.start_stop_frames()
         elif SLOW_BUTTON_X <= x <= SLOW_BUTTON_X + SMALL_BUTTON_WIDTH and BUTTON_Y <= y <= BUTTON_Y + BUTTON_HEIGHT:
