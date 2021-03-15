@@ -70,6 +70,11 @@ def apply_function(func_name, in_args):
             return less_than(func_args[0], func_args[1])
         else:
             print('wrong number of args for numerical less than, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'concat':
+        if len(func_args) == 2:
+            return concat(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for concatenation, expected 2 got ' + str(len(func_args)))
     return func_name
 
 
@@ -219,4 +224,8 @@ def less_than(num1, num2):
     except ValueError:
         print('not an acceptable integer expression: ' + num1 + ' < ' + num2)
         return False
+
+
+def concat(num1, num2):
+    return num1 + num2
 

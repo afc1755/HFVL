@@ -1,10 +1,12 @@
+_roundCount=0
+
 Frame 1:
-    $modifyTitle(text='SHA-1 ROUND 0', color='red')
-    $drawBox(w1,50,700,150,100,text='WORD 1 ROUND 0')
-    $drawBox(w2,200,700,150,100,text='WORD 2 ROUND 0')
-    $drawBox(w3,350,700,150,100,text='WORD 3 ROUND 0')
-    $drawBox(w4,500,700,150,100,text='WORD 4 ROUND 0')
-    $drawBox(w5,650,700,150,100,text='WORD 5 ROUND 0')
+    $modifyTitle(text=@concat('SHA-1 ROUND ';_roundCount), color='red')
+    $drawBox(w1,50,700,150,100,text=@concat('WORD 1 ROUND ';_roundCount))
+    $drawBox(w2,200,700,150,100,text=@concat('WORD 2 ROUND ';_roundCount))
+    $drawBox(w3,350,700,150,100,text=@concat('WORD 3 ROUND ';_roundCount))
+    $drawBox(w4,500,700,150,100,text=@concat('WORD 4 ROUND ';_roundCount))
+    $drawBox(w5,650,700,150,100,text=@concat('WORD 5 ROUND ';_roundCount))
 
     $drawBox(f,400,550,150,75,text='F')
 
@@ -25,15 +27,16 @@ Frame 1:
     $drawBox(exw, 850, 365, 150, 40,text='Expanded Word')
     $drawBox(rc, 850, 235, 150, 40,text='Round Constant')
 
-    $drawBox(ow1,50,60,150,100,text='WORD 1 ROUND 1')
-    $drawBox(ow2,200,60,150,100,text='WORD 2 ROUND 1')
-    $drawBox(ow3,350,60,150,100,text='WORD 3 ROUND 1')
-    $drawBox(ow4,500,60,150,100,text='WORD 4 ROUND 1')
-    $drawBox(ow5,650,60,150,100,text='WORD 5 ROUND 1')
+    $drawBox(ow1,50,60,150,100,text=@concat('WORD 1 ROUND ';@+(_roundCount;1)))
+    $drawBox(ow2,200,60,150,100,text=@concat('WORD 2 ROUND ';@+(_roundCount;1)))
+    $drawBox(ow3,350,60,150,100,text=@concat('WORD 3 ROUND ';@+(_roundCount;1)))
+    $drawBox(ow4,500,60,150,100,text=@concat('WORD 4 ROUND ';@+(_roundCount;1)))
+    $drawBox(ow5,650,60,150,100,text=@concat('WORD 5 ROUND ';@+(_roundCount;1)))
 
     $drawBox(td1,830,700,350,100,text='Current F function \Round 0-19: (W2 or W3) or ((not W2) and W4)\Round 20-39: W2 xor W3 xor W4\Round 40-59: (W2 and W3) or (W2 and W4) or (W3 and W4)\Round 60-79: W2 xor W3 xor W4')
     $drawBox(td2,830,590,350,100,text='Current Round Constant\Round 0-19: 5a 82 79 99 \Round 20-39: 6e d9 eb a1\Round 40-59: 8f 1b bc dc\Round 60-79: ca 62 c1 d6')
     $drawBox(td3,830,480,350,100,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
+    $drawBox(description,830,60,350,150,text='Description of events')
 
     $drawArrow(w1,lb5)
     $drawArrow(w1,ow2)
@@ -71,11 +74,12 @@ Frame 2:
     $mb(w3,text='72 3a d2 01',color='blue',bold=True)
     $mb(w4,text='11 b0 4a 33',color='blue',bold=True)
     $mb(w5,text='32 5b 6e 2a',color='blue',bold=True)
+    $mb(description,text='Population of initial word values',color=blue, bold=True)
 Frame End
 
-_roundCount=0
-while @lt(_roundCount;80):
-    Round
+Round
+
+while @lt(_roundCount;79):
     Frame 3:
         $modifyBox(w2,color='black',bold=False)
         $modifyBox(w5,color='black',bold=False)
@@ -116,11 +120,27 @@ while @lt(_roundCount;80):
     Frame End
 
     Frame 8:
-        $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
+        if @lt(_roundCount;19):
+            $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
+        elif @lt(_roundCount;39):
+            $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='fbox2viz',input=w2;w3;w4)
+        elif @lt(_roundCount;59):
+            $modifyBox(f,color='red',bold=True,text='(W2andW3)or\\(W2andW4)or\\(W3andW4)',link='fbox3viz',input=w2;w3;w4)
+        else:
+            $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='fbox2viz',input=w2;w3;w4)
+        if end
     Frame End
 
     Frame 9:
-        $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
+        if @lt(_roundCount;19):
+            $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
+        elif @lt(_roundCount;39):
+            $modifyBox(f,text=@bitbyte(@xor(@xor(@bytebit(*w2);@bytebit(*w3));@bytebit(*w4))))
+        elif @lt(_roundCount;59):
+            $modifyBox(f,text=@bitbyte(@or(@or(@and(@bytebit(*w2);@bytebit(*w3));@and(@bytebit(*w2);@bytebit(*w4)));@and(@bytebit(*w3);@bytebit(*w4))))
+        else:
+            $modifyBox(f,text=@bitbyte(@xor(@xor(@bytebit(*w2);@bytebit(*w3));@bytebit(*w4))))
+        if end
     Frame End
 
     Frame 10:
@@ -286,8 +306,9 @@ while @lt(_roundCount;80):
         $rb(ow3)
     Frame End
 
+    _roundCount = @+(_roundCount;1)
     Frame 37:
-        $mt(text='SHA-1 ROUND _roundCount',color=blue)
+        $mt(text=@concat('SHA-1 ROUND ';_roundCount),color=blue)
         $mb(ow1,color=blue,bold=True)
         $mb(ow2,color=blue,bold=True)
         $mb(ow3,color=blue,bold=True)
@@ -296,11 +317,11 @@ while @lt(_roundCount;80):
     Frame End
 
     Frame 38:
-        $mb(w1,color=blue,bold=True,text='WORD 1 ROUND _roundCount')
-        $mb(w2,color=blue,bold=True,text='WORD 2 ROUND _roundCount')
-        $mb(w3,color=blue,bold=True,text='WORD 3 ROUND _roundCount')
-        $mb(w4,color=blue,bold=True,text='WORD 4 ROUND _roundCount')
-        $mb(w5,color=blue,bold=True,text='WORD 5 ROUND _roundCount')
+        $mb(w1,color=blue,bold=True,text=@concat('WORD 1 ROUND ';_roundCount))
+        $mb(w2,color=blue,bold=True,text=@concat('WORD 2 ROUND ';_roundCount))
+        $mb(w3,color=blue,bold=True,text=@concat('WORD 3 ROUND ';_roundCount))
+        $mb(w4,color=blue,bold=True,text=@concat('WORD 4 ROUND ';_roundCount))
+        $mb(w5,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
     Frame End
 
     Frame 39:
@@ -311,8 +332,43 @@ while @lt(_roundCount;80):
         $mb(w5,text=*ow5)
     Frame End
 
-    _roundCount = @+(_roundCount;1)
+    Round
+    Frame 40:
+        $mt(color=red)
+        $rb(w1)
+        $rb(w2)
+        $rb(w3)
+        $rb(w4)
+        $rb(w5)
+        $mb(am1o,text='Output')
+        $mb(am2o,text='Output')
+        $mb(am3o,text='Output')
+        $mb(lb5o,text='Output')
+        $mb(f,text='F')
+        $rb(ow1)
+        $rb(ow2)
+        $rb(ow3)
+        $rb(ow4)
+        $rb(ow5)
+        $mb(ow1,text=@concat('WORD 1 ROUND ';@+(_roundCount;1)))
+        $mb(ow2,text=@concat('WORD 2 ROUND ';@+(_roundCount;1)))
+        $mb(ow3,text=@concat('WORD 3 ROUND ';@+(_roundCount;1)))
+        $mb(ow4,text=@concat('WORD 4 ROUND ';@+(_roundCount;1)))
+        $mb(ow5,text=@concat('WORD 5 ROUND ';@+(_roundCount;1)))
+        $mb(exw,text='Expanded Word')
+        $mb(rc,text='Round Constant')
+    Frame End
 While End
+
+Frame 41:
+        $mt(text='END OF SHA-1',color=red)
+        $mb(w1,color=red,bold=True)
+        $mb(w2,color=red,bold=True)
+        $mb(w3,color=red,bold=True)
+        $mb(w4,color=red,bold=True)
+        $mb(w5,color=red,bold=True)
+Frame End
+
 
 
 

@@ -1,0 +1,139 @@
+# W2 xor W3 xor W4
+# boxes w2, w3, and w4 are input
+
+Frame 1:
+    $modifyTitle(text='F Function Bit Visualization', color='red')
+
+    $drawBox(w2by,50,615,150,50,text='W2 byte')
+    $drawBox(w2bi,250,615,170,50,text='W2 bit')
+    $drawBox(w3by,50,535,150,50,text='W3 byte')
+    $drawBox(w3bi,250,535,170,50,text='W3 bit')
+    $drawBox(xor1,470,575,50,50,text='XOR')
+    $drawBox(w2xw3,570,575,170,50,text='W2 xor W3')
+
+    $drawBox(w4by,370,375,150,50,text='W4 byte')
+    $drawBox(w4bi,570,375,170,50,text='W4 bit')
+    $drawBox(xor2,650,475,50,50,text='XOR')
+
+    $drawBox(w2xw3xw4,750,475,170,50,text='W2 xor W3 xor W4')
+    $drawBox(outby,970,475,150,50,text='Output Bytes')
+
+    $drawArrow(w2by,w2bi)
+    $drawArrow(w3by,w3bi)
+    $drawArrow(w4by,w4bi)
+    $da(w2bi,xor1)
+    $da(w3bi,xor1)
+    $da(xor1,w2xw3)
+    $da(w2xw3,xor2)
+    $da(w4bi,xor2)
+    $da(xor2,w2xw3xw4)
+    $da(w2xw3xw4,outby)
+Frame End
+
+Frame 2:
+    $modifyTitle(text='F Function Bit Visualization', color='black')
+    $modifyBox(w2by,text=*w2,color='blue',bold=True)
+    $modifyBox(w3by,text=*w3,color='blue',bold=True)
+Frame End
+
+Frame 3:
+    $modifyBox(w4by,text=*w4,color='blue',bold=True)
+Frame End
+
+Frame 4:
+    $modifyArrow(w2by,w2bi,color='blue')
+    $modifyArrow(w3by,w3bi,color='blue')
+    $rb(w4by)
+Frame End
+
+Frame 5:
+    $modifyBox(w2bi,color='blue',text=@bytebit(*w2by))
+    $modifyBox(w3bi,color='blue',text=@bytebit(*w3by))
+Frame End
+
+Frame 6:
+    $modifyBox(w2orw3,text=@or(*w21f;*w3f),color='red',bold=True)
+Frame End
+
+Frame 7:
+    $modifyBox(w21f,color='black',bold=False)
+    $modifyBox(w3f,color='black',bold=False)
+    $modifyBox(or1,color='black',bold=False)
+    $modifyArrow(w21f,or1,color='black')
+    $modifyArrow(w3f,or1,color='black')
+    $modifyArrow(or1,w2orw3,color='black')
+    $modifyBox(w2orw3,color='black',bold=False)
+Frame End
+
+Frame 8:
+    $modifyBox(w22f,color='green',bold=True)
+    $modifyArrow(w22f,not,color='green')
+Frame End
+
+Frame 9:
+    $modifyBox(not,color='red',bold=True)
+    $modifyArrow(not,notw2,color='red')
+Frame End
+
+Frame 10:
+    $modifyBox(notw2,text=@not(*w22f),color='red',bold=True)
+Frame End
+
+Frame 11:
+    $modifyBox(w22f,color='black',bold=False)
+    $modifyBox(not,color='black',bold=False)
+    $modifyBox(notw2,color='black',bold=False)
+    $modifyArrow(w22f,not,color='black')
+    $modifyArrow(not,notw2,color='black')
+Frame End
+
+Frame 12:
+    $modifyBox(notw2,color='green',bold=True)
+    $modifyBox(w4f,color='green',bold=True)
+    $modifyArrow(notw2,and,color='green')
+    $modifyArrow(w4f,and,color='green')
+Frame End
+
+Frame 13:
+    $modifyBox(and,color='red',bold=True)
+    $modifyArrow(and,notw2andw4,color='red')
+Frame End
+
+Frame 14:
+    $modifyBox(notw2andw4,text=@and(*notw2;*w4f),color='red',bold=True)
+Frame End
+
+Frame 15:
+    $modifyBox(notw2andw4,color='black',bold=False)
+    $modifyBox(and,color='black',bold=False)
+    $modifyBox(w4f,color='black',bold=False)
+    $modifyBox(notw2,color='black',bold=False)
+    $modifyArrow(and,notw2andw4,color='black')
+    $modifyArrow(w4f,and,color='black')
+    $modifyArrow(notw2,and,color='black')
+Frame End
+
+Frame 16:
+    $modifyBox(w2orw3,color='green',bold=True)
+    $modifyBox(notw2andw4,color='green',bold=True)
+    $modifyArrow(notw2andw4,or2,color='green')
+    $modifyArrow(w2orw3,or2,color='green')
+Frame End
+
+Frame 17:
+    $modifyBox(or2,color='red',bold=True)
+    $modifyArrow(or2,w2orw3ornotw2andw4,color='red')
+Frame End
+
+Frame 18:
+    $modifyBox(w2orw3ornotw2andw4,text=@or(*notw2andw4;*w2orw3),color='red',bold=True)
+Frame End
+
+Frame 19:
+    $modifyBox(notw2andw4,color='black',bold=False)
+    $modifyBox(or2,color='black',bold=False)
+    $modifyBox(w2orw3,color='black',bold=False)
+    $modifyArrow(or2,w2orw3ornotw2andw4,color='black')
+    $modifyArrow(notw2andw4,or2,color='black')
+    $modifyArrow(w2orw3,or2,color='black')
+Frame End

@@ -59,6 +59,8 @@ class FrameDisplayer(pyglet.window.Window):
                     if i != 0:
                         self.frame_num = self.round_splits[i - 1]
                         break
+                if (i + 1) == len(self.round_splits):
+                    self.frame_num = self.round_splits[i]
 
     def call_draw(self, dt):
         self.on_draw()
@@ -210,18 +212,26 @@ class FrameDisplayer(pyglet.window.Window):
                                                 color=BLACK_ALPHA,
                                                 batch=t_batch)
         if self.frames[self.frame_num]['global_dict']['frame_count_visible']:
+            if self.total_frames > 1000:
+                f_font_size = 11
+            else:
+                f_font_size = BUTTON_TEXT_SIZE
+            if self.frame_num > 99:
+                f_buffer = 5
+            else:
+                f_buffer = 0
             frame_text = pyglet.text.Label('Frame ' + str(self.frame_num + 1) + '/' + str(self.total_frames),
                                            font_name=FONT_FAMILY,
-                                           font_size=BUTTON_TEXT_SIZE,
+                                           font_size=f_font_size,
                                            bold=True,
-                                           x=FRAME_INFO_X,
+                                           x=FRAME_INFO_X - f_buffer,
                                            y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                            color=WHITE_ALPHA,
                                            batch=t_batch)
             speed_text = pyglet.text.Label('Speed: ' + str(TEXT_SPEED_ARR[self.curr_speed]),
                                            font_name=FONT_FAMILY,
-                                           font_size=BUTTON_TEXT_SIZE,
-                                           x=SPEED_INFO_X,
+                                           font_size=f_font_size,
+                                           x=SPEED_INFO_X + f_buffer,
                                            bold=True,
                                            y=BUTTON_Y + (BUTTON_HEIGHT * .5 - DEFAULT_TEXT_SIZE * .65),
                                            color=WHITE_ALPHA,
@@ -267,7 +277,7 @@ class FrameDisplayer(pyglet.window.Window):
                     dummy_arr.append(pyglet.text.Label(curr_box[4],
                                                        font_name=FONT_FAMILY,
                                                        font_size=DEFAULT_TEXT_SIZE,
-                                                       x=curr_box[0] + DEFAULT_TEXT_SIZE,
+                                                       x=curr_box[0] + ((curr_box[2] - word_size) / 2),
                                                        y=curr_box[1] + curr_box[3] / 2,
                                                        bold=curr_box[5],
                                                        color=curr_box[6] + (255,),

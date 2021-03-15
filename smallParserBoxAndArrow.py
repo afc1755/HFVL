@@ -22,18 +22,24 @@ def read_file(file_to_read, prev_window_dict):
     lang_file = open(file_to_read)
     if not lang_file:
         return []
+    lang_file = lang_file.readlines()
     box_dict = {}
     arrow_dict = {}
     round_splits = []
     global_dict = {'title': ['', BLACK], 'frame_count_visible': True}
     link_dict = {}
     var_dict = {}
+    while_index = -1
+    end_if_index = -1
+    done_if = False
 
     reading_frame_num = 0
+    line_index = 0
 
-    for line in lang_file:
-        line = line.strip()
+    while line_index < len(lang_file):
+        line = lang_file[line_index].strip()
         if len(line) == 0:
+            line_index += 1
             continue
         elif line.strip().split(' ')[0].lower() != 'frame':
             if line[0] == '$':
@@ -196,7 +202,8 @@ def read_file(file_to_read, prev_window_dict):
                         for i in range(0, len(title_args)):
                             attribute_args = title_args[i].split('=')
                             if attribute_args[0].strip().lower() == 'text':
-                                global_dict['title'][0] = attribute_args[1].replace('\'', '')
+                                title_text = attribute_args[1].replace('\'', '')
+                                global_dict['title'][0] = solve_text(title_text, box_dict, prev_window_dict, var_dict)
                             elif attribute_args[0].strip().lower() == 'color':
                                 global_dict['title'][1] = find_color(attribute_args[1].strip('\'').lower())
                 elif function_line[0] == '$hideFrameCount' or function_line[0] == '$hfc':
@@ -208,14 +215,86 @@ def read_file(file_to_read, prev_window_dict):
             elif line[0] == '_':
                 # variable declaration
                 var_strip = line.strip().split('=')
-                var_dict[var_strip[0].strip()] = solve_text(var_strip[1].strip(), box_dict, prev_window_dict, var_dict)
+                var_dict[var_strip[0].strip().replace('_', '')] = solve_text(var_strip[1].strip(), box_dict,
+                                                                             prev_window_dict, var_dict)
             elif line.strip().split(' ')[0].lower() == 'while':
+                if line.strip().split(' ')[1].lower() == 'end':
+                    if while_index == -1:
+                        print('while end without while statement!')
+                        line_index += 1
+                        continue
+                    line_index = while_index - 1
+                    continue
                 # while loop
-                continue
+                while_statement = line.strip().split(' ')[1].replace(':', '')
+                while_cond = solve_text(while_statement, box_dict, prev_window_dict, var_dict)
+                if isinstance(while_cond, bool):
+                    while_index = line_index
+                    if not while_cond:
+                        for small_line_index in range(line_index, len(lang_file)):
+                            s_line = lang_file[small_line_index].strip().split(' ')
+                            if s_line[0].lower() == 'while' and s_line[1].lower() == 'end':
+                                line_index = small_line_index
+                                continue
+            elif line.strip().split(' ')[0].lower() == 'if':
+                if line.strip().split(' ')[1].lower() == 'end':
+                    done_if = False
+                    if end_if_index == -1:
+                        print('if end without if statement!')
+                    line_index += 1
+                    continue
+                if_statement = line.strip().split(' ')[1].replace(':', '')
+                if_cond = solve_text(if_statement, box_dict, prev_window_dict, var_dict)
+                if isinstance(if_cond, bool):
+                    if not if_cond:
+                        for small_line_index in range(line_index, len(lang_file)):
+                            s_line = lang_file[small_line_index].strip().split(' ')
+                            if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
+                                line_index = small_line_index
+                                continue
+                            elif s_line[0].lower() == 'elif':
+                                line_index = small_line_index
+                                continue
+                    else:
+                        line_index += 1
+                        done_if = True
+                        for small_line_index in range(line_index, len(lang_file)):
+                            s_line = lang_file[small_line_index].strip().split(' ')
+                            if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
+                                end_if_index = small_line_index
+                                continue
+            elif line.strip().split(' ')[0].lower() == 'elif' or line.strip().split(' ')[0].lower() == 'else:':
+                if done_if:
+                    line_index = end_if_index
+                else:
+                    if_statement = line.strip().split(' ')[1].replace(':', '')
+                    if if_statement == 'else':
+                        if_cond = True
+                    else:
+                        if_cond = solve_text(if_statement, box_dict, prev_window_dict, var_dict)
+                    if isinstance(if_cond, bool):
+                        if not if_cond:
+                            for small_line_index in range(line_index, len(lang_file)):
+                                s_line = lang_file[small_line_index].strip().split(' ')
+                                if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
+                                    line_index = small_line_index
+                                    continue
+                                elif s_line[0].lower() == 'elif':
+                                    line_index = small_line_index
+                                    continue
+                        else:
+                            line_index += 1
+                            done_if = True
+                            for small_line_index in range(line_index, len(lang_file)):
+                                s_line = lang_file[small_line_index].strip().split(' ')
+                                if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
+                                    end_if_index = small_line_index
+                                    continue
             elif line.strip().lower() == 'round':
                 round_splits.append(reading_frame_num)
             else:
                 print('invalid line found: ' + line)
+                line_index += 1
                 continue
         elif line.strip().split(' ')[0].lower() == 'frame' and line.strip().split(' ')[1].lower() == 'end':
             frames.append({'box_dict': box_dict, 'arrow_dict': arrow_dict, 'var_dict': var_dict,
@@ -229,6 +308,7 @@ def read_file(file_to_read, prev_window_dict):
             link_dict = copy.deepcopy(link_dict)
             var_dict = copy.deepcopy(var_dict)
             reading_frame_num += 1
+        line_index += 1
     return frames, round_splits
 
 
@@ -259,11 +339,10 @@ def solve_text(box_text, box_dict, prev_window_dict, var_dict):
         if isinstance(func_result, str):
             box_text = func_result
         else:
-            return box_text
+            return func_result
     elif box_text[0] == '*':
         # input argument or current box id
         try:
-
             box_text = box_dict[box_text.replace('*', '').replace(')', '')][4]
         except KeyError:
             try:
@@ -273,12 +352,9 @@ def solve_text(box_text, box_dict, prev_window_dict, var_dict):
     elif box_text[0] == '_':
         # input argument or current box id
         try:
-            box_text = var_dict[box_text]
+            box_text = var_dict[box_text.replace('_', '').replace(')', '')]
         except KeyError:
-            try:
-                box_text = prev_window_dict[box_text.replace('*', '').replace(')', '')]
-            except KeyError:
-                print('invalid input argument ' + box_text)
+            print('invalid variable argument ' + box_text)
     return box_text
 
 
