@@ -69,11 +69,11 @@ Frame End
 
 Frame 2:
     $modifyTitle(color='black')
-    $mb(w1,text='17 62 a1 9e',color='blue',bold=True)
-    $mb(w2,text='63 8a 2b 7c',color='blue',bold=True)
-    $mb(w3,text='72 3a d2 01',color='blue',bold=True)
-    $mb(w4,text='11 b0 4a 33',color='blue',bold=True)
-    $mb(w5,text='32 5b 6e 2a',color='blue',bold=True)
+    $mb(w1,text='67 45 23 01',color='blue',bold=True)
+    $mb(w2,text='ef cd ab 89',color='blue',bold=True)
+    $mb(w3,text='98 ba dc fe',color='blue',bold=True)
+    $mb(w4,text='10 32 54 76',color='blue',bold=True)
+    $mb(w5,text='c3 d2 e1 f0',color='blue',bold=True)
     $mb(description,text='Population of initial word values',color=blue, bold=True)
 Frame End
 
@@ -83,12 +83,14 @@ while @lt(_roundCount;79):
     Frame 3:
         $modifyBox(w2,color='black',bold=False)
         $modifyBox(w5,color='black',bold=False)
+        $rb(description)
     Frame End
 
     Frame 4:
         $modifyArrow(w1,ow2,color='blue')
         $modifyArrow(w3,ow4,color='blue')
         $modifyArrow(w4,ow5,color='blue')
+        $mb(description, text='Transfer values from word 1 to word 2 of next round - word 3 to word 4 of next round - and from word 4 to word 5 of next round', color=blue)
     Frame End
 
     Frame 5:
@@ -108,6 +110,7 @@ while @lt(_roundCount;79):
         $modifyBox(ow3, color='black',bold=False)
         $modifyBox(ow4, color='black',bold=False)
         $modifyBox(ow5, color='black',bold=False)
+        $rb(description)
     Frame End
 
     Frame 7:
@@ -117,14 +120,15 @@ while @lt(_roundCount;79):
         $modifyArrow(w4,f,color='green')
         $modifyArrow(w3,f,color='green')
         $modifyArrow(w2,f,color='green')
+        $mb(description,color=blue,text='Take words 2 3 and 4 as input to the F function. The F function will run select bit operations depending on the round. Click on the box for more details.')
     Frame End
 
     Frame 8:
-        if @lt(_roundCount;19):
+        if @lt(_roundCount;20):
             $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
-        elif @lt(_roundCount;39):
+        elif @lt(_roundCount;40:
             $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='fbox2viz',input=w2;w3;w4)
-        elif @lt(_roundCount;59):
+        elif @lt(_roundCount;60):
             $modifyBox(f,color='red',bold=True,text='(W2andW3)or\\(W2andW4)or\\(W3andW4)',link='fbox3viz',input=w2;w3;w4)
         else:
             $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='fbox2viz',input=w2;w3;w4)
@@ -132,12 +136,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 9:
-        if @lt(_roundCount;19):
+        if @lt(_roundCount;20):
             $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
-        elif @lt(_roundCount;39):
+        elif @lt(_roundCount;40):
             $modifyBox(f,text=@bitbyte(@xor(@xor(@bytebit(*w2);@bytebit(*w3));@bytebit(*w4))))
-        elif @lt(_roundCount;59):
-            $modifyBox(f,text=@bitbyte(@or(@or(@and(@bytebit(*w2);@bytebit(*w3));@and(@bytebit(*w2);@bytebit(*w4)));@and(@bytebit(*w3);@bytebit(*w4))))
+        elif @lt(_roundCount;60):
+            $modifyBox(f,text=@bitbyte(@or(@or(@and(@bytebit(*w2);@bytebit(*w3));@and(@bytebit(*w2);@bytebit(*w4)));@and(@bytebit(*w3);@bytebit(*w4)))))
         else:
             $modifyBox(f,text=@bitbyte(@xor(@xor(@bytebit(*w2);@bytebit(*w3));@bytebit(*w4))))
         if end
@@ -150,6 +154,7 @@ while @lt(_roundCount;79):
         $modifyBox(w3,color='black',bold=False)
         $modifyBox(w2,color='black',bold=False)
         $modifyBox(w4,color='black',bold=False)
+        $rb(description)
         $resetBox(f)
     Frame End
 
@@ -158,6 +163,7 @@ while @lt(_roundCount;79):
         $modifyArrow(f,am1,color='green',bold=False)
         $mb(w5,color='green',bold=True)
         $ma(w5,am1,color='green')
+        $mb(description,color=blue,text='Take the output from the F function box and word 5 as input and bitwise add them together modulo 32. Click on the box for more details.')
     Frame End
 
     Frame 12:
@@ -176,11 +182,14 @@ while @lt(_roundCount;79):
         $ra(w5,am1)
         $rb(am1)
         $ra(am1,am1o)
+        $rb(am1o)
+        $rb(description)
     Frame End
 
     Frame 15:
         $mb(w1,color='green',bold=True)
         $ma(w1,lb5,color='green')
+        $mb(description,color=blue,text='Bit shift word 1 left by 5. Click to see details')
     Frame End
 
     Frame 16:
@@ -198,6 +207,7 @@ while @lt(_roundCount;79):
         $rb(lb5o)
         $ra(w1,lb5)
         $ra(lb5,lb5o)
+        $rb(description)
     Frame End
 
     Frame 19:
@@ -205,6 +215,7 @@ while @lt(_roundCount;79):
         $mb(am1o,color=green,bold=True)
         $ma(lb5o,am2,color=green)
         $ma(am1o,am2,color=green)
+        $mb(description,color=blue,text='Take the bit-shifted word 1 and add it with our previous addition output. Click to see details')
     Frame End
 
     Frame 20:
@@ -223,10 +234,12 @@ while @lt(_roundCount;79):
         $ra(lb5o,am2)
         $ra(am1o,am2)
         $ra(am2,am2o)
+        $rb(description)
     Frame End
 
     Frame 23:
         $mb(exw,color=blue,bold=True,text='d7 dc 7b b2')
+        $mb(description,color=blue,text='Plug in the current Expanded Word from our message schedule. Then add this to our previous addition output. Click to see details')
     Frame End
 
     Frame 24:
@@ -252,10 +265,20 @@ while @lt(_roundCount;79):
         $ra(exw,am3)
         $rb(am3)
         $ra(am3,am3o)
+        $rb(description)
     Frame End
 
     Frame 28:
-        $mb(rc,color=blue,bold=True,text='5a 82 79 99')
+        if @lt(_roundCount;20):
+            $mb(rc,color=blue,bold=True,text='5a 82 79 99')
+        elif @lt(_roundCount;40):
+            $mb(rc,color=blue,bold=True,text='6e d9 eb a1')
+        elif @lt(_roundCount;60):
+            $mb(rc,color=blue,bold=True,text='8f 1b bc dc')
+        else:
+            $mb(rc,color=blue,bold=True,text='ca 62 c1 d6')
+        if end
+        $mb(description,color=blue,text='Plug in the current round constant and add this to our previous addition output. Then finally set the next round word 1 to this value. Click to see details')
     Frame End
 
     Frame 29:
@@ -282,11 +305,13 @@ while @lt(_roundCount;79):
         $ra(am3o,am4)
         $ra(am4,ow1)
         $rb(ow1)
+        $rb(description)
     Frame End
 
     Frame 33:
         $mb(w2,color=green,bold=True)
         $ma(w2,lb30,color=green)
+        $mb(description,color=blue,text='Left bit shift word 2 by 30 bits and set the next round word 3 to this value. Click to see details')
     Frame End
 
     Frame 34:
@@ -304,6 +329,7 @@ while @lt(_roundCount;79):
         $ra(w2,lb30)
         $ra(lb30,ow3)
         $rb(ow3)
+        $rb(description)
     Frame End
 
     _roundCount = @+(_roundCount;1)
@@ -314,6 +340,7 @@ while @lt(_roundCount;79):
         $mb(ow3,color=blue,bold=True)
         $mb(ow4,color=blue,bold=True)
         $mb(ow5,color=blue,bold=True)
+        $mb(description,color=blue,text=@concat(@concat('End of SHA-1 round ';_roundCount);'. We now set the next round starting words to be the previous round output and run the same process as before.')
     Frame End
 
     Frame 38:
@@ -357,6 +384,7 @@ while @lt(_roundCount;79):
         $mb(ow5,text=@concat('WORD 5 ROUND ';@+(_roundCount;1)))
         $mb(exw,text='Expanded Word')
         $mb(rc,text='Round Constant')
+        $rb(description)
     Frame End
 While End
 
@@ -367,6 +395,7 @@ Frame 41:
         $mb(w3,color=red,bold=True)
         $mb(w4,color=red,bold=True)
         $mb(w5,color=red,bold=True)
+        $mb(description,color=red,text='We have finished running SHA-1 as we have run through 80 similar rounds. The resulting hash is the concatenation of words 1 through 5: shown in this visualization in red.')
 Frame End
 
 

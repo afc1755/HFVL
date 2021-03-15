@@ -52,7 +52,12 @@ Frame 5:
 Frame End
 
 Frame 6:
-    $modifyBox(w2orw3,text=@or(*w21f;*w3f),color='red',bold=True)
+    $rb(w2bi)
+    $rb(w3bi)
+    $ra(w2by,w2bi)
+    $ra(w3by,w3bi)
+    $rb(w2by)
+    $rb(w3by)
 Frame End
 
 Frame 7:

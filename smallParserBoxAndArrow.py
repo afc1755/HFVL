@@ -235,7 +235,7 @@ def read_file(file_to_read, prev_window_dict):
                             s_line = lang_file[small_line_index].strip().split(' ')
                             if s_line[0].lower() == 'while' and s_line[1].lower() == 'end':
                                 line_index = small_line_index
-                                continue
+                                break
             elif line.strip().split(' ')[0].lower() == 'if':
                 if line.strip().split(' ')[1].lower() == 'end':
                     done_if = False
@@ -247,49 +247,47 @@ def read_file(file_to_read, prev_window_dict):
                 if_cond = solve_text(if_statement, box_dict, prev_window_dict, var_dict)
                 if isinstance(if_cond, bool):
                     if not if_cond:
-                        for small_line_index in range(line_index, len(lang_file)):
+                        for small_line_index in range(line_index + 1, len(lang_file)):
                             s_line = lang_file[small_line_index].strip().split(' ')
                             if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
-                                line_index = small_line_index
-                                continue
-                            elif s_line[0].lower() == 'elif':
-                                line_index = small_line_index
-                                continue
+                                line_index = small_line_index - 1
+                                break
+                            elif s_line[0].lower() == 'elif' or s_line[0].lower() == 'else:':
+                                line_index = small_line_index - 1
+                                break
                     else:
-                        line_index += 1
                         done_if = True
-                        for small_line_index in range(line_index, len(lang_file)):
+                        for small_line_index in range(line_index + 1, len(lang_file)):
                             s_line = lang_file[small_line_index].strip().split(' ')
                             if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
-                                end_if_index = small_line_index
-                                continue
+                                end_if_index = small_line_index - 1
+                                break
             elif line.strip().split(' ')[0].lower() == 'elif' or line.strip().split(' ')[0].lower() == 'else:':
                 if done_if:
                     line_index = end_if_index
                 else:
-                    if_statement = line.strip().split(' ')[1].replace(':', '')
-                    if if_statement == 'else':
+                    if line.strip().split(' ')[0].lower() == 'else:':
                         if_cond = True
                     else:
+                        if_statement = line.strip().split(' ')[1].replace(':', '')
                         if_cond = solve_text(if_statement, box_dict, prev_window_dict, var_dict)
                     if isinstance(if_cond, bool):
                         if not if_cond:
-                            for small_line_index in range(line_index, len(lang_file)):
+                            for small_line_index in range(line_index + 1, len(lang_file)):
                                 s_line = lang_file[small_line_index].strip().split(' ')
                                 if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
-                                    line_index = small_line_index
-                                    continue
-                                elif s_line[0].lower() == 'elif':
-                                    line_index = small_line_index
-                                    continue
+                                    line_index = small_line_index - 1
+                                    break
+                                elif s_line[0].lower() == 'elif' or s_line[0].lower() == 'else:':
+                                    line_index = small_line_index - 1
+                                    break
                         else:
-                            line_index += 1
                             done_if = True
-                            for small_line_index in range(line_index, len(lang_file)):
+                            for small_line_index in range(line_index + 1, len(lang_file)):
                                 s_line = lang_file[small_line_index].strip().split(' ')
                                 if s_line[0].lower() == 'if' and s_line[1].lower() == 'end':
-                                    end_if_index = small_line_index
-                                    continue
+                                    end_if_index = small_line_index - 1
+                                    break
             elif line.strip().lower() == 'round':
                 round_splits.append(reading_frame_num)
             else:
