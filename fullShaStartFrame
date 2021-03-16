@@ -332,9 +332,8 @@ while @lt(_roundCount;79):
         $rb(description)
     Frame End
 
-    _roundCount = @+(_roundCount;1)
     Frame 37:
-        $mt(text=@concat('SHA-1 ROUND ';_roundCount),color=blue)
+        $mt(text=@concat('SHA-1 ROUND ';@+(_roundCount;1),color=blue)
         $mb(ow1,color=blue,bold=True)
         $mb(ow2,color=blue,bold=True)
         $mb(ow3,color=blue,bold=True)
@@ -343,6 +342,7 @@ while @lt(_roundCount;79):
         $mb(description,color=blue,text=@concat(@concat('End of SHA-1 round ';_roundCount);'. We now set the next round starting words to be the previous round output and run the same process as before.')
     Frame End
 
+    _roundCount = @+(_roundCount;1)
     Frame 38:
         $mb(w1,color=blue,bold=True,text=@concat('WORD 1 ROUND ';_roundCount))
         $mb(w2,color=blue,bold=True,text=@concat('WORD 2 ROUND ';_roundCount))
@@ -397,13 +397,3 @@ Frame 41:
         $mb(w5,color=red,bold=True)
         $mb(description,color=red,text='We have finished running SHA-1 as we have run through 80 similar rounds. The resulting hash is the concatenation of words 1 through 5: shown in this visualization in red.')
 Frame End
-
-
-
-
-
-
-
-
-
-

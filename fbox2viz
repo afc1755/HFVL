@@ -1,6 +1,3 @@
-# W2 xor W3 xor W4
-# boxes w2, w3, and w4 are input
-
 Frame 1:
     $modifyTitle(text='F Function Bit Visualization', color='red')
 
@@ -21,8 +18,9 @@ Frame 1:
     $drawArrow(w2by,w2bi)
     $drawArrow(w3by,w3bi)
     $drawArrow(w4by,w4bi)
-    $da(w2bi,xor1)
+
     $da(w3bi,xor1)
+    $da(w2bi,xor1)
     $da(xor1,w2xw3)
     $da(w2xw3,xor2)
     $da(w4bi,xor2)
@@ -96,11 +94,11 @@ Frame End
 
 Frame 12:
     $modifyBox(xor2,color=red,bold=True)
-    $ma(xor2,w2xorw3xorw4,color=red)
+    $ma(xor2,w2xw3xw4,color=red)
 Frame End
 
 Frame 13:
-    $modifyBox(w2xw3xw4,color=red,bold=True,text=@xor(*w2xorw3;*w4bi))
+    $modifyBox(w2xw3xw4,color=red,bold=True,text=@xor(*w2xw3;*w4bi))
 Frame End
 
 Frame 14:
@@ -109,17 +107,17 @@ Frame 14:
     $rb(xor2)
     $rb(w2xw3xw4)
     $ra(w4bi,xor2)
-    $ra(w2xw3xw4,xor2)
+    $ra(w2xw3,xor2)
     $ra(xor2,w2xw3xw4)
 Frame End
 
 Frame 15:
-    $modifyBox(w2xw3x4,color=blue,bold=True)
+    $modifyBox(w2xw3xw4,color=blue,bold=True)
     $ma(w2xw3xw4,outby,color=blue)
 Frame End
 
 Frame 16:
-    $modifyBox(outby,color=blue,bold=True,text=@bitbyte(w2xw3xw4))
+    $modifyBox(outby,color=blue,bold=True,text=@bitbyte(*w2xw3xw4))
 Frame End
 
 Frame 17:
