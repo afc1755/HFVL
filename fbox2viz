@@ -1,3 +1,6 @@
+# w2 xor w3 xor w4
+# boxes w2, w3, and w4 are input
+
 Frame 1:
     $modifyTitle(text='F Function Bit Visualization', color='red')
 

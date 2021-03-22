@@ -81,12 +81,54 @@ Round
 
 while @lt(_roundCount;79):
     Frame 3:
+        if @lt(_roundCount;4):
+            $mb(td3,color=blue,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
+        elif @lt(_roundCount;8):
+            $mb(td3,color=blue,text='Message Schedule\Round 4: 94 95 20 52\Round 5: 2e 26 4a b5\Round 6: bc 96 96 8c\Round 7: d1 56 c9 5e')
+        elif @lt(_roundCount;12):
+            $mb(td3,color=blue,text='Message Schedule\Round 8: f7 7c b0 e5\Round 9: ce 2a 05 f5\Round 10: 9f 7d 56 e6\Round 11: e7 54 8c 5f')
+        elif @lt(_roundCount;16):
+            $mb(td3,color=blue,text='Message Schedule\Round 12: 58 fc 45 9c\Round 13: 9e 7e 53 d7\Round 14: fb 14 6b ec\Round 15: 53 d4 7c 50')
+        elif @lt(_roundCount;20):
+            $mb(td3,color=blue,text='Message Schedule\Round 16: 35 b3 33 f9\Round 17: 9c 21 99 7c\Round 18: b9 2c a8 19\Round 19: d5 be 53 0b')
+        elif @lt(_roundCount;24):
+            $mb(td3,color=blue,text='Message Schedule\Round 20: 2d 5f 3e 96\Round 21: 13 54 68 59\Round 22: 06 e8 cb b8\Round 23: df a8 4f 76')
+        elif @lt(_roundCount;28):
+            $mb(td3,color=blue,text='Message Schedule\Round 24: 7e 5a b0 63\Round 25: 6c c9 fa 3b\Round 26: 7a be 2a ad\Round 27: fb f9 e6 5c')
+        elif @lt(_roundCount;32):
+            $mb(td3,color=blue,text='Message Schedule\Round 28: 0f 55 87 5c\Round 29: 88 ea 7f d8\Round 30: 7c e8 95 83\Round 31: c1 d4 c5 ec')
+        elif @lt(_roundCount;36):
+            $mb(td3,color=blue,text='Message Schedule\Round 32: 82 a9 72 b8\Round 33: cf 35 e6 b2\Round 34: 0a 70 08 c7\Round 35: de 91 f6 e6')
+        elif @lt(_roundCount;40):
+            $mb(td3,color=blue,text='Message Schedule\Round 36: 11 4c 74 a9\Round 37: 37 3d 19 f2\Round 38: 2a 6b aa 15\Round 39: 61 a8 42 11')
+        elif @lt(_roundCount;44):
+            $mb(td3,color=blue,text='Message Schedule\Round 40: a3 b1 53 a3\Round 41: d6 dd a7 15\Round 42: d1 5a a8 59\Round 43: 2d 6e bd c8')
+        elif @lt(_roundCount;48):
+            $mb(td3,color=blue,text='Message Schedule\Round 44: 23 c8 71 29\Round 45: 8f a7 98 a7\Round 46: bb c6 0e 54\Round 47: 7f b9 26 d9')
+        elif @lt(_roundCount;52):
+            $mb(td3,color=blue,text='Message Schedule\Round 48: 4a e7 e2 53\Round 49: 52 b8 95 aa\Round 50: 94 42 bd 3d\Round 51: 66 14 c4 df')
+        elif @lt(_roundCount;56):
+            $mb(td3,color=blue,text='Message Schedule\Round 52: 08 69 54 9b\Round 53: 9a e9 45 f7\Round 54: 4a b4 1b 03\Round 55: a5 90 35 56')
+        elif @lt(_roundCount;60):
+            $mb(td3,color=blue,text='Message Schedule\Round 56: 58 cc 43 57\Round 57: 25 bd 96 47\Round 58: 51 36 a8 a4\Round 59: f4 c0 88 d6')
+        elif @lt(_roundCount;64):
+            $mb(td3,color=blue,text='Message Schedule\Round 60: 24 f1 51 50\Round 61: a9 8f 32 6c\Round 62: 54 20 97 9a\Round 63: 1a fd 41 18')
+        elif @lt(_roundCount;68):
+            $mb(td3,color=blue,text='Message Schedule\Round 64: 4a 45 56 d4\Round 65: dc f8 16 e8\Round 66: 55 fd 0b 62\Round 67: a9 13 93 43')
+        elif @lt(_roundCount;72):
+            $mb(td3,color=blue,text='Message Schedule\Round 68: b0 68 83 a7\Round 69: e5 f1 ee f5\Round 70: 4f 6e ac 32\Round 71: 65 e6 d4 7e')
+        elif @lt(_roundCount;76):
+            $mb(td3,color=blue,text='Message Schedule\Round 72: 84 e1 45 8f\Round 73: 30 d6 b6 d1\Round 74: 62 e1 5c d5\Round 75: eb 04 70 43')
+        else:
+            $mb(td3,color=blue,text='Message Schedule\Round 76: 18 a6 4c 9a\Round 77: 95 a6 95 74\Round 78: f1 0e 2b 47\Round 79: ab da 0e 78')
+        if end
         $modifyBox(w2,color='black',bold=False)
         $modifyBox(w5,color='black',bold=False)
         $rb(description)
     Frame End
 
     Frame 4:
+        $rb(td3)
         $modifyArrow(w1,ow2,color='blue')
         $modifyArrow(w3,ow4,color='blue')
         $modifyArrow(w4,ow5,color='blue')
@@ -238,7 +280,167 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 23:
-        $mb(exw,color=blue,bold=True,text='d7 dc 7b b2')
+        if @lt(_roundCount;1):
+            $mb(exw,color=blue,bold=True,text='d7 dc 7b b2')
+        elif @lt(_roundCount;2):
+            $mb(exw,color=blue,bold=True,text='3f ea 47 07')
+        elif @lt(_roundCount;3):
+            $mb(exw,color=blue,bold=True,text='a5 70 4f 33')
+        elif @lt(_roundCount;4):
+            $mb(exw,color=blue,bold=True,text='81 57 b7 69')
+        elif @lt(_roundCount;5):
+            $mb(exw,color=blue,bold=True,text='94 95 20 52')
+        elif @lt(_roundCount;6):
+            $mb(exw,color=blue,bold=True,text='2e 26 4a b5')
+        elif @lt(_roundCount;7):
+            $mb(exw,color=blue,bold=True,text='bc 96 96 8c')
+        elif @lt(_roundCount;8):
+            $mb(exw,color=blue,bold=True,text='d1 56 c9 5e')
+        elif @lt(_roundCount;9):
+            $mb(exw,color=blue,bold=True,text='f7 7c b0 e5')
+        elif @lt(_roundCount;10):
+            $mb(exw,color=blue,bold=True,text='ce 2a 05 f5')
+        elif @lt(_roundCount;11):
+            $mb(exw,color=blue,bold=True,text='9f 7d 56 e6')
+        elif @lt(_roundCount;12):
+            $mb(exw,color=blue,bold=True,text='e7 54 8c 5f')
+        elif @lt(_roundCount;13):
+            $mb(exw,color=blue,bold=True,text='58 fc 45 9c')
+        elif @lt(_roundCount;14):
+            $mb(exw,color=blue,bold=True,text='9e 7e 53 d7')
+        elif @lt(_roundCount;15):
+            $mb(exw,color=blue,bold=True,text='fb 14 6b ec')
+        elif @lt(_roundCount;16):
+            $mb(exw,color=blue,bold=True,text='53 d4 7c 50')
+        elif @lt(_roundCount;17):
+            $mb(exw,color=blue,bold=True,text='35 b3 33 f9')
+        elif @lt(_roundCount;18):
+            $mb(exw,color=blue,bold=True,text='9c 21 99 7c')
+        elif @lt(_roundCount;19):
+            $mb(exw,color=blue,bold=True,text='b9 2c a8 19')
+        elif @lt(_roundCount;20):
+            $mb(exw,color=blue,bold=True,text='d5 be 53 0b')
+        elif @lt(_roundCount;21):
+            $mb(exw,color=blue,bold=True,text='2d 5f 3e 96')
+        elif @lt(_roundCount;22):
+            $mb(exw,color=blue,bold=True,text='13 54 68 59')
+        elif @lt(_roundCount;23):
+            $mb(exw,color=blue,bold=True,text='06 e8 cb b8')
+        elif @lt(_roundCount;24):
+            $mb(exw,color=blue,bold=True,text='df a8 4f 76')
+        elif @lt(_roundCount;25):
+            $mb(exw,color=blue,bold=True,text='7e 5a b0 63')
+        elif @lt(_roundCount;26):
+            $mb(exw,color=blue,bold=True,text='6c c9 fa 3b')
+        elif @lt(_roundCount;27):
+            $mb(exw,color=blue,bold=True,text='7a be 2a ad')
+        elif @lt(_roundCount;28):
+            $mb(exw,color=blue,bold=True,text='fb f9 e6 5c')
+        elif @lt(_roundCount;29):
+            $mb(exw,color=blue,bold=True,text='0f 55 87 5c')
+        elif @lt(_roundCount;30):
+            $mb(exw,color=blue,bold=True,text='88 ea 7f d8')
+        elif @lt(_roundCount;31):
+            $mb(exw,color=blue,bold=True,text='7c e8 95 83')
+        elif @lt(_roundCount;32):
+            $mb(exw,color=blue,bold=True,text='c1 d4 c5 ec')
+        elif @lt(_roundCount;33):
+            $mb(exw,color=blue,bold=True,text='82 a9 72 b8')
+        elif @lt(_roundCount;34):
+            $mb(exw,color=blue,bold=True,text='cf 35 e6 b2')
+        elif @lt(_roundCount;35):
+            $mb(exw,color=blue,bold=True,text='0a 70 08 c7')
+        elif @lt(_roundCount;36):
+            $mb(exw,color=blue,bold=True,text='de 91 f6 e6')
+        elif @lt(_roundCount;37):
+            $mb(exw,color=blue,bold=True,text='11 4c 74 a9')
+        elif @lt(_roundCount;38):
+            $mb(exw,color=blue,bold=True,text='37 3d 19 f2')
+        elif @lt(_roundCount;39):
+            $mb(exw,color=blue,bold=True,text='2a 6b aa 15')
+        elif @lt(_roundCount;40):
+            $mb(exw,color=blue,bold=True,text='61 a8 42 11')
+        elif @lt(_roundCount;41):
+            $mb(exw,color=blue,bold=True,text='a3 b1 53 a3')
+        elif @lt(_roundCount;42):
+            $mb(exw,color=blue,bold=True,text='d6 dd a7 15')
+        elif @lt(_roundCount;43):
+            $mb(exw,color=blue,bold=True,text='d1 5a a8 59')
+        elif @lt(_roundCount;44):
+            $mb(exw,color=blue,bold=True,text='2d 6e bd c8')
+        elif @lt(_roundCount;45):
+            $mb(exw,color=blue,bold=True,text='23 c8 71 29')
+        elif @lt(_roundCount;46):
+            $mb(exw,color=blue,bold=True,text='8f a7 98 a7')
+        elif @lt(_roundCount;47):
+            $mb(exw,color=blue,bold=True,text='bb c6 0e 54')
+        elif @lt(_roundCount;48):
+            $mb(exw,color=blue,bold=True,text='7f b9 26 d9')
+        elif @lt(_roundCount;49):
+            $mb(exw,color=blue,bold=True,text='4a e7 e2 53')
+        elif @lt(_roundCount;50):
+            $mb(exw,color=blue,bold=True,text='52 b8 95 aa')
+        elif @lt(_roundCount;51):
+            $mb(exw,color=blue,bold=True,text='94 42 bd 3d')
+        elif @lt(_roundCount;52):
+            $mb(exw,color=blue,bold=True,text='66 14 c4 df')
+        elif @lt(_roundCount;53):
+            $mb(exw,color=blue,bold=True,text='08 69 54 9b')
+        elif @lt(_roundCount;54):
+            $mb(exw,color=blue,bold=True,text='9a e9 45 f7')
+        elif @lt(_roundCount;55):
+            $mb(exw,color=blue,bold=True,text='4a b4 1b 03')
+        elif @lt(_roundCount;56):
+            $mb(exw,color=blue,bold=True,text='a5 90 35 56')
+        elif @lt(_roundCount;57):
+            $mb(exw,color=blue,bold=True,text='58 cc 43 57')
+        elif @lt(_roundCount;58):
+            $mb(exw,color=blue,bold=True,text='25 bd 96 47')
+        elif @lt(_roundCount;59):
+            $mb(exw,color=blue,bold=True,text='51 36 a8 a4')
+        elif @lt(_roundCount;60):
+            $mb(exw,color=blue,bold=True,text='f4 c0 88 d6')
+        elif @lt(_roundCount;61):
+            $mb(exw,color=blue,bold=True,text='24 f1 51 50')
+        elif @lt(_roundCount;62):
+            $mb(exw,color=blue,bold=True,text='a9 8f 32 6c')
+        elif @lt(_roundCount;63):
+            $mb(exw,color=blue,bold=True,text='54 20 97 9a')
+        elif @lt(_roundCount;64):
+            $mb(exw,color=blue,bold=True,text='1a fd 41 18')
+        elif @lt(_roundCount;65):
+            $mb(exw,color=blue,bold=True,text='4a 45 56 d4')
+        elif @lt(_roundCount;66):
+            $mb(exw,color=blue,bold=True,text='dc f8 16 e8')
+        elif @lt(_roundCount;67):
+            $mb(exw,color=blue,bold=True,text='55 fd 0b 62')
+        elif @lt(_roundCount;68):
+            $mb(exw,color=blue,bold=True,text='a9 13 93 43')
+        elif @lt(_roundCount;69):
+            $mb(exw,color=blue,bold=True,text='b0 68 83 a7')
+        elif @lt(_roundCount;70):
+            $mb(exw,color=blue,bold=True,text='e5 f1 ee f5')
+        elif @lt(_roundCount;71):
+            $mb(exw,color=blue,bold=True,text='4f 6e ac 32')
+        elif @lt(_roundCount;72):
+            $mb(exw,color=blue,bold=True,text='65 e6 d4 7e')
+        elif @lt(_roundCount;73):
+            $mb(exw,color=blue,bold=True,text='84 e1 45 8f')
+        elif @lt(_roundCount;74):
+            $mb(exw,color=blue,bold=True,text='30 d6 b6 d1')
+        elif @lt(_roundCount;75):
+            $mb(exw,color=blue,bold=True,text='62 e1 5c d5')
+        elif @lt(_roundCount;76):
+            $mb(exw,color=blue,bold=True,text='eb 04 70 43')
+        elif @lt(_roundCount;77):
+            $mb(exw,color=blue,bold=True,text='18 a6 4c 9a')
+        elif @lt(_roundCount;78):
+            $mb(exw,color=blue,bold=True,text='95 a6 95 74')
+        elif @lt(_roundCount;79):
+            $mb(exw,color=blue,bold=True,text='f1 0e 2b 47')
+        else:
+            $mb(exw,color=blue,bold=True,text='ab da 0e 78')
+        if end
         $mb(description,color=blue,text='Plug in the current Expanded Word from our message schedule. Then add this to our previous addition output. Click to see details')
     Frame End
 

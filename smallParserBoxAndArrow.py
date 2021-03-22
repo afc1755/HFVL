@@ -521,7 +521,7 @@ def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict
             if check_colliding(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, box_dict, boxes_to_ignore):
                 out_mat[x][y] = -1
             elif check_colliding_arrow(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, arrow_dict):
-                out_mat[x][y] = 500
+                out_mat[x][y] = 5
             else:
                 out_mat[x][y] = 1
     for i in range(0, 2):
@@ -731,4 +731,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('fullShaStartFrame', [])
+    run_frames('SHA2', [])
