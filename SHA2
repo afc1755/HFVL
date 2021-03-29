@@ -12,29 +12,28 @@ Frame 1:
     $drawBox(h,720,750,100,50,text=@concat('WORD H ROUND ';_roundCount))
 
     $db(ch,510,600,100,50,text='Ch')
-    $db(sum1,420,500,100,50,text='sum 1')
+    $db(sum1,420,515,100,50,text='sum 1')
     $db(ma,110,350,100,50,text='Ma')
     $db(sum2,20,250,100,50,text='sum 2')
 
-    $db(am1,745,600,50,50,text='+')
+    $db(am1,670,600,100,50,text='+')
+    $db(am2,905,600,100,50,text='+')
+    $db(am3,670,450,100,50,text='+')
+    $db(am4,365,400,100,50,text='+')
+    $db(am5,670,350,100,50,text='+')
+    $db(am6,670,200,100,50,text='+')
 
-    $db(am2,845,600,50,50,text='+')
-    $db(am3,745,450,50,50,text='+')
-    $db(am4,420,400,50,50,text='+')
-    $db(am5,745,350,50,50,text='+')
-    $db(am6,745,200,50,50,text='+')
+    $db(ew,905,700,100,50,text='Expanded Word')
+    $db(rc,905,500,100,50,text='Round Constant')
 
-    $db(ew,845,700,150,50,text='Expanded Word')
-    $db(rc,845,500,150,50,text='Round Constant')
-
-    $drawBox(ao,50,60,100,50,text=@concat('WORD A ROUND ';@+(_roundCount;1)))
-    $drawBox(bo,150,60,100,50,text=@concat('WORD B ROUND ';@+(_roundCount;1)))
-    $drawBox(co,250,60,100,50,text=@concat('WORD C ROUND ';@+(_roundCount;1)))
-    $drawBox(do,350,60,100,50,text=@concat('WORD D ROUND ';@+(_roundCount;1)))
-    $drawBox(eo,450,60,100,50,text=@concat('WORD E ROUND ';@+(_roundCount;1)))
-    $drawBox(fo,550,60,100,50,text=@concat('WORD F ROUND ';@+(_roundCount;1)))
-    $drawBox(go,650,60,100,50,text=@concat('WORD G ROUND ';@+(_roundCount;1)))
-    $drawBox(ho,750,60,100,50,text=@concat('WORD H ROUND ';@+(_roundCount;1)))
+    $drawBox(ao,20,60,100,50,text=@concat('WORD A ROUND ';@+(_roundCount;1)))
+    $drawBox(bo,120,60,100,50,text=@concat('WORD B ROUND ';@+(_roundCount;1)))
+    $drawBox(co,220,60,100,50,text=@concat('WORD C ROUND ';@+(_roundCount;1)))
+    $drawBox(do,320,60,100,50,text=@concat('WORD D ROUND ';@+(_roundCount;1)))
+    $drawBox(eo,420,60,100,50,text=@concat('WORD E ROUND ';@+(_roundCount;1)))
+    $drawBox(fo,520,60,100,50,text=@concat('WORD F ROUND ';@+(_roundCount;1)))
+    $drawBox(go,620,60,100,50,text=@concat('WORD G ROUND ';@+(_roundCount;1)))
+    $drawBox(ho,720,60,100,50,text=@concat('WORD H ROUND ';@+(_roundCount;1)))
 
     $drawBox(td2,880,330,300,100,text='Current Round Constant\Round 0: 42 8a 2f 98 \Round 1: 71 37 44 91\Round 2: b5 c0 fb cf\Round 3: e9 b5 db a5')
     $drawBox(td3,880,220,300,100,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
@@ -50,12 +49,10 @@ Frame 1:
     $da(b,co)
     $da(c,do)
 
+    $da(f,ch)
     $da(g,ch)
     $da(g,ho)
     $da(d,am4)
-
-    $da(f,ch)
-
 
     $da(f,go)
 
@@ -88,4 +85,683 @@ Frame 2:
     $mb(f,color=blue,bold=True,text='9b 05 68 8c')
     $mb(g,color=blue,bold=True,text='1f 83 d9 ab')
     $mb(h,color=blue,bold=True,text='5b e0 cd 19')
+    $mb(description,color=blue,text='Populate the words with initial values')
+Frame End
+
+while @lt(_roundCount;79):
+    Round
+    Frame 3:
+        if @lt(_roundCount;4):
+            $mb(td2,color=blue,text='Current Round Constant\Round  0: 42 8a 2f 98\Round  1: 71 37 44 91\Round  2: b5 c0 fb cf\Round  3: e9 b5 db a5')
+            $mb(td3,color=blue,text='Message Schedule\Round  0: d7 dc 7b b2\Round  1: 3f ea 47 07\Round  2: a5 70 4f 33\Round  3: 81 57 b7 69')
+        elif @lt(_roundCount;8):
+            $mb(td2,color=blue,text='Current Round Constant\Round  4: 39 56 c2 5b\Round  5: 59 f1 11 f1\Round  6: 92 3f 82 a4\Round  7: ab 1c 5e d5')
+            $mb(td3,color=blue,text='Message Schedule\Round  4: 94 95 20 52\Round  5: 2e 26 4a b5\Round  6: bc 96 96 8c\Round  7: d1 56 c9 5e')
+        elif @lt(_roundCount;12):
+            $mb(td2,color=blue,text='Current Round Constant\Round  8: d8 07 aa 98\Round  9: 12 83 5b 01\Round 10: 24 31 85 be\Round 11: 55 0c 7d c3')
+            $mb(td3,color=blue,text='Message Schedule\Round  8: f7 7c b0 e5\Round  9: ce 2a 05 f5\Round 10: 9f 7d 56 e6\Round 11: e7 54 8c 5f')
+        elif @lt(_roundCount;16):
+            $mb(td2,color=blue,text='Current Round Constant\Round 12: 72 be 5d 74\Round 13: 80 de b1 fe\Round 14: 9b dc 06 a7\Round 15: c1 9b f1 74')
+            $mb(td3,color=blue,text='Message Schedule\Round 12: 58 fc 45 9c\Round 13: 9e 7e 53 d7\Round 14: fb 14 6b ec\Round 15: 53 d4 7c 50')
+        elif @lt(_roundCount;20):
+            $mb(td2,color=blue,text='Current Round Constant\Round 16: e4 9b 69 c1\Round 17: ef be 47 86\Round 18: 0f c1 9d c6\Round 19: 24 0c a1 cc')
+            $mb(td3,color=blue,text='Message Schedule\Round 16: 35 b3 33 f9\Round 17: 9c 21 99 7c\Round 18: b9 2c a8 19\Round 19: d5 be 53 0b')
+        elif @lt(_roundCount;24):
+            $mb(td2,color=blue,text='Current Round Constant\Round 20: 2d e9 2c 6f\Round 21: 4a 74 84 aa\Round 22: 5c b0 a9 dc\Round 23: 76 f9 88 da')
+            $mb(td3,color=blue,text='Message Schedule\Round 20: 2d 5f 3e 96\Round 21: 13 54 68 59\Round 22: 06 e8 cb b8\Round 23: df a8 4f 76')
+        elif @lt(_roundCount;28):
+            $mb(td2,color=blue,text='Current Round Constant\Round 24: 98 3e 51 52\Round 25: 98 3e 51 52\Round 26: 98 3e 51 52\Round 27: bf 59 7f c7')
+            $mb(td3,color=blue,text='Message Schedule\Round 24: 7e 5a b0 63\Round 25: 6c c9 fa 3b\Round 26: 7a be 2a ad\Round 27: fb f9 e6 5c')
+        elif @lt(_roundCount;32):
+            $mb(td2,color=blue,text='Current Round Constant\Round 28: c6 e0 0b f3\Round 29: d5 a7 91 47\Round 30: 06 ca 63 51\Round 31: 14 29 29 67')
+            $mb(td3,color=blue,text='Message Schedule\Round 28: 0f 55 87 5c\Round 29: 88 ea 7f d8\Round 30: 7c e8 95 83\Round 31: c1 d4 c5 ec')
+        elif @lt(_roundCount;36):
+            $mb(td2,color=blue,text='Current Round Constant\Round 32: 27 b7 0a 85\Round 33: 2e 1b 21 38\Round 34: 4d 2c 6d fc\Round 35: 53 38 0d 13')
+            $mb(td3,color=blue,text='Message Schedule\Round 32: 82 a9 72 b8\Round 33: cf 35 e6 b2\Round 34: 0a 70 08 c7\Round 35: de 91 f6 e6')
+        elif @lt(_roundCount;40):
+            $mb(td2,color=blue,text='Current Round Constant\Round 36: 65 0a 73 54\Round 37: 76 6a 0a bb\Round 38: 81 c2 c9 2e\Round 39: 92 72 2c 85')
+            $mb(td3,color=blue,text='Message Schedule\Round 36: 11 4c 74 a9\Round 37: 37 3d 19 f2\Round 38: 2a 6b aa 15\Round 39: 61 a8 42 11')
+        elif @lt(_roundCount;44):
+            $mb(td2,color=blue,text='Current Round Constant\Round 40: a2 bf e8 a1\Round 41: a8 1a 66 4b\Round 42: c2 4b 8b 70\Round 43: c7 6c 51 a3')
+            $mb(td3,color=blue,text='Message Schedule\Round 40: a3 b1 53 a3\Round 41: d6 dd a7 15\Round 42: d1 5a a8 59\Round 43: 2d 6e bd c8')
+        elif @lt(_roundCount;48):
+            $mb(td2,color=blue,text='Current Round Constant\Round 44: d1 92 e8 19\Round 45: d6 99 06 24\Round 46: f4 0e 35 85\Round 47: 10 6a a0 70')
+            $mb(td3,color=blue,text='Message Schedule\Round 44: 23 c8 71 29\Round 45: 8f a7 98 a7\Round 46: bb c6 0e 54\Round 47: 7f b9 26 d9')
+        elif @lt(_roundCount;52):
+            $mb(td2,color=blue,text='Current Round Constant\Round 48: 19 a4 c1 16\Round 49: 1e 37 6c 08\Round 50: 27 48 77 4c\Round 51: 34 b0 bc b5')
+            $mb(td3,color=blue,text='Message Schedule\Round 48: 4a e7 e2 53\Round 49: 52 b8 95 aa\Round 50: 94 42 bd 3d\Round 51: 66 14 c4 df')
+        elif @lt(_roundCount;56):
+            $mb(td2,color=blue,text='Current Round Constant\Round 52: 39 1c 0c b3\Round 53: 4e d8 aa 4a\Round 54: 5b 9c ca 4f\Round 55: 68 2e 6f f3')
+            $mb(td3,color=blue,text='Message Schedule\Round 52: 08 69 54 9b\Round 53: 9a e9 45 f7\Round 54: 4a b4 1b 03\Round 55: a5 90 35 56')
+        elif @lt(_roundCount;60):
+            $mb(td2,color=blue,text='Current Round Constant\Round 56: 74 8f 82 ee\Round 57: 78 a5 63 6f\Round 58: 84 c8 78 14\Round 59: 8c c7 02 08')
+            $mb(td3,color=blue,text='Message Schedule\Round 56: 58 cc 43 57\Round 57: 25 bd 96 47\Round 58: 51 36 a8 a4\Round 59: f4 c0 88 d6')
+        else:
+            $mb(td2,color=blue,text='Current Round Constant\Round 60: 90 be ff fa\Round 61: a4 50 6c eb\Round 62: be f9 a3 f7\Round 63: c6 71 78 f2')
+            $mb(td3,color=blue,text='Message Schedule\Round 60: 18 a6 4c 9a\Round 61: 95 a6 95 74\Round 62: f1 0e 2b 47\Round 63: ab da 0e 78')
+        if end
+        $rb(d)
+        $rb(h)
+        $mb(a,color=blue,bold=True)
+        $mb(b,color=blue,bold=True)
+        $mb(c,color=blue,bold=True)
+        $mb(e,color=blue,bold=True)
+        $mb(f,color=blue,bold=True)
+        $mb(g,color=blue,bold=True)
+        $mb(description,color=blue,text='Update current round constant and message schedule')
+    Frame End
+
+    Frame 4:
+        $rb(td3)
+        $rb(td2)
+        $mb(bo,color=blue,bold=True,text=*a)
+        $mb(co,color=blue,bold=True,text=*b)
+        $mb(do,color=blue,bold=True,text=*c)
+        $mb(fo,color=blue,bold=True,text=*e)
+        $mb(go,color=blue,bold=True,text=*f)
+        $mb(ho,color=blue,bold=True,text=*g)
+        $ma(a,bo,color=blue)
+        $ma(b,co,color=blue)
+        $ma(c,do,color=blue)
+        $ma(e,fo,color=blue)
+        $ma(f,go,color=blue)
+        $ma(g,ho,color=blue)
+        $mb(description,color=blue,text='Transfer values from input words to output words if applicable')
+    Frame End
+
+    Frame 5:
+        $rb(bo)
+        $rb(co)
+        $rb(do)
+        $rb(fo)
+        $rb(go)
+        $rb(ho)
+        $rb(a)
+        $rb(b)
+        $rb(c)
+        $rb(e)
+        $rb(f)
+        $rb(g)
+        $ra(a,bo)
+        $ra(b,co)
+        $ra(c,do)
+        $ra(e,fo)
+        $ra(f,go)
+        $ra(g,ho)
+        $rb(description)
+    Frame End
+
+    Frame 6:
+        $mb(e,color=green,bold=True)
+        $mb(f,color=green,bold=True)
+        $mb(g,color=green,bold=True)
+        $ma(e,ch,color=green)
+        $ma(f,ch,color=green)
+        $ma(g,ch,color=green)
+        $mb(description,color=blue,text='Take words E and F and G as input to the Ch function. The Ch function is (E and F) xor (~E and G). Click on the Ch function to see in what happens at the bit level.')
+    Frame End
+
+    Frame 7:
+        $mb(ch,color=red,bold=true,link='sha2ch',input=e;f;g)
+    Frame End
+
+    Frame 8:
+        $mb(ch,text=@bitbyte(@xor(@and(@bytebit(*e);@bytebit(*f));@and(@not(@bytebit(*e));@bytebit(*g)))))
+    Frame End
+
+    Frame 9:
+        $rb(ch)
+        $rb(e)
+        $rb(f)
+        $rb(g)
+        $ra(e,ch)
+        $ra(f,ch)
+        $ra(g,ch)
+    Frame End
+
+    Frame 10:
+        $mb(description,color=blue,text='Populate the round constant and current message word based on the current round.')
+        if @lt(_roundCount;1):
+            $mb(ew,color=blue,bold=True,text='d7 dc 7b b2')
+            $mb(rc,color=blue,bold=True,text='42 8a 2f 98')
+        elif @lt(_roundCount;2):
+            $mb(ew,color=blue,bold=True,text='3f ea 47 07')
+            $mb(rc,color=blue,bold=True,text='71 37 44 91')
+        elif @lt(_roundCount;3):
+            $mb(ew,color=blue,bold=True,text='a5 70 4f 33')
+            $mb(rc,color=blue,bold=True,text='b5 c0 fb cf')
+        elif @lt(_roundCount;4):
+            $mb(ew,color=blue,bold=True,text='81 57 b7 69')
+            $mb(rc,color=blue,bold=True,text='e9 b5 db a5')
+        elif @lt(_roundCount;5):
+            $mb(ew,color=blue,bold=True,text='94 95 20 52')
+            $mb(rc,color=blue,bold=True,text='39 56 c2 5b')
+        elif @lt(_roundCount;6):
+            $mb(ew,color=blue,bold=True,text='2e 26 4a b5')
+            $mb(rc,color=blue,bold=True,text='59 f1 11 f1')
+        elif @lt(_roundCount;7):
+            $mb(ew,color=blue,bold=True,text='bc 96 96 8c')
+            $mb(rc,color=blue,bold=True,text='92 3f 82 a4')
+        elif @lt(_roundCount;8):
+            $mb(ew,color=blue,bold=True,text='d1 56 c9 5e')
+            $mb(rc,color=blue,bold=True,text='ab 1c 5e d5')
+        elif @lt(_roundCount;9):
+            $mb(ew,color=blue,bold=True,text='f7 7c b0 e5')
+            $mb(rc,color=blue,bold=True,text='d8 07 aa 98')
+        elif @lt(_roundCount;10):
+            $mb(ew,color=blue,bold=True,text='ce 2a 05 f5')
+            $mb(rc,color=blue,bold=True,text='12 83 5b 01')
+        elif @lt(_roundCount;11):
+            $mb(ew,color=blue,bold=True,text='9f 7d 56 e6')
+            $mb(rc,color=blue,bold=True,text='24 31 85 be')
+        elif @lt(_roundCount;12):
+            $mb(ew,color=blue,bold=True,text='e7 54 8c 5f')
+            $mb(rc,color=blue,bold=True,text='55 0c 7d c3')
+        elif @lt(_roundCount;13):
+            $mb(ew,color=blue,bold=True,text='58 fc 45 9c')
+            $mb(rc,color=blue,bold=True,text='72 be 5d 74')
+        elif @lt(_roundCount;14):
+            $mb(ew,color=blue,bold=True,text='9e 7e 53 d7')
+            $mb(rc,color=blue,bold=True,text='80 de b1 fe')
+        elif @lt(_roundCount;15):
+            $mb(ew,color=blue,bold=True,text='fb 14 6b ec')
+            $mb(rc,color=blue,bold=True,text='9b dc 06 a7')
+        elif @lt(_roundCount;16):
+            $mb(ew,color=blue,bold=True,text='53 d4 7c 50')
+            $mb(rc,color=blue,bold=True,text='c1 9b f1 74')
+        elif @lt(_roundCount;17):
+            $mb(ew,color=blue,bold=True,text='35 b3 33 f9')
+            $mb(rc,color=blue,bold=True,text='e4 9b 69 c1')
+        elif @lt(_roundCount;18):
+            $mb(ew,color=blue,bold=True,text='9c 21 99 7c')
+            $mb(rc,color=blue,bold=True,text='ef be 47 86')
+        elif @lt(_roundCount;19):
+            $mb(ew,color=blue,bold=True,text='b9 2c a8 19')
+            $mb(rc,color=blue,bold=True,text='0f c1 9d c6')
+        elif @lt(_roundCount;20):
+            $mb(ew,color=blue,bold=True,text='d5 be 53 0b')
+            $mb(rc,color=blue,bold=True,text='24 0c a1 cc')
+        elif @lt(_roundCount;21):
+            $mb(ew,color=blue,bold=True,text='2d 5f 3e 96')
+            $mb(rc,color=blue,bold=True,text='2d e9 2c 6f')
+        elif @lt(_roundCount;22):
+            $mb(ew,color=blue,bold=True,text='13 54 68 59')
+            $mb(rc,color=blue,bold=True,text='4a 74 84 aa')
+        elif @lt(_roundCount;23):
+            $mb(ew,color=blue,bold=True,text='06 e8 cb b8')
+            $mb(rc,color=blue,bold=True,text='5c b0 a9 dc')
+        elif @lt(_roundCount;24):
+            $mb(ew,color=blue,bold=True,text='df a8 4f 76')
+            $mb(rc,color=blue,bold=True,text='76 f9 88 da')
+        elif @lt(_roundCount;25):
+            $mb(ew,color=blue,bold=True,text='df a8 4f 76')
+            $mb(rc,color=blue,bold=True,text='98 3e 51 52')
+        elif @lt(_roundCount;26):
+            $mb(ew,color=blue,bold=True,text='7e 5a b0 63')
+            $mb(rc,color=blue,bold=True,text='a8 31 c6 6d')
+        elif @lt(_roundCount;27):
+            $mb(ew,color=blue,bold=True,text='6c c9 fa 3b')
+            $mb(rc,color=blue,bold=True,text='b0 03 27 c8')
+        elif @lt(_roundCount;28):
+            $mb(ew,color=blue,bold=True,text='7a be 2a ad')
+            $mb(rc,color=blue,bold=True,text='bf 59 7f c7')
+        elif @lt(_roundCount;29):
+            $mb(ew,color=blue,bold=True,text='fb f9 e6 5c')
+            $mb(rc,color=blue,bold=True,text='c6 e0 0b f3')
+        elif @lt(_roundCount;30):
+            $mb(ew,color=blue,bold=True,text='0f 55 87 5c')
+            $mb(rc,color=blue,bold=True,text='d5 a7 91 47')
+        elif @lt(_roundCount;31):
+            $mb(ew,color=blue,bold=True,text='88 ea 7f d8')
+            $mb(rc,color=blue,bold=True,text='06 ca 63 51')
+        elif @lt(_roundCount;32):
+            $mb(ew,color=blue,bold=True,text='7c e8 95 83')
+            $mb(rc,color=blue,bold=True,text='14 29 29 67')
+        elif @lt(_roundCount;33):
+            $mb(ew,color=blue,bold=True,text='c1 d4 c5 ec')
+            $mb(rc,color=blue,bold=True,text='27 b7 0a 85')
+        elif @lt(_roundCount;34):
+            $mb(ew,color=blue,bold=True,text='82 a9 72 b8')
+            $mb(rc,color=blue,bold=True,text='2e 1b 21 38')
+        elif @lt(_roundCount;35):
+            $mb(ew,color=blue,bold=True,text='cf 35 e6 b2')
+            $mb(rc,color=blue,bold=True,text='4d 2c 6d fc')
+        elif @lt(_roundCount;36):
+            $mb(ew,color=blue,bold=True,text='0a 70 08 c7')
+            $mb(rc,color=blue,bold=True,text='53 38 0d 13')
+        elif @lt(_roundCount;37):
+            $mb(ew,color=blue,bold=True,text='de 91 f6 e6')
+            $mb(rc,color=blue,bold=True,text='65 0a 73 54')
+        elif @lt(_roundCount;38):
+            $mb(ew,color=blue,bold=True,text='11 4c 74 a9')
+            $mb(rc,color=blue,bold=True,text='76 6a 0a bb')
+        elif @lt(_roundCount;39):
+            $mb(ew,color=blue,bold=True,text='37 3d 19 f2')
+            $mb(rc,color=blue,bold=True,text='81 c2 c9 2e')
+        elif @lt(_roundCount;40):
+            $mb(ew,color=blue,bold=True,text='2a 6b aa 15')
+            $mb(rc,color=blue,bold=True,text='92 72 2c 85')
+        elif @lt(_roundCount;41):
+            $mb(ew,color=blue,bold=True,text='61 a8 42 11')
+            $mb(rc,color=blue,bold=True,text='a2 bf e8 a1')
+        elif @lt(_roundCount;42):
+            $mb(ew,color=blue,bold=True,text='a3 b1 53 a3')
+            $mb(rc,color=blue,bold=True,text='a8 1a 66 4b')
+        elif @lt(_roundCount;43):
+            $mb(ew,color=blue,bold=True,text='d6 dd a7 15')
+            $mb(rc,color=blue,bold=True,text='c2 4b 8b 70')
+        elif @lt(_roundCount;44):
+            $mb(ew,color=blue,bold=True,text='d1 5a a8 59')
+            $mb(rc,color=blue,bold=True,text='c7 6c 51 a3')
+        elif @lt(_roundCount;45):
+            $mb(ew,color=blue,bold=True,text='2d 6e bd c8')
+            $mb(rc,color=blue,bold=True,text='d1 92 e8 19')
+        elif @lt(_roundCount;46):
+            $mb(ew,color=blue,bold=True,text='23 c8 71 29')
+            $mb(rc,color=blue,bold=True,text='d6 99 06 24')
+        elif @lt(_roundCount;47):
+            $mb(ew,color=blue,bold=True,text='8f a7 98 a7')
+            $mb(rc,color=blue,bold=True,text='f4 0e 35 85')
+        elif @lt(_roundCount;48):
+            $mb(ew,color=blue,bold=True,text='bb c6 0e 54')
+            $mb(rc,color=blue,bold=True,text='10 6a a0 70')
+        elif @lt(_roundCount;49):
+            $mb(ew,color=blue,bold=True,text='7f b9 26 d9')
+            $mb(rc,color=blue,bold=True,text='19 a4 c1 16')
+        elif @lt(_roundCount;50):
+            $mb(ew,color=blue,bold=True,text='4a e7 e2 53')
+            $mb(rc,color=blue,bold=True,text='1e 37 6c 08')
+        elif @lt(_roundCount;51):
+            $mb(ew,color=blue,bold=True,text='52 b8 95 aa')
+            $mb(rc,color=blue,bold=True,text='27 48 77 4c')
+        elif @lt(_roundCount;52):
+            $mb(ew,color=blue,bold=True,text='94 42 bd 3d')
+            $mb(rc,color=blue,bold=True,text='34 b0 bc b5')
+        elif @lt(_roundCount;53):
+            $mb(ew,color=blue,bold=True,text='66 14 c4 df')
+            $mb(rc,color=blue,bold=True,text='39 1c 0c b3')
+        elif @lt(_roundCount;54):
+            $mb(ew,color=blue,bold=True,text='08 69 54 9b')
+            $mb(rc,color=blue,bold=True,text='4e d8 aa 4a')
+        elif @lt(_roundCount;55):
+            $mb(ew,color=blue,bold=True,text='9a e9 45 f7')
+            $mb(rc,color=blue,bold=True,text='5b 9c ca 4f')
+        elif @lt(_roundCount;56):
+            $mb(ew,color=blue,bold=True,text='4a b4 1b 03')
+            $mb(rc,color=blue,bold=True,text='68 2e 6f f3')
+        elif @lt(_roundCount;57):
+            $mb(ew,color=blue,bold=True,text='a5 90 35 56')
+            $mb(rc,color=blue,bold=True,text='74 8f 82 ee')
+        elif @lt(_roundCount;58):
+            $mb(ew,color=blue,bold=True,text='58 cc 43 57')
+            $mb(rc,color=blue,bold=True,text='78 a5 63 6f')
+        elif @lt(_roundCount;59):
+            $mb(ew,color=blue,bold=True,text='25 bd 96 47')
+            $mb(rc,color=blue,bold=True,text='84 c8 78 14')
+        elif @lt(_roundCount;60):
+            $mb(ew,color=blue,bold=True,text='51 36 a8 a4')
+            $mb(rc,color=blue,bold=True,text='8c c7 02 08')
+        elif @lt(_roundCount;61):
+            $mb(ew,color=blue,bold=True,text='f4 c0 88 d6')
+            $mb(rc,color=blue,bold=True,text='90 be ff fa')
+        elif @lt(_roundCount;62):
+            $mb(ew,color=blue,bold=True,text='24 f1 51 50')
+            $mb(rc,color=blue,bold=True,text='a4 50 6c eb')
+        elif @lt(_roundCount;63):
+            $mb(ew,color=blue,bold=True,text='a9 8f 32 6c')
+            $mb(rc,color=blue,bold=True,text='be f9 a3 f7')
+        else:
+            $mb(ew,color=blue,bold=True,text='54 20 97 9a')
+            $mb(rc,color=blue,bold=True,text='c6 71 78 f2')
+        if end
+        $mb(td3,color=blue,bold=True)
+        $mb(td2,color=blue,bold=True)
+    Frame End
+
+    Frame 11:
+        $rb(rc)
+        $rb(ew)
+        $rb(td3)
+        $rb(td2)
+    Frame End
+
+    Frame 12:
+        $mb(description,color=blue,text='Take the expanded word and round constant as input and add them together mod 32. Click on the addition box to see bit level details.')
+        $mb(rc,color=green,bold=True)
+        $mb(ew,color=green,bold=True)
+        $ma(rc,am2)
+        $ma(ew,am2)
+    Frame End
+
+    Frame 13:
+        $mb(am2,color=red,bold=True,link='sha2amviz2',input=rc;ew)
+    Frame End
+
+    Frame 14:
+        $mb(am2,text=@bitbyte(@mod(@add(@bytebit(*ew);@bytebit(*rc)))))
+    Frame End
+
+    Frame 15:
+        $rb(am2)
+        $rb(rc)
+        $rb(ew)
+        $ra(rc,am2)
+        $ra(ew,am2)
+    Frame End
+
+    Frame 16:
+        $mb(description,color=blue,text='Take the Ch output and word H and addition output and add them together. Click on the addition box to see bit level details.')
+        $mb(ch,color=green,bold=True)
+        $mb(h,color=green,bold=True)
+        $mb(am2,color=green,bold=True)
+        $ma(ch,am1,color=green)
+        $ma(h,am1,color=green)
+        $ma(am2,am1,color=green)
+    Frame End
+
+    Frame 17:
+        $mb(am1,color=red,bold=True,link='sha2amviz1',input=ch;h;am2)
+    Frame End
+
+    Frame 18:
+        $mb(am1,text=@bitbyte(@mod(@add(@mod(@add(@bytebit(*ch);@bytebit(*h)));@bytebit(*am2)))))
+    Frame End
+
+    Frame 19:
+        $rb(am1)
+        $rb(am2)
+        $rb(h)
+        $rb(ch)
+        $ra(ch,am1)
+        $ra(h,am1)
+        $ra(am2,am1)
+    Frame End
+
+    Frame 20:
+        $mb(description,color=blue,text='Take E as input and run it through the Sum 1 function. This function is (E >> 6) xor (E >> 11) xor (E >> 25). Click on the Sum 1 box to see in what happens at the bit level.')
+        $mb(e,color=green,bold=True)
+        $ma(e,sum1,color=green)
+    Frame End
+
+    Frame 21:
+        $mb(sum1,color=red,bold=True,link='sha2sum1',input=e)
+    Frame End
+
+    Frame 22:
+        $mb(sum1,text=@bitbyte(@xor(@xor(@rbitshift6(@bytebit(*e));@rbitshift11(@bytebit(*e)));@rbitshift25(@bytebit(*e)))))
+    Frame End
+
+    Frame 23:
+        $rb(sum1)
+        $rb(e)
+        $ra(e,sum1)
+    Frame End
+
+    Frame 24:
+        $mb(description,color=blue,text='Take the Sum 1 output and previous addition output and add them together. Click on the addition box to see bit level details.')
+        $mb(sum1,color=green,bold=True)
+        $mb(am1,color=green,bold=True)
+        $ma(am1,am3,color=green)
+        $ma(sum1,am3,color=green)
+    Frame End
+
+    Frame 25:
+        $mb(am3,color=red,bold=True,input=am1;sum1)
+    Frame End
+
+    Frame 25:
+        $mb(am3,text=@bitbyte(@mod(@add(@bytebit(*sum1);@bytebit(*am1)))),link='sha2amviz3')
+    Frame End
+
+    Frame 26:
+        $rb(sum1)
+        $rb(am3)
+        $rb(am1)
+        $ra(sum1,am3)
+        $ra(am1,am3)
+    Frame End
+
+    Frame 27:
+        $mb(description,color=blue,text='Take word D and previous addition output and add them together. The result will be placed in output word E. Click on the addition box to see what happens at the bit level.')
+        $mb(am3,color=green,bold=True)
+        $mb(d,color=green,bold=True)
+        $ma(d,am4,color=green)
+        $ma(am3,am4,color=green)
+    Frame End
+
+    Frame 28:
+        $mb(am4,color=red,bold=True,link='sha2amviz4',input=am3;d)
+    Frame End
+
+    Frame 29:
+        $mb(am4,text=@bitbyte(@mod(@add(@bytebit(*am3);@bytebit(*d)))))
+    Frame End
+
+    Frame 30:
+        $rb(am3)
+        $rb(d)
+        $rb(am4)
+        $ra(d,am4)
+        $ra(am3,am4)
+    Frame End
+
+    Frame 31:
+        $mb(am4,color=blue,bold=True)
+        $ma(am4,eo,color=blue)
+    Frame End
+
+    Frame 32:
+        $mb(eo,color=blue,bold=True,text=*am4)
+    Frame End
+
+    Frame 33:
+        $rb(eo)
+        $rb(am4)
+        $ra(am4,eo)
+    Frame End
+
+    Frame 34:
+        $mb(description,color=blue,text='Take words A and B and C as input to the Ma function. The Ma function is (A and B) xor (A and C) xor (B and C). Click on the Ma box to see bit level details.')
+        $mb(a,color=green,bold=True)
+        $mb(b,color=green,bold=True)
+        $mb(c,color=green,bold=True)
+        $ma(a,ma,color=green)
+        $ma(b,ma,color=green)
+        $ma(c,ma,color=green)
+    Frame End
+
+    Frame 35:
+        $mb(ma,color=red,bold=True,link='sha2ma',input=a;b;c)
+    Frame End
+
+    Frame 36:
+        $mb(ma,text=@bitbyte(@xor(@xor(@and(@bytebit(*a);@bytebit(*b));@and(@bytebit(*a);@bytebit(*c)));@and(@bytebit(*b);@bytebit(*c)))))
+    Frame End
+
+    Frame 37:
+        $rb(ma)
+        $rb(a)
+        $rb(b)
+        $rb(c)
+        $ra(a,ma)
+        $ra(b,ma)
+        $ra(c,ma)
+    Frame End
+
+    Frame 38:
+        $mb(description,color=blue,text='Take the Ma output and previous addition output and add them together. Click on the addition box to see bit level details.')
+        $mb(ma,color=green,bold=True)
+        $mb(am3,color=green,bold=True)
+        $ma(ma,am5,color=green)
+        $ma(am3,am5,color=green)
+    Frame End
+
+    Frame 39:
+        $mb(am5,color=red,bold=True,link='sha2amviz5',input=am3;ma)
+    Frame End
+
+    Frame 40:
+        $mb(am5,text=@bitbyte(@mod(@add(@bytebit(*am3);@bytebit(*ma)))))
+    Frame End
+
+    Frame 41:
+        $rb(am5)
+        $rb(ma)
+        $rb(am3)
+        $ra(am3,am5)
+        $ra(ma,am5)
+    Frame End
+
+    Frame 42:
+        $mb(description,color=blue,text='Take A as input and run it through the Sum 2 function. This function is (A >> 2) xor (A >> 13) xor (A >> 22). Click on the Sum 2 box to see bit level details.')
+        $mb(a,color=green,bold=True)
+        $ma(a,sum2,color=green)
+    Frame End
+
+    Frame 43:
+        $mb(sum2,color=red,bold=True,link='sha2sum2',input=a)
+    Frame End
+
+    Frame 44:
+        $mb(sum2,text=@bitbyte(@xor(@xor(@rbitshift2(@bytebit(*a));@rbitshift13(@bytebit(*a)));@rbitshift22(@bytebit(*a)))))
+    Frame End
+
+    Frame 45:
+        $rb(a)
+        $rb(sum2)
+        $ra(a,sum2)
+    Frame End
+
+    Frame 46:
+        $mb(description,color=blue,text='Take Sum 2 output and the previous addition output and add them together mod 32. The result here will become the output A word. Click on the addition box to see bit level details.')
+        $mb(sum2,color=green,bold=True)
+        $mb(am5,color=green,bold=True)
+        $ma(am5,am6,color=green)
+        $ma(sum2,am6,color=green)
+    Frame End
+
+    Frame 47:
+        $mb(am6,color=red,bold=True,link='sha2amviz6',input=am5;sum2)
+    Frame End
+
+    Frame 48:
+        $mb(am6,text=@bitbyte(@mod(@add(@bytebit(*am5);@bytebit(*sum2)))))
+    Frame End
+
+    Frame 49:
+        $rb(ao)
+        $rb(am6)
+        $rb(am5)
+        $rb(sum2)
+        $ra(sum2,am6)
+        $ra(am5,am6)
+        $ra(am6,ao)
+    Frame End
+
+    Frame 50:
+        $mb(am6,color=blue,bold=True)
+        $ma(am6,ao,color=blue)
+    Frame End
+
+    Frame 51:
+        $mb(ao,color=blue,bold=True,text=*am6)
+    Frame End
+
+    Frame 52:
+        $rb(ao)
+        $rb(am6)
+        $ra(am6,ao)
+        $rb(description)
+    Frame End
+
+    Frame 53:
+        $mt(text=@concat('SHA-2 256-bit ROUND ';@+(_roundCount;1),color=blue)
+        $mb(ao,color=blue,bold=True)
+        $mb(bo,color=blue,bold=True)
+        $mb(co,color=blue,bold=True)
+        $mb(do,color=blue,bold=True)
+        $mb(eo,color=blue,bold=True)
+        $mb(fo,color=blue,bold=True)
+        $mb(go,color=blue,bold=True)
+        $mb(ho,color=blue,bold=True)
+        $mb(description,color=blue,text=@concat(@concat('End of SHA-2 256 round ';_roundCount);'. We now set the next round starting words to be the previous round output and run the same process as before.')
+    Frame End
+
+    _roundCount = @+(_roundCount;1)
+
+    Frame 54:
+        $mb(a,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(b,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(c,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(d,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(e,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(f,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(g,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+        $mb(h,color=blue,bold=True,text=@concat('WORD 5 ROUND ';_roundCount))
+    Frame End
+
+    Frame 55:
+        $mb(a,color=blue,bold=True,text=*ao)
+        $mb(b,color=blue,bold=True,text=*bo)
+        $mb(c,color=blue,bold=True,text=*co)
+        $mb(d,color=blue,bold=True,text=*do)
+        $mb(e,color=blue,bold=True,text=*eo)
+        $mb(f,color=blue,bold=True,text=*fo)
+        $mb(g,color=blue,bold=True,text=*go)
+        $mb(h,color=blue,bold=True,text=*ho)
+    Frame End
+
+    Frame 56:
+        $mt(color=red)
+        $rb(a)
+        $rb(b)
+        $rb(c)
+        $rb(d)
+        $rb(e)
+        $rb(f)
+        $rb(g)
+        $rb(h)
+        $rb(ao)
+        $rb(bo)
+        $rb(co)
+        $rb(do)
+        $rb(eo)
+        $rb(fo)
+        $rb(go)
+        $rb(ho)
+        $mb(ao,text=@concat('WORD A ROUND ';@+(_roundCount;1)))
+        $mb(bo,text=@concat('WORD B ROUND ';@+(_roundCount;1)))
+        $mb(co,text=@concat('WORD C ROUND ';@+(_roundCount;1)))
+        $mb(do,text=@concat('WORD D ROUND ';@+(_roundCount;1)))
+        $mb(eo,text=@concat('WORD E ROUND ';@+(_roundCount;1)))
+        $mb(fo,text=@concat('WORD F ROUND ';@+(_roundCount;1)))
+        $mb(go,text=@concat('WORD G ROUND ';@+(_roundCount;1)))
+        $mb(ho,text=@concat('WORD H ROUND ';@+(_roundCount;1)))
+        $mb(ew,text='Expanded Word')
+        $mb(rc,text='Round Constant')
+        $rb(description)
+        $mb(am1,text='+')
+        $mb(am2,text='+')
+        $mb(am3,text='+')
+        $mb(am4,text='+')
+        $mb(am5,text='+')
+        $mb(am6,text='+')
+        $mb(ch,text='Ch')
+        $mb(ma,text='Ma')
+        $mb(sum1,text='Sum 1')
+        $mb(sum2,text='Sum 2')
+    Frame End
+While End
+
+Frame 57:
+        $mt(text='END OF SHA-2 256-bit',color=red)
+        $mb(a,color=red,bold=True)
+        $mb(b,color=red,bold=True)
+        $mb(c,color=red,bold=True)
+        $mb(d,color=red,bold=True)
+        $mb(e,color=red,bold=True)
+        $mb(f,color=red,bold=True)
+        $mb(g,color=red,bold=True)
+        $mb(h,color=red,bold=True)
+        $mb(description,color=red,text='We have finished running SHA-2 as we have run through 64 similar rounds. The resulting hash is the concatenation of words a through h: shown in this visualization in red.')
 Frame End

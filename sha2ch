@@ -1,0 +1,208 @@
+# (e and f) xor ((not e) and g)
+# boxes e, f, and g are input
+
+Frame 1:
+    $modifyTitle(text='Ch Function Bit Visualization', color='red')
+    $drawBox(e1by,120,615,150,50,text='E bytes')
+    $drawBox(e1bi,320,615,170,50,text='E bits')
+    $drawBox(fby,120,535,150,50,text='F bytes')
+    $drawBox(fbi,320,535,170,50,text='F bits')
+    $drawBox(and1,540,575,50,50,text='AND')
+    $drawBox(eandf,640,575,170,50,text='E and G')
+
+
+    $drawBox(e2by,20,420,150,50,text='E bytes')
+    $drawBox(e2bi,10,320,170,50,text='E bits')
+    $drawBox(not,220,320,50,50,text='NOT')
+    $drawBox(note,320,320,170,50,text='not E')
+    $drawBox(gby,120,240,150,50,text='G bytes')
+    $drawBox(gbi,320,240,170,50,text='G bits')
+    $drawBox(and2,540,280,50,50,text='AND')
+    $drawBox(noteandg,640,280,170,50,text='not E and G')
+
+    $drawBox(xor,700,425,50,50,text='XOR')
+    $drawBox(eandfxornoteandg,800,425,170,50,text='(E and F) xor ((not E) and G)')
+    $drawBox(outby,1040,425,150,50,text='Output Bytes')
+
+    $da(e2by,e2bi)
+    $da(e1by,e1bi)
+    $da(fby,fbi)
+    $da(gby,gbi)
+
+    $da(fbi,and1)
+    $da(e1bi,and1)
+    $da(and1,eandf)
+    $da(eandf,xor)
+
+    $da(e2bi,not)
+    $da(not,note)
+    $da(gbi,and2)
+    $da(note,and2)
+
+    $da(and2,noteandg)
+    $da(noteandg,xor)
+
+    $da(xor,eandfxornoteandg)
+    $da(eandfxornoteandg,outby)
+
+Frame End
+
+Frame 2:
+    $modifyTitle(text='F Function Bit Visualization', color='black')
+    $modifyBox(e1by,color='blue',bold=True)
+    $modifyBox(fby,color='blue',bold=True)
+    $modifyBox(e2by,color='blue',bold=True)
+    $modifyBox(gby,color='blue',bold=True)
+Frame End
+
+Frame 3:
+    $modifyBox(e1by,text=*e)
+    $modifyBox(fby,text=*f)
+    $modifyBox(e2by,text=*e)
+    $modifyBox(gby,text=*g)
+Frame End
+
+Frame 4:
+    $ma(e1by,e1bi,color=blue,bold=True)
+    $ma(e2by,e2bi,color=blue,bold=True)
+    $ma(fby,fbi,color=blue,bold=True)
+    $ma(gby,gbi,color=blue,bold=True)
+Frame End
+
+Frame 5:
+    $modifyBox(e1bi,text=@bytebit(*e),color='blue',bold=True)
+    $modifyBox(fbi,text=@bytebit(*f),color='blue',bold=True)
+    $modifyBox(e2bi,text=@bytebit(*e),color='blue',bold=True)
+    $modifyBox(gbi,text=@bytebit(*g),color='blue',bold=True)
+Frame End
+
+Frame 6:
+    $rb(e1bi)
+    $rb(fbi)
+    $rb(gbi)
+    $rb(e2bi)
+    $rb(e1by)
+    $rb(fby)
+    $rb(gby)
+    $rb(e2by)
+    $ra(e1by,e1bi)
+    $ra(e2by,e2bi)
+    $ra(fby,fbi)
+    $ra(gby,gbi)
+Frame End
+
+Frame 7:
+    $modifyBox(e1bi,color='green')
+    $modifyBox(fbi,color='green')
+    $modifyArrow(e1bi,and1,color='green')
+    $modifyArrow(fbi,and1,color='green')
+    $modifyBox(e2bi,color='black',bold=False)
+    $modifyBox(gbi,color='black',bold=False)
+Frame End
+
+Frame 8:
+    $modifyBox(and1,color='red',bold=True)
+    $modifyArrow(and1,eandf,color='red')
+Frame End
+
+Frame 9:
+    $modifyBox(eandf,text=@and(*e1bi;*fbi),color='red',bold=True)
+Frame End
+
+Frame 10:
+    $modifyBox(e1bi,color='black',bold=False)
+    $modifyBox(fbi,color='black',bold=False)
+    $modifyBox(and1,color='black',bold=False)
+    $modifyArrow(e1bi,and1,color='black')
+    $modifyArrow(fbi,and1,color='black')
+    $modifyArrow(and1,eandf,color='black')
+    $modifyBox(eandf,color='black',bold=False)
+Frame End
+
+Frame 11:
+    $modifyBox(e2bi,color='green',bold=True)
+    $modifyArrow(e2bi,not,color='green')
+Frame End
+
+Frame 12:
+    $modifyBox(not,color='red',bold=True)
+    $modifyArrow(not,note,color='red')
+Frame End
+
+Frame 13:
+    $modifyBox(note,text=@not(*e2bi),color='red',bold=True)
+Frame End
+
+Frame 14:
+    $modifyBox(e2bi,color='black',bold=False)
+    $modifyBox(not,color='black',bold=False)
+    $modifyBox(note,color='black',bold=False)
+    $modifyArrow(e2bi,not,color='black')
+    $modifyArrow(not,note,color='black')
+Frame End
+
+Frame 15:
+    $modifyBox(note,color='green',bold=True)
+    $modifyBox(gbi,color='green',bold=True)
+    $modifyArrow(note,and2,color='green')
+    $modifyArrow(gbi,and2,color='green')
+Frame End
+
+Frame 16:
+    $modifyBox(and2,color='red',bold=True)
+    $modifyArrow(and2,noteandg,color='red')
+Frame End
+
+Frame 17:
+    $modifyBox(noteandg,text=@and(*note;*gbi),color='red',bold=True)
+Frame End
+
+Frame 18:
+    $modifyBox(noteandg,color='black',bold=False)
+    $modifyBox(and2,color='black',bold=False)
+    $modifyBox(gbi,color='black',bold=False)
+    $modifyBox(note,color='black',bold=False)
+    $modifyArrow(and2,noteandg,color='black')
+    $modifyArrow(gbi,and2,color='black')
+    $modifyArrow(note,and2,color='black')
+Frame End
+
+Frame 19:
+    $modifyBox(eandf,color='green',bold=True)
+    $modifyBox(noteandg,color='green',bold=True)
+    $modifyArrow(noteandg,xor,color='green')
+    $modifyArrow(eandf,xor,color='green')
+Frame End
+
+Frame 20:
+    $modifyBox(xor,color='red',bold=True)
+    $modifyArrow(xor,eandfxornoteandg,color='red')
+Frame End
+
+Frame 21:
+    $modifyBox(eandfxornoteandg,text=@xor(*noteandg;*eandf),color='red',bold=True)
+Frame End
+
+Frame 22:
+    $modifyBox(noteandg,color='black',bold=False)
+    $modifyBox(xor,color='black',bold=False)
+    $modifyBox(eandf,color='black',bold=False)
+    $modifyArrow(xor,eandfxornoteandg,color='black')
+    $modifyArrow(noteandg,xor,color='black')
+    $modifyArrow(eandf,xor,color='black')
+Frame End
+
+Frame 23:
+    $modifyBox(eandfxornoteandg,color='blue',bold=True)
+    $ma(eandfxornoteandg,outby,color=blue)
+Frame End
+
+Frame 24:
+    $modifyBox(outby,text=@bitbyte(*eandfxornoteandg),color='blue',bold=True)
+Frame End
+
+Frame 25:
+    $modifyBox(outby,color=red,bold=True)
+    $rb(eandfxornoteandg)
+    $ra(eandfxornoteandg,outby)
+Frame End

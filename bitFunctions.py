@@ -20,16 +20,46 @@ def apply_function(func_name, in_args):
             return bit_to_byte(func_args[0])
         else:
             print('wrong number of args for bit to byte, expected 1 got ' + str(len(func_args)))
-    elif func_name == 'bitshift5':
+    elif func_name == 'lbitshift5':
         if len(func_args) == 1:
-            return bit_shift(func_args[0], 5)
+            return lbit_shift(func_args[0], 5)
         else:
             print('wrong number of args for bit shift 5, expected 1 got ' + str(len(func_args)))
-    elif func_name == 'bitshift30':
+    elif func_name == 'lbitshift30':
         if len(func_args) == 1:
-            return bit_shift(func_args[0], 30)
+            return lbit_shift(func_args[0], 30)
         else:
             print('wrong number of args for bit shift 30, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift2':
+        if len(func_args) == 1:
+            return rbit_shift(func_args[0], 2)
+        else:
+            print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift13':
+        if len(func_args) == 1:
+            return rbit_shift(func_args[0], 13)
+        else:
+            print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift22':
+        if len(func_args) == 1:
+            return rbit_shift(func_args[0], 22)
+        else:
+            print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift6':
+        if len(func_args) == 1:
+            return rbit_shift(func_args[0], 6)
+        else:
+            print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift11':
+        if len(func_args) == 1:
+            return rbit_shift(func_args[0], 11)
+        else:
+            print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift25':
+        if len(func_args) == 1:
+            return rbit_shift(func_args[0], 25)
+        else:
+            print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
     elif func_name == 'not':
         if len(func_args) == 1:
             return not_bit(func_args[0])
@@ -78,10 +108,23 @@ def apply_function(func_name, in_args):
     return func_name
 
 
-def bit_shift(in_bit, shift_len):
+def lbit_shift(in_bit, shift_len):
     in_bit = in_bit.replace(' ', '')
     first_slice = in_bit[0:shift_len]
     second_slice = in_bit[shift_len:]
+    prelim_shift = second_slice + first_slice
+    bit_shift_out = ''
+    for i in range(0, len(prelim_shift)):
+        bit_shift_out += prelim_shift[i]
+        if (i + 1) % 8 == 0 and (i + 1) != len(in_bit):
+            bit_shift_out += ' '
+    return bit_shift_out
+
+
+def rbit_shift(in_bit, shift_len):
+    in_bit = in_bit.replace(' ', '')
+    first_slice = in_bit[0:len(in_bit)-shift_len]
+    second_slice = in_bit[len(in_bit)-shift_len:]
     prelim_shift = second_slice + first_slice
     bit_shift_out = ''
     for i in range(0, len(prelim_shift)):

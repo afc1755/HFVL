@@ -41,7 +41,7 @@ Frame 6:
 Frame End
 
 Frame 7:
-    $modifyBox(w1bio,text=@bitshift5(*w1bi),color=red,bold=True)
+    $modifyBox(w1bio,text=@lbitshift5(*w1bi),color=red,bold=True)
 Frame End
 
 Frame 8:

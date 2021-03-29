@@ -11,7 +11,9 @@ import bitFunctions
 
 
 def run_frames(file_to_read, prev_window_dict):
+    curr_time = time.time()
     frames, r_splits = read_file(file_to_read, prev_window_dict)
+    print('time to create visualization for file ' + file_to_read + ':' + str(time.time() - curr_time))
     if frames:
         fd = FrameDisplayer.FrameDisplayer(frames, len(frames), r_splits)
         pyglet.app.run()
@@ -290,7 +292,7 @@ def read_file(file_to_read, prev_window_dict):
                                     break
             elif line.strip().lower() == 'round':
                 round_splits.append(reading_frame_num)
-            else:
+            elif line.strip()[0] != '#':
                 print('invalid line found: ' + line)
                 line_index += 1
                 continue
@@ -311,7 +313,8 @@ def read_file(file_to_read, prev_window_dict):
 
 
 def solve_text(box_text, box_dict, prev_window_dict, var_dict):
-    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@bitshift5', '@bitshift30']
+    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@rbitshift13',
+                '@rbitshift22', '@rbitshift6', '@rbitshift11', '@rbitshift25']
     if box_text[0] == '@':
         # function found
         func_name, func_args = box_text.split('(', 1)
@@ -377,7 +380,11 @@ def get_start_end_arrow(box_dict, start_box_id, end_box_id):
     for box_id in box_id_arr:
         box = box_dict[box_id]
         blocked_dict = find_blocking_boxes(box_id, box_dict)
-        x_diff, y_diff = get_x_y_diff(box_dict[start_box_id], box_dict[end_box_id])
+        try:
+            x_diff, y_diff = get_x_y_diff(box_dict[start_box_id], box_dict[end_box_id])
+        except KeyError:
+            print('no box found for box id either: ' + start_box_id + ' or ' + end_box_id)
+            return []
         if box_id != start_box_id:
             x_diff = -x_diff
             y_diff = -y_diff
@@ -500,53 +507,59 @@ def get_x_y_diff(s_b, e_b):
     return x_diff, y_diff
 
 
-def point_in_box(p_x, p_y, box):
-    if box[0] <= p_x <= box[0] + box[2] and box[1] <= p_y <= box[1] + box[3]:
-        return True
-    else:
-        return False
-
-
-def point_near_box(p_x, p_y, box):
-    if box[0] - BOX_NEARNESS <= p_x <= box[0] + box[2] + BOX_NEARNESS and box[1] - BOX_NEARNESS <= p_y <= box[1] + box[3] + BOX_NEARNESS:
-        return True
-    else:
-        return False
-
-
 def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict, arrow_dict):
-    out_mat = np.zeros((WINDOW_WIDTH//MATRIX_RESOLUTION, WINDOW_HEIGHT//MATRIX_RESOLUTION))
-    for x in range(0, WINDOW_WIDTH//MATRIX_RESOLUTION):
-        for y in range(0, WINDOW_HEIGHT//MATRIX_RESOLUTION):
-            if check_colliding(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, box_dict, boxes_to_ignore):
-                out_mat[x][y] = -1
-            elif check_colliding_arrow(x * MATRIX_RESOLUTION, y * MATRIX_RESOLUTION, arrow_dict):
-                out_mat[x][y] = 5
+    out_mat = np.ones((WINDOW_WIDTH//MATRIX_RESOLUTION, WINDOW_HEIGHT//MATRIX_RESOLUTION))
+    for arrow_id in arrow_dict:
+        for coord in arrow_dict[arrow_id][0]:
+            if coord[1] < coord[3]:
+                y_start = (coord[1] - ARROW_NEARNESS)
+                y_end = (coord[3] + ARROW_NEARNESS)
             else:
-                out_mat[x][y] = 1
+                y_end = (coord[1] + ARROW_NEARNESS)
+                y_start = (coord[3] - ARROW_NEARNESS)
+            if coord[0] < coord[2]:
+                x_start = (coord[0] - ARROW_NEARNESS)
+                x_end = (coord[2] + ARROW_NEARNESS)
+            else:
+                x_end = (coord[0] + ARROW_NEARNESS)
+                x_start = (coord[2] - ARROW_NEARNESS)
+            for x in range(int(x_start // MATRIX_RESOLUTION), int(x_end // MATRIX_RESOLUTION)):
+                for y in range(int(y_start // MATRIX_RESOLUTION), int(y_end // MATRIX_RESOLUTION)):
+                    out_mat[x][y] = 50
+    for box_id in box_dict:
+        curr_box = box_dict[box_id]
+        if box_id in boxes_to_ignore:
+            diff = 0
+        else:
+            diff = BOX_NEARNESS
+        for x in range(int((curr_box[0] - diff)//MATRIX_RESOLUTION),
+                       int((curr_box[0] + curr_box[2] + diff) // MATRIX_RESOLUTION)):
+            for y in range(int((curr_box[1] - diff) // MATRIX_RESOLUTION),
+                           int((curr_box[1] + curr_box[3] + diff) // MATRIX_RESOLUTION)):
+                out_mat[x][y] = -1
     for i in range(0, 2):
         if special_box_loc[i] == 'top':
             extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
             extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
-            for extra_space in range(1, int(ARROW_END_GAP// MATRIX_RESOLUTION)):
+            for extra_space in range(0, int(ARROW_END_GAP // MATRIX_RESOLUTION)):
                 out_mat[extra_x - 1][extra_y + extra_space] = -1
                 out_mat[extra_x + 1][extra_y + extra_space] = -1
         elif special_box_loc[i] == 'bottom':
             extra_x = int(special_box_coords[i][0] // MATRIX_RESOLUTION)
             extra_y = int((special_box_coords[i][1] // MATRIX_RESOLUTION))
-            for extra_space in range(1, int(ARROW_END_GAP//MATRIX_RESOLUTION)):
+            for extra_space in range(0, int(ARROW_END_GAP//MATRIX_RESOLUTION)):
                 out_mat[extra_x - 1][extra_y - extra_space] = -1
                 out_mat[extra_x + 1][extra_y - extra_space] = -1
         elif special_box_loc[i] == 'left':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(1, int(ARROW_END_GAP//MATRIX_RESOLUTION)):
+            for extra_space in range(0, int(ARROW_END_GAP//MATRIX_RESOLUTION)):
                 out_mat[extra_x - extra_space][extra_y - 1] = -1
                 out_mat[extra_x - extra_space][extra_y + 1] = -1
         elif special_box_loc[i] == 'right':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(1, int(ARROW_END_GAP// MATRIX_RESOLUTION)):
+            for extra_space in range(0, int(ARROW_END_GAP// MATRIX_RESOLUTION)):
                 out_mat[extra_x + extra_space][extra_y - 1] = -1
                 out_mat[extra_x + extra_space][extra_y + 1] = -1
     return out_mat
@@ -559,13 +572,10 @@ def is_inside_matrix(x, y):
 
 
 def pathfind_arrow(start_x, start_y, s_loc, end_x, end_y, e_loc, s_box_id, e_box_id, box_dict, arrow_dict):
-    curr_time = time.time()
     matrix = create_matrix([[start_x, start_y], [end_x, end_y]], [s_loc, e_loc], [s_box_id, e_box_id], box_dict, arrow_dict)
-    print('matrix creation:' + str(time.time() - curr_time))
-    curr_time = time.time()
+
     old_node = pathfind_arrow_dijkstras(matrix, int(start_x//MATRIX_RESOLUTION), int(start_y//MATRIX_RESOLUTION),
                                         int(end_x//MATRIX_RESOLUTION), int(end_y//MATRIX_RESOLUTION))
-
     if not old_node:
         return []
 
@@ -595,7 +605,6 @@ def pathfind_arrow(start_x, start_y, s_loc, end_x, end_y, e_loc, s_box_id, e_box
             moving_y = False
     point_list.append([curr_node.x * MATRIX_RESOLUTION, curr_node.y * MATRIX_RESOLUTION, old_node.x * MATRIX_RESOLUTION, old_node.y * MATRIX_RESOLUTION])
     point_list.reverse()
-    print('rest of arrow finding:' + str(time.time() - curr_time))
     return point_list
 
 
@@ -619,10 +628,11 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
 
         # return if the destination is found
         if i == end_x and j == end_y:
-            if score_dict[(i, j)] < 3:
+            if score_dict[(i, j)] < 100:
                 return curr
             else:
                 candidates.append(curr)
+                continue
 
         curr_score = score_dict[(curr.x, curr.y)]
         # check all four possible movements from the current cell
@@ -639,7 +649,6 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
                 next = Node(x, y, curr)
                 key = (next.x, next.y)
                 next_score = curr_score + matrix[x][y]
-
                 # if it is not visited yet
                 if key not in score_dict:
                     # enqueue it and mark it as visited
@@ -662,33 +671,6 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
                 curr_min = score_dict[(candidate.x, candidate.y)]
                 curr_can = candidate
         return curr_can
-
-
-def check_colliding(loc_x, loc_y, box_dict, boxes_to_ignore):
-    for box_id in box_dict:
-        if box_id in boxes_to_ignore:
-            if point_in_box(loc_x, loc_y, box_dict[box_id]):
-                return True
-        else:
-            if point_near_box(loc_x, loc_y, box_dict[box_id]):
-                return True
-
-    return False
-
-
-def check_colliding_arrow(loc_x, loc_y, arrow_dict):
-    for arrow_id in arrow_dict:
-        for coord in arrow_dict[arrow_id][0]:
-            if point_near_arrow(loc_x, loc_y, coord):
-                return True
-    return False
-
-
-def point_near_arrow(loc_x, loc_y, coord):
-    if (coord[0] - (MATRIX_RESOLUTION * ARROW_NEARNESS)) <= loc_x <= (coord[2] + (MATRIX_RESOLUTION * ARROW_NEARNESS)) and \
-            (coord[1] - (MATRIX_RESOLUTION * ARROW_NEARNESS)) <= loc_y <= (coord[3] + (MATRIX_RESOLUTION * ARROW_NEARNESS)):
-        return True
-    return False
 
 
 def create_arrowhead(arrow_lines, arrowhead_thickness):

@@ -1,0 +1,106 @@
+# visualization for addition mod 32 first round
+# input: sum1, am1
+
+Frame 1:
+    $modifyTitle(text='Addition mod 2^32 Bit Visualization', color='red')
+    $drawBox(i1by,50,400,150,50,text='Sum1 output bytes')
+    $drawBox(i1bi,250,400,170,50,text='Sum1 output bits')
+    $drawBox(i2by,50,200,150,50,text='Addition output bytes')
+    $drawBox(i2bi,250,200,170,50,text='Addition output bits')
+    $drawBox(add,340,300,50,50,text='+')
+    $drawBox(addi1i2,440,300,170,50,text='Sum1 + Add')
+    $drawBox(mod,660,300,100,50,text='Modulo 2^32')
+    $drawBox(obi,810,300,170,50,text='output bit')
+    $drawBox(oby,1030,300,150,50,text='output byte')
+
+    $drawArrow(i1by,i1bi)
+    $drawArrow(i2by,i2bi)
+    $drawArrow(i1bi,add)
+    $drawArrow(i2bi,add)
+    $drawArrow(add,addi1i2)
+    $drawArrow(addi1i2,mod)
+    $drawArrow(mod,obi)
+    $drawArrow(obi,oby)
+Frame End
+
+Frame 2:
+    $modifyTitle(color='black')
+    $mb(i1by, color='blue',bold=True,text=*sum1)
+    $mb(i2by, color='blue',bold=True,text=*am1)
+    $ma(i1by,i1bi,color='blue')
+    $ma(i2by,i2bi,color='blue')
+Frame End
+
+Frame 3:
+    $mb(i1bi, color='blue',bold=True,text=@bytebit(*i1by))
+    $mb(i2bi, color='blue',bold=True,text=@bytebit(*i2by))
+Frame End
+
+Frame 4:
+    $rb(i1by)
+    $rb(i2by)
+    $ra(i1by,i1bi)
+    $ra(i2by,i2bi)
+Frame End
+
+Frame 5:
+    $mb(i1bi,color='green')
+    $mb(i2bi,color='green')
+    $ma(i1bi,add,color='green')
+    $ma(i2bi,add,color='green')
+Frame End
+
+Frame 6:
+    $mb(add, color='red',bold=True)
+    $ma(add,addi1i2,color='red')
+Frame End
+
+Frame 7:
+    $mb(addi1i2, color='red',bold=True, text=@add(*i1bi;*i2bi))
+Frame End
+
+Frame 8:
+    $rb(add)
+    $rb(i1bi)
+    $rb(i2bi)
+    $ra(i1bi,add)
+    $ra(i2bi,add)
+    $rb(add)
+    $ra(add,addi1i2)
+Frame End
+
+Frame 9:
+    $mb(addi1i2, color='green')
+    $ma(addi1i2,mod,color='green')
+Frame End
+
+Frame 10:
+    $mb(mod, color='red',bold=True)
+    $ma(mod,obi,color='red')
+Frame End
+
+Frame 11:
+    $mb(obi, color='red',bold=True,text=@mod(*addi1i2))
+Frame End
+
+Frame 12:
+    $rb(addi1i2)
+    $ra(addi1i2,mod)
+    $rb(mod)
+    $ra(mod,obi)
+Frame End
+
+Frame 13:
+    $mb(obi, color='blue')
+    $ma(obi,oby,color='blue')
+Frame End
+
+Frame 14:
+    $mb(oby, color='blue',bold=True,text=@bitbyte(*obi))
+Frame End
+
+Frame 15:
+    $rb(obi)
+    $ra(obi,oby)
+    $mb(oby, color='red')
+Frame End

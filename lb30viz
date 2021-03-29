@@ -41,7 +41,7 @@ Frame 6:
 Frame End
 
 Frame 7:
-    $modifyBox(w2bio,text=@bitshift30(*w2bi),color=red,bold=True)
+    $modifyBox(w2bio,text=@lbitshift30(*w2bi),color=red,bold=True)
 Frame End
 
 Frame 8:

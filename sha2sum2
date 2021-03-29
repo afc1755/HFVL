@@ -1,0 +1,192 @@
+# visualization for sum 2 in SHA 2
+# input: a
+
+Frame 1:
+    $modifyTitle(text='Sum 2 Bit Visualization', color='red')
+    $drawBox(a1by,60,700,150,50,text='A bytes')
+    $drawBox(a1bi,50,600,170,50,text='A bits')
+    $drawBox(a2by,60,300,150,50,text='A bytes')
+    $drawBox(a2bi,50,400,170,50,text='A bits')
+    $drawBox(a3by,280,100,150,50,text='A bytes')
+    $drawBox(a3bi,270,200,170,50,text='A bits')
+    $drawBox(rot6,270,600,50,50,text='>> 2')
+    $drawBox(rot11,270,400,50,50,text='>> 13')
+    $drawBox(rot25,490,200,50,50,text='>> 22')
+    $drawBox(arot6,370,600,170,50,text='A >> 2')
+    $drawBox(arot11,370,400,170,50,text='A >> 13')
+    $drawBox(arot25,590,200,170,50,text='A >> 22')
+
+    $drawBox(xor1,490,500,50,50,text='XOR')
+    $drawBox(xor2,710,350,50,50,text='XOR')
+
+    $drawBox(a6xora11,590,500,170,50,text='A>>2 xor A>>13')
+    $drawBox(outbi,810,350,170,50,text='Output bits')
+    $drawBox(outby,1030,350,150,50,text='Output bytes')
+
+    $drawArrow(a1by,a1bi)
+    $drawArrow(a2by,a2bi)
+    $drawArrow(a3by,a3bi)
+    $drawArrow(a1bi,rot6)
+    $drawArrow(a2bi,rot11)
+    $drawArrow(a3bi,rot25)
+    $drawArrow(rot6,arot6)
+    $drawArrow(rot11,arot11)
+    $drawArrow(rot25,arot25)
+    $da(arot6,xor1)
+    $da(arot11,xor1)
+    $da(xor1,a6xora11)
+    $da(a6xora11,xor2)
+    $da(arot25,xor2)
+    $da(xor2,outbi)
+    $da(outbi,outby)
+Frame End
+
+Frame 2:
+    $modifyTitle(color='black')
+    $mb(a1by,color='blue',bold=True,text=*a)
+    $ma(a1by,a1bi,color='blue')
+    $mb(a2by,color='blue',bold=True,text=*a)
+    $ma(a2by,a2bi,color='blue')
+    $mb(a3by,color='blue',bold=True,text=*a)
+    $ma(a3by,a3bi,color='blue')
+Frame End
+
+Frame 3:
+    $mb(a1bi,color='blue',bold=True,text=@bytebit(*a))
+    $mb(a2bi,color='blue',bold=True,text=@bytebit(*a))
+    $mb(a3bi,color='blue',bold=True,text=@bytebit(*a))
+Frame End
+
+Frame 4:
+    $rb(a1bi)
+    $rb(a2bi)
+    $rb(a3bi)
+    $rb(a1by)
+    $rb(a2by)
+    $rb(a3by)
+    $ra(a1by,a1bi)
+    $ra(a2by,a2bi)
+    $ra(a3by,a3bi)
+Frame End
+
+Frame 5:
+    $mb(a1bi,color='green',bold=True)
+    $mb(a2bi,color='green',bold=True)
+    $ma(a1bi,rot6,color=green)
+    $ma(a2bi,rot11,color=green)
+Frame End
+
+Frame 6:
+    $mb(rot6,color='red',bold=True)
+    $mb(rot11,color='red',bold=True)
+    $ma(rot6,arot6,color=red)
+    $ma(rot11,arot11,color=red)
+Frame End
+
+Frame 7:
+    $mb(arot6,color=red,bold=True,text=@rbitshift2(*a1bi))
+    $mb(arot11,color=red,bold=True,text=@rbitshift13(*a2bi))
+frame end
+
+Frame 8:
+    $rb(arot6)
+    $rb(arot11)
+    $rb(rot6)
+    $rb(rot11)
+    $rb(a1bi)
+    $rb(a2bi)
+    $ra(a1bi,rot6)
+    $ra(a2bi,rot11)
+    $ra(rot6,arot6)
+    $ra(rot11,arot11)
+Frame End
+
+Frame 9:
+    $mb(a3bi,color=green,bold=True)
+    $ma(a3bi,rot25,color=green)
+Frame End
+
+Frame 10:
+    $mb(rot25,color=red,bold=True)
+    $ma(rot25,arot25)
+Frame End
+
+Frame 11:
+    $mb(arot25,color=red,bold=true,text=@rbitshift22(*a3bi))
+Frame End
+
+Frame 12:
+    $rb(arot25)
+    $rb(rot25)
+    $rb(a3bi)
+    $ra(a3bi,rot25)
+    $ra(rot25,arot25)
+Frame End
+
+Frame 13:
+    $mb(arot6,color=green,bold=True)
+    $mb(arot11,color=green,bold=True)
+    $ma(arot6,xor1,color=green)
+    $ma(arot11,xor1,color=green)
+Frame End
+
+Frame 14:
+    $mb(xor1,color=red,bold=true)
+    $ma(xor1,a6xora11,color=red)
+Frame End
+
+Frame 15:
+    $mb(a6xora11,color=red,bold=True,text=@xor(*arot6;*arot11))
+Frame End
+
+Frame 16:
+    $rb(a6xora11)
+    $rb(xor1)
+    $rb(arot6)
+    $rb(arot11)
+    $ra(arot6,xor1)
+    $ra(arot11,xor1)
+    $ra(xor1,a6xora11)
+Frame End
+
+Frame 17:
+    $mb(a6xora11,color=green,bold=True)
+    $mb(arot25,color=green,bold=True)
+    $ma(a6xora11,xor2,color=green)
+    $ma(arot25,xor2,color=green)
+Frame End
+
+Frame 18:
+    $mb(xor2,color=red,bold=true)
+    $ma(xor2,outbi,color=red)
+Frame End
+
+Frame 19:
+    $mb(outbi,color=red,bold=True,text=@xor(*a6xora11;*arot25))
+Frame End
+
+Frame 20:
+    $rb(outbi)
+    $rb(xor2)
+    $rb(arot25)
+    $rb(a6xora11)
+    $ra(a6xora11,xor2)
+    $ra(arot25,xor2)
+    $ra(xor2,outbi)
+Frame End
+
+Frame 21:
+    $mb(outbi,color=blue,bold=true)
+    $ma(outbi,outby,color=blue)
+Frame End
+
+Frame 22:
+    $mb(outby,color=blue,bold=true,text=@bitbyte(*outbi))
+Frame End
+
+Frame 23:
+    $rb(outbi)
+    $ra(outbi,outby)
+    $mb(outby,color=red)
+Frame End
+

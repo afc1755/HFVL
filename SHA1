@@ -8,7 +8,7 @@ Frame 1:
     $drawBox(w4,500,700,150,100,text=@concat('WORD 4 ROUND ';_roundCount))
     $drawBox(w5,650,700,150,100,text=@concat('WORD 5 ROUND ';_roundCount))
 
-    $drawBox(f,400,550,150,75,text='F')
+    $drawBox(f,380,550,150,75,text='F')
 
     $db(am1, 650,625,150,40,text='Addition mod 2^32')
     $db(am2, 650, 495, 150,40,text='Addition mod 2^32')
@@ -33,9 +33,9 @@ Frame 1:
     $drawBox(ow4,500,60,150,100,text=@concat('WORD 4 ROUND ';@+(_roundCount;1)))
     $drawBox(ow5,650,60,150,100,text=@concat('WORD 5 ROUND ';@+(_roundCount;1)))
 
-    $drawBox(td1,830,700,350,100,text='Current F function \Round 0-19: (W2 or W3) or ((not W2) and W4)\Round 20-39: W2 xor W3 xor W4\Round 40-59: (W2 and W3) or (W2 and W4) or (W3 and W4)\Round 60-79: W2 xor W3 xor W4')
-    $drawBox(td2,830,590,350,100,text='Current Round Constant\Round 0-19: 5a 82 79 99 \Round 20-39: 6e d9 eb a1\Round 40-59: 8f 1b bc dc\Round 60-79: ca 62 c1 d6')
-    $drawBox(td3,830,480,350,100,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
+    $drawBox(td1,830,700,350,100,text='Current F function \Round  0-19: (W2 or W3) or ((not W2) and W4)\Round 20-39: W2 xor W3 xor W4\Round 40-59: (W2 and W3) or (W2 and W4) or (W3 and W4)\Round 60-79: W2 xor W3 xor W4')
+    $drawBox(td2,830,590,350,100,text='Current Round Constant\Round  0-19: 5a 82 79 99 \Round 20-39: 6e d9 eb a1\Round 40-59: 8f 1b bc dc\Round 60-79: ca 62 c1 d6')
+    $drawBox(td3,830,480,350,100,text='Message Schedule\Round  0: d7 dc 7b b2\Round  1: 3f ea 47 07\Round  2: a5 70 4f 33\Round  3: 81 57 b7 69')
     $drawBox(description,830,60,350,150,text='Description of events')
 
     $drawArrow(w1,lb5)
@@ -82,11 +82,11 @@ Round
 while @lt(_roundCount;79):
     Frame 3:
         if @lt(_roundCount;4):
-            $mb(td3,color=blue,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
+            $mb(td3,color=blue,text='Message Schedule\Round  0: d7 dc 7b b2\Round  1: 3f ea 47 07\Round  2: a5 70 4f 33\Round  3: 81 57 b7 69')
         elif @lt(_roundCount;8):
-            $mb(td3,color=blue,text='Message Schedule\Round 4: 94 95 20 52\Round 5: 2e 26 4a b5\Round 6: bc 96 96 8c\Round 7: d1 56 c9 5e')
+            $mb(td3,color=blue,text='Message Schedule\Round  4: 94 95 20 52\Round  5: 2e 26 4a b5\Round  6: bc 96 96 8c\Round  7: d1 56 c9 5e')
         elif @lt(_roundCount;12):
-            $mb(td3,color=blue,text='Message Schedule\Round 8: f7 7c b0 e5\Round 9: ce 2a 05 f5\Round 10: 9f 7d 56 e6\Round 11: e7 54 8c 5f')
+            $mb(td3,color=blue,text='Message Schedule\Round  8: f7 7c b0 e5\Round  9: ce 2a 05 f5\Round 10: 9f 7d 56 e6\Round 11: e7 54 8c 5f')
         elif @lt(_roundCount;16):
             $mb(td3,color=blue,text='Message Schedule\Round 12: 58 fc 45 9c\Round 13: 9e 7e 53 d7\Round 14: fb 14 6b ec\Round 15: 53 d4 7c 50')
         elif @lt(_roundCount;20):
@@ -240,7 +240,7 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 17:
-        $mb(lb5o,color='red',bold=True,text=@bitbyte(@bitshift5(@bytebit(*w1))),link='lb5viz',input=w1)
+        $mb(lb5o,color='red',bold=True,text=@bitbyte(@lbitshift5(@bytebit(*w1))),link='lb5viz',input=w1)
     Frame End
 
     Frame 18:
@@ -522,7 +522,7 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 35:
-        $mb(ow3,color=red,bold=True,text=@bitbyte(@bitshift30(@bytebit(*w2)))),link='lb30viz',input=w2)
+        $mb(ow3,color=red,bold=True,text=@bitbyte(@lbitshift30(@bytebit(*w2)))),link='lb30viz',input=w2)
     Frame End
 
     Frame 36:
