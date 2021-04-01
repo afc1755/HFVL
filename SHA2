@@ -1,3 +1,6 @@
+# Visualization for SHA 2, needs to be in the same directory as all of the sub-visualization files:
+#   sha2amviz1-sha2amviz6, sha2ch, sha2ma, sha2sum1, sha2sum1
+
 _roundCount=0
 
 Frame 1:
@@ -35,8 +38,8 @@ Frame 1:
     $drawBox(go,620,60,100,50,text=@concat('WORD G ROUND ';@+(_roundCount;1)))
     $drawBox(ho,720,60,100,50,text=@concat('WORD H ROUND ';@+(_roundCount;1)))
 
-    $drawBox(td2,880,330,300,100,text='Current Round Constant\Round 0: 42 8a 2f 98 \Round 1: 71 37 44 91\Round 2: b5 c0 fb cf\Round 3: e9 b5 db a5')
-    $drawBox(td3,880,220,300,100,text='Message Schedule\Round 0: d7 dc 7b b2\Round 1: 3f ea 47 07\Round 2: a5 70 4f 33\Round 3: 81 57 b7 69')
+    $drawBox(td2,880,330,300,100,text='Current Round Constant\Round  0: 42 8a 2f 98 \Round  1: 71 37 44 91\Round  2: b5 c0 fb cf\Round  3: e9 b5 db a5')
+    $drawBox(td3,880,220,300,100,text='Message Schedule\Round  0: d7 dc 7b b2\Round  1: 3f ea 47 07\Round  2: a5 70 4f 33\Round  3: 81 57 b7 69')
     $drawBox(description,880,60,300,150,text='Description of events')
 
     $da(b,ma)
@@ -88,7 +91,7 @@ Frame 2:
     $mb(description,color=blue,text='Populate the words with initial values')
 Frame End
 
-while @lt(_roundCount;79):
+while @lt(_roundCount;64):
     Round
     Frame 3:
         if @lt(_roundCount;4):

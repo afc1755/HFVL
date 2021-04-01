@@ -63,10 +63,10 @@ Frame 3:
 Frame End
 
 Frame 4:
-    $ma(e1by,e1bi,color=blue,bold=True)
-    $ma(e2by,e2bi,color=blue,bold=True)
-    $ma(fby,fbi,color=blue,bold=True)
-    $ma(gby,gbi,color=blue,bold=True)
+    $ma(e1by,e1bi,color=blue)
+    $ma(e2by,e2bi,color=blue)
+    $ma(fby,fbi,color=blue)
+    $ma(gby,gbi,color=blue)
 Frame End
 
 Frame 5:
@@ -92,12 +92,10 @@ Frame 6:
 Frame End
 
 Frame 7:
-    $modifyBox(e1bi,color='green')
-    $modifyBox(fbi,color='green')
+    $modifyBox(e1bi,color='green',bold=True)
+    $modifyBox(fbi,color='green',bold=True)
     $modifyArrow(e1bi,and1,color='green')
     $modifyArrow(fbi,and1,color='green')
-    $modifyBox(e2bi,color='black',bold=False)
-    $modifyBox(gbi,color='black',bold=False)
 Frame End
 
 Frame 8:

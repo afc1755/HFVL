@@ -1,0 +1,63 @@
+# File for visualizing SHA-3/Keccak Sponge function
+
+Frame 1:
+    $modifyTitle(text='SHA-3 256-bit Sponge Function Overview', color='red')
+    $db(r0,650,710,300,100,text='r')
+    $db(c0,50,710,600,100,text='c')
+    $db(p0,750,570,400,100,text='input block 0')
+    $db(xor1,650,595,50,50,text='XOR')
+    $db(f0,90,570,500,100,text='f')
+    $db(r1,650,410,300,100,text='r')
+    $db(c1,50,410,600,100,text='c')
+    $db(p1,750,280,400,100,text='input block 1')
+    $db(xor2,650,305,50,50,text='XOR')
+    $db(f1,90,280,500,100,text='f')
+    $db(r2,650,120,300,100,text='r')
+    $db(c2,50,120,600,100,text='c')
+    $db(z0,800,80,200,100,text='output hash')
+
+    $da(p0,xor1)
+    $da(r0,xor1)
+    $da(c0,f0)
+    $da(xor1,f0)
+
+    $da(f0,c1)
+    $da(f0,r1)
+
+    $da(r1,xor2)
+    $da(p1,xor2)
+    $da(c1,f1)
+    $da(xor2,f1)
+
+    $da(f1,c2)
+    $da(f1,r2)
+
+    $da(r2,z0)
+Frame End
+
+Frame 2:
+    $mb(c0,color=blue,bold=True,text='00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00')
+    $mb(r0,color=blue,bold=True,text='00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00')
+Frame End
+
+Frame 3:
+    $rb(c0)
+    $rb(r0)
+Frame End
+
+Frame 4:
+    $mb(p0,color=blue,bold=true,text='db 52 2b 32 ad e1 8a dc 76 cf ac c1 9e 32 6d 07 e5 d5 1d e9 a6 83 68 b6 e2 78 5f b5 fd 54 d2 5b 80 3f 5b f8 76 87 9b e6 6d d0 ef 94 6a 72 58 b3 cc 6f ee b1 e6 78 cc 73 a1 6a 56 77 dd 91 25 f9 90 f9 59 47 ca 7e d5 28 37 a4 2c 26 50 87 fa c6 d1 84 41 59 7a b0 b7 e5 96 ec 0d 5b d9 c9 29 c0 2b 88 1b 7e 78 75 a6 e5 eb 9a 69 61 2b b6 fd 0f d9 b6 d2 8b 71 91 92 7a 78 20 90 3b bf 63 7e 65 01 34 3c 35 57 16 7f 70')
+    $mb(p1,color=blue,bold=True,text='47 09 15 02 ca ba ea 5c 5d ca ae ce 58 fc da 09 df a4 f4 1c 83 64 7a 9c 92 d2 a4 a8 85 55 7f 32 1e 38 95 75 36 e5 8e 9c ee 14 b9 ae af 5c c1 6b 23 94 db 47 e8 23 2a 44 68 2a 48 42 f9 3e 4c ac 7a d4 4d c0 88 9c 37 ba 4b 66 a3 0d 78 8c 90 51 30 d0 af aa fb e8 d2 d9 aa e1 f5 e9 c2 f5 f2 aa 3a 90 ad 23 f9 bf 04 3a 6c 53 79 70 11 86 15 94 be c3 c6 a0 cd 3b 77 c2 49 ba 4e 84 da e3 1d 68 08 59 fa d1 33 d6 ce d1')
+Frame End
+
+Frame 5:
+    $rb(p0)
+    $rb(p1)
+Frame End
+
+Frame 6:
+    $ma(p0,xor1,color=green)
+    $ma(r0,xor1,color=green)
+    $mb(r0,color=green,bold=True)
+    $mb(p0,color=green,bold=True)
+Frame End

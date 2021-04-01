@@ -148,7 +148,7 @@ while @lt(_roundCount;79):
         $modifyArrow(w1,ow2,color='black')
         $modifyArrow(w3,ow4,color='black')
         $modifyArrow(w4,ow5,color='black')
-        $modifyBox(ow2, color='black',bold=False)
+        $modifyBox(ow2,color='black',bold=False)
         $modifyBox(ow3, color='black',bold=False)
         $modifyBox(ow4, color='black',bold=False)
         $modifyBox(ow5, color='black',bold=False)
