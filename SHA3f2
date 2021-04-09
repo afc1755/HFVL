@@ -1,0 +1,20 @@
+# File for visualizing Keccak-f 1600 function
+_roundNum = 0
+Frame 1:
+    $modifyTitle(text='Keccak-f[1600] Function', color='red')
+    $db(a,100,730,800,80,text=@concat('A Round ';_roundNum))
+    $db(theta,100,620,800,80,text='Theta Function')
+    $db(roh,100,510,800,80,text='Roh Function')
+    $db(pi,100,400,800,80,text='Pi Function')
+    $db(chi,100,290,800,80,text='Chi Function')
+    $db(iota,100,180,800,80,text='Iota Function')
+    $db(ao,100,70,800,80,text=@concat('A Round ';@+(_roundNum;1)))
+    $db(description,930,70,240,190,text='Description of events')
+
+    $da(a,theta)
+    $da(theta,roh)
+    $da(roh,pi)
+    $da(pi,chi)
+    $da(chi,iota)
+    $da(iota,ao)
+Frame End

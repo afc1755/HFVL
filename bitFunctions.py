@@ -5,6 +5,11 @@ BIT_BYTE = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '01
 BYTE_BIT = {'0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100', '5': '0101', '6': '0110', '7': '0111',
             '8': '1000', '9': '1001', 'a': '1010', 'b': '1011', 'c': '1100', 'd': '1101', 'e': '1110', 'f': '1111'}
 
+ROT_TABLE = [[ 0, 36,  3, 41, 18],
+             [ 1, 10, 44, 45,  2],
+             [62,  6, 43, 15, 61],
+             [28, 55, 25, 21, 56],
+             [27, 20, 39,  8, 14]]
 
 def apply_function(func_name, in_args):
     func_args = []
@@ -70,6 +75,31 @@ def apply_function(func_name, in_args):
             return mod_32(func_args[0])
         else:
             print('wrong number of args for modulus, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'trunc32':
+        if len(func_args) == 1:
+            return trunc_32(func_args[0])
+        else:
+            print('wrong number of args for truncate to 32 bytes, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'theta':
+        if len(func_args) == 1:
+            return theta(func_args[0])
+        else:
+            print('wrong number of args for Theta, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'roh':
+        if len(func_args) == 1:
+            return roh(func_args[0])
+        else:
+            print('wrong number of args for Roh, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'pi':
+        if len(func_args) == 1:
+            return pi(func_args[0])
+        else:
+            print('wrong number of args for Pi, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'chi':
+        if len(func_args) == 1:
+            return chi(func_args[0])
+        else:
+            print('wrong number of args for Chi, expected 1 got ' + str(len(func_args)))
     elif func_name == 'add':
         if len(func_args) == 2:
             return add_bit(func_args[0], func_args[1])
@@ -105,6 +135,16 @@ def apply_function(func_name, in_args):
             return concat(func_args[0], func_args[1])
         else:
             print('wrong number of args for concatenation, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'kf_1600':
+        if len(func_args) == 2:
+            return keccak_f_1600(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for keccak-f[1600], expected 2 got ' + str(len(func_args)))
+    elif func_name == 'iota':
+        if len(func_args) == 2:
+            return iota(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for Iota, expected 2 got ' + str(len(func_args)))
     return func_name
 
 
@@ -272,3 +312,67 @@ def less_than(num1, num2):
 def concat(num1, num2):
     return num1 + num2
 
+
+def trunc_32(in_byte):
+    in_byte = in_byte.replace(' ', '')
+    out_byte = ''
+    for i in range(0, len(in_byte)):
+        if i == 64:
+            return out_byte
+        out_byte += in_byte[i]
+        if (i + 1) % 2 == 0 and (i + 1) != len(in_byte):
+            out_byte += ' '
+    return out_byte
+
+
+def rot(i1, i2):
+    return ROT_TABLE[i1][i2]
+
+
+def create_mat(a):
+    a_mat = [['','','','',''],['','','','',''],['','','','',''],['','','','',''],['','','','','']]
+    a = a.replace(' ', '')
+    curr_i = 0
+    curr_sub_i = 0
+    for i in range(0, len(a)):
+        if i != 0 and i % 16 == 0:
+            a_mat[curr_i][curr_sub_i] = a[i-16:i]
+            curr_sub_i += 1
+        if i != 0 and i % 80 == 0:
+            curr_i += 1
+            curr_sub_i = 0
+    a_mat[4][4] = a[(len(a)-16):]
+    return a_mat
+
+
+def theta(a):
+    a_mat = create_mat(a)
+
+    c = ['','','','','']
+    d = ['','','','','']
+    #for x in range(0,5):
+
+    """for x in range(0,5):
+        for y in range(0,5):
+            B[]"""
+    return a
+
+
+def roh(theta_o):
+    return theta_o
+
+
+def pi(roh_o):
+    return roh_o
+
+
+def chi(pi_o):
+    return pi_o
+
+
+def iota(chi_o, rc):
+    return chi_o
+
+
+def keccak_f_1600(rate, capacity):
+    return rate + capacity

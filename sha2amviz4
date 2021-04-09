@@ -91,7 +91,7 @@ Frame 12:
 Frame End
 
 Frame 13:
-    $mb(obi, color='blue')
+    $mb(obi, color='blue',bold=true)
     $ma(obi,oby,color='blue')
 Frame End
 

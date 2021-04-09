@@ -2,19 +2,20 @@
 
 Frame 1:
     $modifyTitle(text='SHA-3 256-bit Sponge Function Overview', color='red')
-    $db(r0,480,690,200,120,text='r')
-    $db(c0,50,690,430,120,text='c')
+    $db(r0,480,690,200,120,text='r(rate)')
+    $db(c0,50,690,430,120,text='c(capacity)')
     $db(p0,955,530,200,120,text='input block 0')
     $db(xor1,655,530,200,120,text='XOR')
-    $db(f0,50,540,430,100,text='f')
-    $db(r1,480,370,200,120,text='r')
-    $db(c1,50,370,430,120,text='c')
+    $db(f0,50,540,430,100,text='f(Keccak-f[1600])')
+    $db(r1,480,370,200,120,text='r(rate)')
+    $db(c1,50,370,430,120,text='c(capacity)')
     $db(p1,955,210,200,120,text='input block 1')
     $db(xor2,655,210,200,120,text='XOR')
-    $db(f1,50,220,430,100,text='f')
-    $db(r2,480,50,200,120,text='r')
-    $db(c2,50,50,430,120,text='c')
-    $db(z0,730,50,200,120,text='output hash')
+    $db(f1,50,220,430,100,text='f(Keccak-f[1600])')
+    $db(r2,480,50,200,120,text='r(rate)')
+    $db(c2,50,50,430,120,text='c(capacity)')
+    $db(z0,730,75,200,70,text='output hash')
+    $db(description,800,670,355,140,text='Description of events')
 
     $da(p0,xor1)
     $da(r0,xor1)
@@ -38,21 +39,25 @@ Frame End
 Frame 2:
     $mb(c0,color=blue,bold=True,text='00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00')
     $mb(r0,color=blue,bold=True,text='00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00')
+    $mb(description,color=blue,text='Population of c and r with initial '0' values.')
 Frame End
 
 Frame 3:
     $rb(c0)
     $rb(r0)
+    $rb(description)
 Frame End
 
 Frame 4:
     $mb(p0,color=blue,bold=true,text='ea 27 f9 9a ae 29 90 e9 72 5d 7f a6 a3 fc 2f 70 67 79 68 80 08 23 53 e4 e8 c0 28 48 00 b1 95 33 fe c1 29 4f 29 1c 1b c8 ad ea 5a 3b 0a bf 39 06 a9 4e bb 2f 1b d3 f3 09 bb 11 45 11 e9 28 a5 df')
     $mb(p1,color=blue,bold=True,text='47 09 15 02 ca ba ea 5c 5d ca ae ce 58 fc da 09 df a4 f4 1c 83 64 7a 9c 92 d2 a4 a8 85 55 7f 32 1e 38 95 75 36 e5 8e 9c ee 14 b9 ae af 5c c1 6b 23 94 db 47 e8 23 2a 44 68 2a 48 42 f9 3e 4c ac')
+    $mb(description,color=blue,text='Population of the input text blocks with the user's input bytes(text to be hashed). This will be padded if necessary to fit in 512-bit blocks. Here we have a 128 byte input split up into 2 64 byte blocks.')
 Frame End
 
 Frame 5:
     $rb(p0)
     $rb(p1)
+    $rb(description)
 Frame End
 
 Frame 6:
@@ -60,10 +65,11 @@ Frame 6:
     $ma(r0,xor1,color=green)
     $mb(r0,color=green,bold=True)
     $mb(p0,color=green,bold=True)
+    $mb(description,color=blue,text='XOR together the input bytes and the r block(rate) and use the output as input to the f function in the next step. Click on the XOR box to see this process on a bit level.')
 Frame End
 
 Frame 7:
-    $mb(xor1, color=red,bold=True)
+    $mb(xor1,color=red,bold=True,link='SHA3XOR1',input=p0;r0)
 Frame End
 
 Frame 8:
@@ -76,6 +82,7 @@ Frame 9:
     $rb(r0)
     $ra(r0,xor1)
     $ra(p0,xor1)
+    $rb(description)
 Frame End
 
 Frame 10:
@@ -83,10 +90,11 @@ Frame 10:
     $mb(c0,color=green,bold=true)
     $ma(xor1,f0,color=green)
     $ma(c0,f0,color=green)
+    $mb(description,color=blue,text='Take the XOR output and the c block(capacity) and append these together as input to the f function. Click on the f box to see how this process works on a bit level. Take the output of the f function as the rate and capacity for the next round.')
 Frame End
 
 Frame 11:
-    $mb(f0,color=red,bold=true)
+    $mb(f0,color=red,bold=true,link='SHA3f1',input=c0;xor1)
     $ma(f0,c1,color=red)
     $ma(f0,r1,color=red)
 Frame End
@@ -106,6 +114,7 @@ Frame 13:
     $ra(xor1,f0)
     $ra(f0,c1)
     $ra(f0,r1)
+    $rb(description)
 Frame End
 
 Frame 14:
@@ -113,10 +122,11 @@ Frame 14:
     $ma(r1,xor2,color=green)
     $mb(r1,color=green,bold=True)
     $mb(p1,color=green,bold=True)
+    $mb(description,color=blue,text='XOR together the input bytes and the r block(rate) and use the output as input to the f function in the next step. Click on the XOR box to see this process on a bit level.')
 Frame End
 
 Frame 15:
-    $mb(xor2, color=red,bold=True)
+    $mb(xor2,color=red,bold=True,link='SHA3XOR2',input=p1;r1)
 Frame End
 
 Frame 16:
@@ -129,6 +139,7 @@ Frame 17:
     $rb(r1)
     $ra(r1,xor2)
     $ra(p1,xor2)
+    $rb(description)
 Frame End
 
 Frame 18:
@@ -136,10 +147,11 @@ Frame 18:
     $mb(c1,color=green,bold=true)
     $ma(xor2,f1,color=green)
     $ma(c1,f1,color=green)
+    $mb(description,color=blue,text='Take the XOR output and the c block(capacity) and append these together as input to the f function. Click on the f box to see how this process works on a bit level. Take the output of the f function as the rate and capacity for the next round.')
 Frame End
 
 Frame 19:
-    $mb(f1,color=red,bold=true)
+    $mb(f1,color=red,bold=true,link='SHA3f2',input=c1;xor2)
     $ma(f1,c2,color=red)
     $ma(f1,r2,color=red)
 Frame End
@@ -159,19 +171,22 @@ Frame 21:
     $ra(xor2,f1)
     $ra(f1,c2)
     $ra(f1,r2)
+    $rb(description)
 Frame End
 
 Frame 22:
     $mb(r2,color=blue,bold=True)
     $ma(r2,z0,color=blue)
+    $mb(description,color=blue,text='Take the rate output from the f function and take only the first 256 bits from it(32 bytes). This will be the hash output.')
 Frame End
 
 Frame 23:
-    $mb(z0,color=blue,bold=true,text=*r2)
+    $mb(z0,color=blue,bold=true,text=@trunc32(*r2))
 Frame End
 
 Frame 24:
     $rb(r2)
     $ra(r2,z0)
     $mb(z0,bold=true,color=red)
+    $mb(description,color=red,text=@concat('The hash output is shown in the output box. The final hash is: ';*z0))
 Frame End

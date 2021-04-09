@@ -1,0 +1,81 @@
+# visualization for xor in sponge function
+# input: p1, r1
+
+Frame 1:
+    $modifyTitle(text='XOR of Input Bytes and Rate Visualization', color='red')
+    $drawBox(i1by,50,700,300,100,text='Rate bytes')
+    $drawBox(i1bi,50,470,380,180,text='Rate bits')
+    $drawBox(i2by,50,90,300,100,text='Input bytes')
+    $drawBox(i2bi,50,240,380,180,text='Input bits')
+    $drawBox(xor,540,420,50,50,text='XOR')
+    $drawBox(obi,740,355,380,180,text='output bit')
+    $drawBox(oby,780,180,300,100,text='output byte')
+
+    $drawArrow(i1by,i1bi)
+    $drawArrow(i2by,i2bi)
+    $drawArrow(i2bi,xor)
+    $drawArrow(i1bi,xor)
+    $drawArrow(xor,obi)
+    $drawArrow(obi,oby)
+Frame End
+
+Frame 2:
+    $modifyTitle(color='black')
+    $mb(i1by, color='blue',bold=True,text=*p1)
+    $mb(i2by, color='blue',bold=True,text=*r1)
+    $ma(i1by,i1bi,color='blue')
+    $ma(i2by,i2bi,color='blue')
+Frame End
+
+Frame 3:
+    $mb(i1bi, color='blue',bold=True,text=@bytebit(*i1by))
+    $mb(i2bi, color='blue',bold=True,text=@bytebit(*i2by))
+Frame End
+
+Frame 4:
+    $rb(i1by)
+    $rb(i2by)
+    $ra(i1by,i1bi)
+    $ra(i2by,i2bi)
+Frame End
+
+Frame 5:
+    $mb(i1bi,color='green')
+    $mb(i2bi,color='green')
+    $ma(i1bi,xor,color='green')
+    $ma(i2bi,xor,color='green')
+Frame End
+
+Frame 6:
+    $mb(xor, color='red',bold=True)
+    $ma(xor,obi,color='red')
+Frame End
+
+Frame 7:
+    $mb(obi, color='red',bold=True, text=@xor(*i1bi;*i2bi))
+Frame End
+
+Frame 8:
+    $rb(obi)
+    $rb(i1bi)
+    $rb(i2bi)
+    $ra(i1bi,xor)
+    $ra(i2bi,xor)
+    $rb(xor)
+    $ra(xor,obi)
+Frame End
+
+Frame 9:
+    $mb(obi,color='blue',bold=true)
+    $ma(obi,oby,color='blue')
+Frame End
+
+Frame 10:
+    $mb(oby,color='blue',bold=True,text=@bitbyte(*obi))
+Frame End
+
+Frame 11:
+    $rb(obi)
+    $ra(obi,oby)
+    $mb(oby, color='red')
+Frame End

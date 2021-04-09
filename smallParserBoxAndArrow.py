@@ -313,8 +313,9 @@ def read_file(file_to_read, prev_window_dict):
 
 
 def solve_text(box_text, box_dict, prev_window_dict, var_dict):
-    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@rbitshift13',
-                '@rbitshift22', '@rbitshift6', '@rbitshift11', '@rbitshift25']
+    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@hrbitshift13',
+                '@rbitshift22', '@rbitshift6', '@rbitshift11', '@rbitshift25', '@trunc32', '@theta', '@roh', '@chi',
+                '@pi']
     if box_text[0] == '@':
         # function found
         func_name, func_args = box_text.split('(', 1)
