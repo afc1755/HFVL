@@ -1,81 +1,227 @@
-# visualization for xor in sponge function
-# input: p1, r1
-
+# visualization for roh in sponge function
+# input: theta
+_roundNum = 0
+_xNum = 0
+_yNum = 0
 Frame 1:
-    $modifyTitle(text='XOR of Input Bytes and Rate Visualization', color='red')
-    $drawBox(i1by,50,700,300,100,text='Rate bytes')
-    $drawBox(i1bi,50,470,380,180,text='Rate bits')
-    $drawBox(i2by,50,90,300,100,text='Input bytes')
-    $drawBox(i2bi,50,240,380,180,text='Input bits')
-    $drawBox(xor,540,420,50,50,text='XOR')
-    $drawBox(obi,740,355,380,180,text='output bit')
-    $drawBox(oby,780,180,300,100,text='output byte')
+    $modifyTitle(text='Roh Function Visualization Round 0', color='red')
+    $db(b,55,720,860,90,text='Theta bytes')
+    $drawBox(i1by,105,620,200,50,text='Theta[x][y] bytes')
+    $drawBox(i1bi,90,550,230,50,text='Theta[x][y] bits')
+    $drawBox(rot,420,550,200,50,text='Rotation Amount')
+    $drawBox(bs,420,460,200,50,text='Right bit shift')
+    $drawBox(obi,405,360,230,50,text='Theta[x][y] bit shifted bits')
+    $drawBox(oby,420,280,200,50,text='Theta[x][y] bit shifted bytes')
+    $drawBox(obr,90,50,860,90,text='Roh output')
+    $db(rotschedule,930,550,240,100,text='Current Rotation\Round  0:  0\Round  1: 36\Round  2:  3\Round  3: 41\Round  4: 18')
+    $db(description,930,670,240,140,text='Description of events')
 
+    $drawArrow(b,i1by)
     $drawArrow(i1by,i1bi)
-    $drawArrow(i2by,i2bi)
-    $drawArrow(i2bi,xor)
-    $drawArrow(i1bi,xor)
-    $drawArrow(xor,obi)
+    $drawArrow(i1bi,bs)
+    $da(rot,bs)
+    $drawArrow(bs,obi)
     $drawArrow(obi,oby)
+    $da(oby,obr)
 Frame End
 
 Frame 2:
-    $modifyTitle(color='black')
-    $mb(i1by, color='blue',bold=True,text=*p1)
-    $mb(i2by, color='blue',bold=True,text=*r1)
-    $ma(i1by,i1bi,color='blue')
-    $ma(i2by,i2bi,color='blue')
+    $mb(b,color=blue,bold=true,text=*theta)
+    $mb(obr,text=' ')
 Frame End
 
 Frame 3:
-    $mb(i1bi, color='blue',bold=True,text=@bytebit(*i1by))
-    $mb(i2bi, color='blue',bold=True,text=@bytebit(*i2by))
+    $rb(b)
 Frame End
 
-Frame 4:
-    $rb(i1by)
-    $rb(i2by)
-    $ra(i1by,i1bi)
-    $ra(i2by,i2bi)
-Frame End
+while @lt(_roundNum;25):
+    Round
+    Frame 4:
+        $mb(b,color=blue,bold=true)
+        $ma(b,i1by,color=blue)
+        if @lt(_roundNum;5):
+            $mb(rotschedule,color=blue,text='Current Rotation\Round  0:  0\Round  1: 36\Round  2:  3\Round  3: 41\Round  4: 18')
+        elif @lt(_roundNum;10):
+            $mb(rotschedule,color=blue,text='Current Rotation\Round  5:  1\Round  6: 10\Round  7: 44\Round  8: 45\Round  9:  2')
+        elif @lt(_roundNum;15):
+            $mb(rotschedule,color=blue,text='Current Rotation\Round 10: 62\Round 11:  6\Round 12: 43\Round 13: 15\Round 14: 61')
+        elif @lt(_roundNum;20):
+            $mb(rotschedule,color=blue,text='Current Rotation\Round 15: 28\Round 16: 55\Round 17: 25\Round 18: 21\Round 19: 56')
+        else:
+            $mb(rotschedule,color=blue,text='Current Rotation\Round 20: 27\Round 21: 20\Round 22: 39\Round 23:  8\Round 24: 14')
+        if end
+        $mb(description,color=blue,text='Update the current rotation number schedule and take the current bytes to be rotated from the input block')
+    Frame End
 
-Frame 5:
-    $mb(i1bi,color='green')
-    $mb(i2bi,color='green')
-    $ma(i1bi,xor,color='green')
-    $ma(i2bi,xor,color='green')
-Frame End
+    Frame 5:
+        $rb(rotschedule)
+        $mb(i1by,color=blue,bold=true,text=@indexmat(*theta;_xNum;_yNum))
+    Frame End
 
-Frame 6:
-    $mb(xor, color='red',bold=True)
-    $ma(xor,obi,color='red')
-Frame End
+    Frame 6:
+        $rb(b)
+        $ra(b,i1by)
+        $rb(description)
+    Frame End
 
-Frame 7:
-    $mb(obi, color='red',bold=True, text=@xor(*i1bi;*i2bi))
-Frame End
+    Frame 6:
+        $ma(i1by,i1bi,color='blue')
+        $mb(i1bi,color=blue,bold=true)
+        $mb(description,color=blue,text='Translate the current bytes to bits')
+    Frame End
 
-Frame 8:
-    $rb(obi)
-    $rb(i1bi)
-    $rb(i2bi)
-    $ra(i1bi,xor)
-    $ra(i2bi,xor)
-    $rb(xor)
-    $ra(xor,obi)
-Frame End
+    Frame 7:
+        $mb(i1bi,text=@bytebit(*i1by))
+    Frame End
 
-Frame 9:
-    $mb(obi,color='blue',bold=true)
-    $ma(obi,oby,color='blue')
-Frame End
+    Frame 8:
+        $rb(i1bi)
+        $rb(i1by)
+        $ra(i1by,i1bi)
+        $rb(description)
+    Frame End
 
-Frame 10:
-    $mb(oby,color='blue',bold=True,text=@bitbyte(*obi))
-Frame End
+    Frame 9:
+        $mb(description,color=blue,text='Populate the rotation number from our schedule')
+        $mb(rotschedule,color=blue,bold=true)
+        if @lt(_roundNum;1):
+            $mb(rot,color=blue,bold=true,text='0')
+        elif @lt(_roundNum;2):
+            $mb(rot,color=blue,bold=true,text='36')
+        elif @lt(_roundNum;3):
+            $mb(rot,color=blue,bold=true,text='3')
+        elif @lt(_roundNum;4):
+            $mb(rot,color=blue,bold=true,text='41')
+        elif @lt(_roundNum;5):
+            $mb(rot,color=blue,bold=true,text='18')
+        elif @lt(_roundNum;6):
+            $mb(rot,color=blue,bold=true,text='1')
+        elif @lt(_roundNum;7):
+            $mb(rot,color=blue,bold=true,text='10')
+        elif @lt(_roundNum;8):
+            $mb(rot,color=blue,bold=true,text='44')
+        elif @lt(_roundNum;9):
+            $mb(rot,color=blue,bold=true,text='45')
+        elif @lt(_roundNum;10):
+            $mb(rot,color=blue,bold=true,text='2')
+        elif @lt(_roundNum;11):
+            $mb(rot,color=blue,bold=true,text='62')
+        elif @lt(_roundNum;12):
+            $mb(rot,color=blue,bold=true,text='6')
+        elif @lt(_roundNum;13):
+            $mb(rot,color=blue,bold=true,text='43')
+        elif @lt(_roundNum;14):
+            $mb(rot,color=blue,bold=true,text='15')
+        elif @lt(_roundNum;15):
+            $mb(rot,color=blue,bold=true,text='61')
+        elif @lt(_roundNum;16):
+            $mb(rot,color=blue,bold=true,text='28')
+        elif @lt(_roundNum;17):
+            $mb(rot,color=blue,bold=true,text='55')
+        elif @lt(_roundNum;18):
+            $mb(rot,color=blue,bold=true,text='25')
+        elif @lt(_roundNum;19):
+            $mb(rot,color=blue,bold=true,text='21')
+        elif @lt(_roundNum;20):
+            $mb(rot,color=blue,bold=true,text='56')
+        elif @lt(_roundNum;21):
+            $mb(rot,color=blue,bold=true,text='27')
+        elif @lt(_roundNum;22):
+            $mb(rot,color=blue,bold=true,text='20')
+        elif @lt(_roundNum;23):
+            $mb(rot,color=blue,bold=true,text='39')
+        elif @lt(_roundNum;24):
+            $mb(rot,color=blue,bold=true,text='8')
+        else:
+            $mb(rot,color=blue,bold=true,text='14')
+        if end
+    Frame End
 
-Frame 11:
-    $rb(obi)
-    $ra(obi,oby)
-    $mb(oby, color='red')
+    Frame 10:
+        $rb(rot)
+        $rb(description)
+        $rb(rotschedule)
+    Frame End
+
+    Frame 17:
+        $mb(description,color=blue,text='Right rotate the input bits by the current rotation number')
+        $mb(rot,color=green,bold=true)
+        $mb(i1bi,color=green,bold=true)
+        $ma(i1bi,bs,color=green)
+        $ma(rot,bs,color=green)
+    Frame End
+
+    Frame 18:
+        $mb(bs,color=red,bold=true)
+        $ma(bs,obi,color=red)
+    Frame End
+
+    Frame 19:
+        $mb(obi,color=red,bold=True,text=@rbitshift(*i1bi;*rot))
+    Frame End
+
+    Frame 20:
+        $rb(rot)
+        $ra(rot,bs)
+        $rb(obi)
+        $rb(bs)
+        $rb(i1bi)
+        $ra(i1bi,bs)
+        $ra(bs,obi)
+        $rb(description)
+    Frame End
+
+    Frame 21:
+        $mb(description,color=blue,text='Translate the output bits back into bytes')
+        $mb(obi,color=blue,bold=true)
+        $ma(obi,oby,color=blue)
+    Frame End
+
+    Frame 22:
+        $mb(oby,color=blue,bold=true,text=@bitbyte(*obi))
+    Frame End
+
+    Frame 23:
+        $rb(obi)
+        $ra(obi,oby)
+        $rb(description)
+    Frame End
+
+    Frame 24:
+        $mb(description,color=blue,text='Append the current bytes to the overall Roh output block')
+        $ma(oby,obr,color=blue)
+        $mb(obr,color=blue,bold=true,text=@concat(@concat(*obr;' ');*oby))
+    Frame End
+
+    Frame 25:
+        $rb(obr)
+        $rb(oby)
+        $ra(oby,obr)
+        $rb(description)
+    Frame End
+
+    _roundNum = @+(_roundNum;1)
+    Frame 26:
+        _yNum = @+(_yNum;1)
+        if @lt(_yNum;5):
+            _xNum = _xNum
+        else:
+            _yNum = 0
+            _xNum = @+(_xNum;1)
+        if end
+        $mb(description,color=blue,text='End of current round. We will now take the next chunk from the input block')
+        $modifyTitle(text=@concat('Roh Function Visualization Round ';_roundNum), color='red')
+        $mb(i1by,text='Theta[x][y] bytes')
+        $mb(i1bi,text='Theta[x][y] bits')
+        $mb(obi,text='Theta[x][y] bit shifted bits')
+        $mb(oby,text='Theta[x][y] bit shifted bytes')
+        $mb(rot,text='Rotation Amount')
+        $mb(bs,text='Right bit shift')
+    Frame End
+While End
+
+Round
+Frame 27:
+    $mb(description,color=blue,text='End of Roh function, output of Roh is seen in the bottom block')
+    $mb(obr,color=red,bold=True)
 Frame End

@@ -1,20 +1,272 @@
 # File for visualizing Keccak-f 1600 function
+# input: p1, xor2
 _roundNum = 0
 Frame 1:
-    $modifyTitle(text='Keccak-f[1600] Function', color='red')
-    $db(a,100,730,800,80,text=@concat('A Round ';_roundNum))
-    $db(theta,100,620,800,80,text='Theta Function')
-    $db(roh,100,510,800,80,text='Roh Function')
-    $db(pi,100,400,800,80,text='Pi Function')
-    $db(chi,100,290,800,80,text='Chi Function')
-    $db(iota,100,180,800,80,text='Iota Function')
-    $db(ao,100,70,800,80,text=@concat('A Round ';@+(_roundNum;1)))
-    $db(description,930,70,240,190,text='Description of events')
-
+    $modifyTitle(text=@concat('Keccak-f[1600] Function Round ';_roundNum), color='red')
+    $db(a,30,720,860,90,text=@concat('A Round ';_roundNum))
+    $db(theta,30,610,860,90,text='Theta Function')
+    $db(roh,30,500,860,90,text='Roh Function')
+    $db(pi,30,390,860,90,text='Pi Function')
+    $db(chi,30,280,860,90,text='Chi Function')
+    $db(iota,30,170,860,90,text='Iota Function')
+    $db(rc,930,170,240,90,text='Round Constant')
+    $db(ao,30,60,860,90,text=@concat('A Round ';@+(_roundNum;1)))
+    $db(description,930,610,240,200,text='Description of events')
+    $db(td1,930,460,240,130,text='Current Round Constant\Round  0:\ 00 00 00 00 00 00 00 01\Round  1:\ 00 00 00 00 00 00 80 82\Round  2:\ 80 00 00 00 00 00 80 8a\Round  3:\ 80 00 00 00 80 00 80 00')
     $da(a,theta)
     $da(theta,roh)
     $da(roh,pi)
     $da(pi,chi)
     $da(chi,iota)
     $da(iota,ao)
+    $da(rc,iota)
+Frame End
+
+Frame 2:
+    $mb(a,color=blue,bold=True,text=@concat(@concat(*c1;' ');'*xor2)))
+    $mb(description,color=blue,text='Populate A with the concatenation of the capacity and XOR of input bits and rate. This is our starting input')
+Frame End
+
+Frame 3:
+    $rb(description)
+    $rb(a)
+Frame End
+
+while @lt(_roundNum;24):
+    Round
+    Frame 3:
+        $mb(a,color=green,bold=True)
+        $ma(a,theta,color=green)
+        $mb(description,color=blue,text='Take A as input and run it through the Theta function. Click on the Theta box to see bit level details.')
+    Frame End
+
+    Frame 4:
+        $mb(theta,color=red,bold=true,link='SHA3Theta',input=a)
+    Frame End
+
+    Frame 5:
+        $mb(theta,text=@theta(*a))
+    Frame End
+
+    Frame 6:
+        $rb(theta)
+        $rb(a)
+        $ra(a,theta)
+        $rb(description)
+    Frame End
+
+    Frame 7:
+        $mb(theta,color=green,bold=True)
+        $ma(theta,roh,color=green)
+        $mb(description,color=blue,text='Take Theta output as input and run it through the Roh function. Click on the Roh box to see bit level details.')
+    Frame End
+
+    Frame 8:
+        $mb(roh,color=red,bold=true,link='SHA3Roh',input=theta)
+    Frame End
+
+    Frame 9:
+        $mb(roh,text=@roh(*theta))
+    Frame End
+
+    Frame 10:
+        $rb(roh)
+        $rb(theta)
+        $rb(description)
+        $ra(theta,roh)
+    Frame End
+
+    Frame 11:
+        $mb(roh,color=green,bold=True)
+        $ma(roh,pi,color=green)
+        $mb(description,color=blue,text='Take Roh output as input and run it through the Pi function. Click on the Pi box to see bit level details.')
+    Frame End
+
+    Frame 12:
+        $mb(pi,color=red,bold=true,link='SHA3Pi',input=roh)
+    Frame End
+
+    Frame 13:
+        $mb(pi,text=@pi(*roh))
+    Frame End
+
+    Frame 14:
+        $rb(pi)
+        $rb(roh)
+        $ra(roh,pi)
+        $rb(description)
+    Frame End
+
+    Frame 15:
+        $mb(pi,color=green,bold=True)
+        $ma(pi,chi,color=green)
+        $mb(description,color=blue,text='Take Pi output as input and run it through the Chi function. Click on the Chi box to see bit level details.')
+    Frame End
+
+    Frame 16:
+        $mb(chi,color=red,bold=true,link='SHA3Chi',input=pi)
+    Frame End
+
+    Frame 17:
+        $mb(chi,text=@chi(*pi))
+    Frame End
+
+    Frame 18:
+        $rb(pi)
+        $rb(chi)
+        $ra(pi,chi)
+        $rb(description)
+    Frame End
+
+    Frame 19:
+        $mb(td1,color=blue,bold=True)
+        $mb(rc,color=blue,bold=True)
+        $mb(description,color=blue,text='Populate the round constant box with the current round constant dictated by the schedule.')
+    Frame End
+
+    Frame 20:
+        if @lt(_roundNum;1):
+            $mb(rc,text='00 00 00 00 00 00 00 01')
+        elif @lt(_roundNum;2):
+            $mb(rc,text='00 00 00 00 00 00 80 82')
+        elif @lt(_roundNum;3):
+            $mb(rc,text='80 00 00 00 00 00 80 8a')
+        elif @lt(_roundNum;4):
+            $mb(rc,text='80 00 00 00 80 00 80 00')
+        elif @lt(_roundNum;5):
+            $mb(rc,text='00 00 00 00 00 00 80 8b')
+        elif @lt(_roundNum;6):
+            $mb(rc,text='00 00 00 00 80 00 00 01')
+        elif @lt(_roundNum;7):
+            $mb(rc,text='80 00 00 00 80 00 80 81')
+        elif @lt(_roundNum;8):
+            $mb(rc,text='80 00 00 00 00 00 80 09')
+        elif @lt(_roundNum;9):
+            $mb(rc,text='00 00 00 00 00 00 00 8a')
+        elif @lt(_roundNum;10):
+            $mb(rc,text='00 00 00 00 00 00 00 88')
+        elif @lt(_roundNum;11):
+            $mb(rc,text='00 00 00 00 80 00 80 09')
+        elif @lt(_roundNum;12):
+            $mb(rc,text='00 00 00 00 80 00 00 0a')
+        elif @lt(_roundNum;13):
+            $mb(rc,text='00 00 00 00 80 00 80 8b')
+        elif @lt(_roundNum;14):
+            $mb(rc,text='80 00 00 00 00 00 00 8b')
+        elif @lt(_roundNum;15):
+            $mb(rc,text='80 00 00 00 00 00 80 89')
+        elif @lt(_roundNum;16):
+            $mb(rc,text='80 00 00 00 00 00 80 03')
+        elif @lt(_roundNum;17):
+            $mb(rc,text='80 00 00 00 00 00 80 02')
+        elif @lt(_roundNum;18):
+            $mb(rc,text='80 00 00 00 00 00 00 80')
+        elif @lt(_roundNum;19):
+            $mb(rc,text='00 00 00 00 00 00 80 0a')
+        elif @lt(_roundNum;20):
+            $mb(rc,text='80 00 00 00 80 00 00 0a')
+        elif @lt(_roundNum;21):
+            $mb(rc,text='80 00 00 00 80 00 80 81')
+        elif @lt(_roundNum;22):
+            $mb(rc,text='80 00 00 00 00 00 80 80')
+        elif @lt(_roundNum;23):
+            $mb(rc,text='00 00 00 00 80 00 00 01')
+        else:
+            $mb(rc,text='80 00 00 00 80 00 80 08')
+        if end
+    Frame End
+
+    Frame 21:
+        $rb(description)
+        $rb(rc)
+        $rb(td1)
+    Frame End
+
+    Frame 22:
+        $mb(chi,color=green,bold=True)
+        $ma(chi,iota,color=green)
+        $mb(rc,color=green,bold=True)
+        $ma(rc,iota,color=green)
+        $mb(description,color=blue,text='Take the Chi output and the current round constant as input and run it through the Iota function. Click on the Iota box to see bit level details.')
+    Frame End
+
+    Frame 23:
+        $mb(iota,color=red,bold=true,link='SHA3Iota',input=chi;rc)
+    Frame End
+
+    Frame 24:
+        $mb(iota,text=@iota(*chi;*rc))
+    Frame End
+
+    Frame 25:
+        $rb(rc)
+        $rb(iota)
+        $rb(chi)
+        $ra(rc,iota)
+        $ra(chi,iota)
+        $rb(description)
+    Frame End
+
+    Frame 26:
+        $mb(iota,color=blue,bold=true)
+        $ma(iota,ao,color=blue)
+        $mb(description,color=blue,text='Take the Iota output as the output for this round. This output will become the input for the next round.')
+    Frame End
+
+    Frame 27:
+        $mb(ao,color=blue,bold=True,text=*iota)
+    Frame End
+
+    Frame 28:
+        $rb(ao)
+        $rb(iota)
+        $ra(iota,ao)
+        $mb(description,color=blue,text=@concat(@concat('End of Keccak-f[1600] round ';_roundNum);'. We now set the next round's block A to be the previous round output and run the same process as before.')
+    Frame End
+
+    _roundNum = @+(_roundNum;1)
+    Frame 29:
+        $modifyTitle(color=blue,text=@concat('Keccak-f[1600] Function Round ';_roundNum))
+        $mb(a,text=@concat('A Round ';_roundNum))
+        $mb(theta,text='Theta Function')
+        $mb(roh,text='Roh Function')
+        $mb(pi,text='Pi Function')
+        $mb(chi,text='Chi Function')
+        $mb(iota,text='Iota Function')
+        $mb(ao,color=blue,bold=True)
+        $mb(rc,text='Round Constant')
+        if @lt(_roundNum;4):
+            $mb(td1,color=blue,text='Current Round Constant\Round  0:\ 00 00 00 00 00 00 00 01\Round  1:\ 00 00 00 00 00 00 80 82\Round  2:\ 80 00 00 00 00 00 80 8a\Round  3:\ 80 00 00 00 80 00 80 00')
+        elif @lt(_roundNum;8):
+            $mb(td1,color=blue,text='Current Round Constant\Round  4:\ 00 00 00 00 00 00 80 8b\Round  5:\ 00 00 00 00 80 00 00 01\Round  6:\ 80 00 00 00 80 00 80 81\Round  7:\ 80 00 00 00 00 00 80 09')
+        elif @lt(_roundNum;12):
+            $mb(td1,color=blue,text='Current Round Constant\Round  8:\ 00 00 00 00 00 00 00 8A\Round  9:\ 00 00 00 00 00 00 00 88\Round 10:\ 00 00 00 00 80 00 80 09\Round 11:\ 00 00 00 00 80 00 00 0A')
+        elif @lt(_roundNum;16):
+            $mb(td1,color=blue,text='Current Round Constant\Round 12:\ 00 00 00 00 80 00 80 8B\Round 13:\ 80 00 00 00 00 00 00 8B\Round 14:\ 80 00 00 00 00 00 80 89\Round 15:\ 80 00 00 00 00 00 80 03')
+        elif @lt(_roundNum;20):
+            $mb(td1,color=blue,text='Current Round Constant\Round 16:\ 80 00 00 00 00 00 80 02\Round 17:\ 80 00 00 00 00 00 00 80\Round 18:\ 00 00 00 00 00 00 80 0A\Round 19:\ 80 00 00 00 80 00 00 0A')
+        else:
+            $mb(td1,color=blue,text='Current Round Constant\Round 20:\ 80 00 00 00 80 00 80 81\Round 21:\ 80 00 00 00 00 00 80 80\Round 22:\ 00 00 00 00 80 00 00 01\Round 23:\ 80 00 00 00 80 00 80 08')
+        if end
+    Frame End
+
+    Frame 30:
+        $mb(a,text=*ao,color=blue,bold=True)
+    Frame End
+
+    Frame 31:
+        $mt(color=red)
+        $rb(td1)
+        $rb(a)
+        $rb(ao)
+        $rb(description)
+        $mb(ao,text=@concat('A Round ';@+(_roundNum;1)))
+    Frame End
+While End
+
+Round
+Frame 32:
+    $mt(text='END OF Keccak-f[1600]',color=red)
+    $mb(a,color=red,bold=True)
+    $mb(description,color=red,text='We have finished running Keccak-f[1600] as we have run through 24 identical rounds. The result of this function is shown in the top box in word a. This will be split into the first 1088 bits for rate and the last 512 bit for capacity.')
 Frame End

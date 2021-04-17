@@ -100,8 +100,8 @@ Frame 11:
 Frame End
 
 Frame 12:
-    $mb(r1,color=red,bold=True,text=*xor1)
-    $mb(c1,color=red,bold=True,text=*c0)
+    $mb(c1,color=red,bold=True,text=@first272(@kf1600(*c0;*xor1)))
+    $mb(r1,color=red,bold=True,text=@last128(@kf1600(*c0;*xor1)))
 Frame End
 
 Frame 13:
@@ -157,8 +157,8 @@ Frame 19:
 Frame End
 
 Frame 20:
-    $mb(r2,color=red,bold=True,text=*xor1)
-    $mb(c2,color=red,bold=True,text=*c0)
+    $mb(c2,color=red,bold=True,text=@first272(@kf1600(*c1;*xor2)))
+    $mb(r2,color=red,bold=True,text=@last128(@kf1600(*c1;*xor2)))
 Frame End
 
 Frame 21:

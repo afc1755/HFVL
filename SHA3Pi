@@ -1,81 +1,70 @@
-# visualization for xor in sponge function
-# input: p1, r1
-
+# visualization for pi in sponge function
+# input: theta
+_roundNum = 0
+_xNum = 0
+_yNum = 0
 Frame 1:
-    $modifyTitle(text='XOR of Input Bytes and Rate Visualization', color='red')
-    $drawBox(i1by,50,700,300,100,text='Rate bytes')
-    $drawBox(i1bi,50,470,380,180,text='Rate bits')
-    $drawBox(i2by,50,90,300,100,text='Input bytes')
-    $drawBox(i2bi,50,240,380,180,text='Input bits')
-    $drawBox(xor,540,420,50,50,text='XOR')
-    $drawBox(obi,740,355,380,180,text='output bit')
-    $drawBox(oby,780,180,300,100,text='output byte')
+    $modifyTitle(text='Pi Function Visualization Round 0', color='red')
+    $db(b,55,720,860,90,text='Theta bytes')
+    $drawBox(i1by,105,620,200,50,text='Theta[x][y] bytes')
+    $drawBox(i1bi,90,550,230,50,text='Theta[x][y] bits')
+    $drawBox(rot,420,550,200,50,text='Rotation Amount')
+    $drawBox(bs,420,460,200,50,text='Right bit shift')
+    $drawBox(obi,405,360,230,50,text='Theta[x][y] bit shifted bits')
+    $drawBox(oby,420,280,200,50,text='Theta[x][y] bit shifted bytes')
+    $db(o00,90,180,200,30,text=' ')
+    $db(o01,290,180,200,30,text=' ')
+    $db(o02,490,180,200,30,text=' ')
+    $db(o03,690,180,200,30,text=' ')
+    $db(o04,890,180,200,30,text=' ')
+    $db(o10,90,150,200,30,text=' ')
+    $db(o11,290,150,200,30,text=' ')
+    $db(o12,490,150,200,30,text=' ')
+    $db(o13,690,150,200,30,text=' ')
+    $db(o14,890,150,200,30,text=' ')
+    $db(o20,90,120,200,30,text=' ')
+    $db(o21,290,120,200,30,text=' ')
+    $db(o22,490,120,200,30,text='Output Matrix')
+    $db(o23,690,120,200,30,text=' ')
+    $db(o24,890,120,200,30,text=' ')
+    $db(o30,90,90,200,30,text=' ')
+    $db(o31,290,90,200,30,text=' ')
+    $db(o32,490,90,200,30,text=' ')
+    $db(o33,690,90,200,30,text=' ')
+    $db(o34,890,90,200,30,text=' ')
+    $db(o40,90,60,200,30,text=' ')
+    $db(o41,290,60,200,30,text=' ')
+    $db(o42,490,60,200,30,text=' ')
+    $db(o43,690,60,200,30,text=' ')
+    $db(o44,890,60,200,30,text=' ')
+    $db(description,930,670,240,140,text='Description of events')
 
-    $drawArrow(i1by,i1bi)
-    $drawArrow(i2by,i2bi)
-    $drawArrow(i2bi,xor)
-    $drawArrow(i1bi,xor)
-    $drawArrow(xor,obi)
-    $drawArrow(obi,oby)
 Frame End
 
 Frame 2:
-    $modifyTitle(color='black')
-    $mb(i1by, color='blue',bold=True,text=*p1)
-    $mb(i2by, color='blue',bold=True,text=*r1)
-    $ma(i1by,i1bi,color='blue')
-    $ma(i2by,i2bi,color='blue')
+    $mb(b,color=blue,bold=true,text=*theta)
 Frame End
 
 Frame 3:
-    $mb(i1bi, color='blue',bold=True,text=@bytebit(*i1by))
-    $mb(i2bi, color='blue',bold=True,text=@bytebit(*i2by))
+    $rb(b)
 Frame End
 
-Frame 4:
-    $rb(i1by)
-    $rb(i2by)
-    $ra(i1by,i1bi)
-    $ra(i2by,i2bi)
-Frame End
+while @lt(_roundNum;25):
+    Round
 
-Frame 5:
-    $mb(i1bi,color='green')
-    $mb(i2bi,color='green')
-    $ma(i1bi,xor,color='green')
-    $ma(i2bi,xor,color='green')
-Frame End
+    _roundNum = @+(_roundNum;1)
+    Frame 26:
+        _yNum = @+(_yNum;1)
+        if @lt(_yNum;5):
+            _xNum = _xNum
+        else:
+            _yNum = 0
+            _xNum = @+(_xNum;1)
+        if end
+    Frame End
+While End
 
-Frame 6:
-    $mb(xor, color='red',bold=True)
-    $ma(xor,obi,color='red')
-Frame End
-
-Frame 7:
-    $mb(obi, color='red',bold=True, text=@xor(*i1bi;*i2bi))
-Frame End
-
-Frame 8:
-    $rb(obi)
-    $rb(i1bi)
-    $rb(i2bi)
-    $ra(i1bi,xor)
-    $ra(i2bi,xor)
-    $rb(xor)
-    $ra(xor,obi)
-Frame End
-
-Frame 9:
-    $mb(obi,color='blue',bold=true)
-    $ma(obi,oby,color='blue')
-Frame End
-
-Frame 10:
-    $mb(oby,color='blue',bold=True,text=@bitbyte(*obi))
-Frame End
-
-Frame 11:
-    $rb(obi)
-    $ra(obi,oby)
-    $mb(oby, color='red')
+Round
+Frame 27:
+    $mb(description,color=blue,text='End of Pi function, output of Pi is seen in the bottom matrix block')
 Frame End

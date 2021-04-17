@@ -12,7 +12,7 @@ Frame 1:
     $db(rc,930,170,240,90,text='Round Constant')
     $db(ao,30,60,860,90,text=@concat('A Round ';@+(_roundNum;1)))
     $db(description,930,610,240,200,text='Description of events')
-    $db(td1,930,460,240,130,text=text='Current Round Constant\Round  0:\ 00 00 00 00 00 00 00 01\Round  1:\ 00 00 00 00 00 00 80 82\Round  2:\ 80 00 00 00 00 00 80 8a\Round  3:\ 80 00 00 00 80 00 80 00')
+    $db(td1,930,460,240,130,text='Current Round Constant\Round  0:\ 00 00 00 00 00 00 00 01\Round  1:\ 00 00 00 00 00 00 80 82\Round  2:\ 80 00 00 00 00 00 80 8a\Round  3:\ 80 00 00 00 80 00 80 00')
     $da(a,theta)
     $da(theta,roh)
     $da(roh,pi)
@@ -142,17 +142,17 @@ while @lt(_roundNum;24):
         elif @lt(_roundNum;8):
             $mb(rc,text='80 00 00 00 00 00 80 09')
         elif @lt(_roundNum;9):
-            $mb(rc,text='00 00 00 00 00 00 00 8A')
+            $mb(rc,text='00 00 00 00 00 00 00 8a')
         elif @lt(_roundNum;10):
             $mb(rc,text='00 00 00 00 00 00 00 88')
         elif @lt(_roundNum;11):
             $mb(rc,text='00 00 00 00 80 00 80 09')
         elif @lt(_roundNum;12):
-            $mb(rc,text='00 00 00 00 80 00 00 0A')
+            $mb(rc,text='00 00 00 00 80 00 00 0a')
         elif @lt(_roundNum;13):
-            $mb(rc,text='00 00 00 00 80 00 80 8B')
+            $mb(rc,text='00 00 00 00 80 00 80 8b')
         elif @lt(_roundNum;14):
-            $mb(rc,text='80 00 00 00 00 00 00 8B')
+            $mb(rc,text='80 00 00 00 00 00 00 8b')
         elif @lt(_roundNum;15):
             $mb(rc,text='80 00 00 00 00 00 80 89')
         elif @lt(_roundNum;16):
@@ -162,9 +162,9 @@ while @lt(_roundNum;24):
         elif @lt(_roundNum;18):
             $mb(rc,text='80 00 00 00 00 00 00 80')
         elif @lt(_roundNum;19):
-            $mb(rc,text='00 00 00 00 00 00 80 0A')
+            $mb(rc,text='00 00 00 00 00 00 80 0a')
         elif @lt(_roundNum;20):
-            $mb(rc,text='80 00 00 00 80 00 00 0A')
+            $mb(rc,text='80 00 00 00 80 00 00 0a')
         elif @lt(_roundNum;21):
             $mb(rc,text='80 00 00 00 80 00 80 81')
         elif @lt(_roundNum;22):
@@ -195,7 +195,7 @@ while @lt(_roundNum;24):
     Frame End
 
     Frame 24:
-        $mb(iota,text=@iota(*chi;rc))
+        $mb(iota,text=@iota(*chi;*rc))
     Frame End
 
     Frame 25:
@@ -260,11 +260,13 @@ while @lt(_roundNum;24):
         $rb(a)
         $rb(ao)
         $rb(description)
+        $mb(ao,text=@concat('A Round ';@+(_roundNum;1)))
     Frame End
 While End
 
+Round
 Frame 32:
     $mt(text='END OF Keccak-f[1600]',color=red)
     $mb(a,color=red,bold=True)
-    $mb(description,color=red,text='We have finished running Keccak-f[1600] as we have run through 16 similar rounds. The result of this function is shown in the top box in word a. This will be split into the first 1088 bits for rate and the last 512 bit for capacity.')
+    $mb(description,color=red,text='We have finished running Keccak-f[1600] as we have run through 24 identical rounds. The result of this function is shown in the top box in word a. This will be split into the first 1088 bits for rate and the last 512 bit for capacity.')
 Frame End

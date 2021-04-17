@@ -11,6 +11,14 @@ ROT_TABLE = [[ 0, 36,  3, 41, 18],
              [28, 55, 25, 21, 56],
              [27, 20, 39,  8, 14]]
 
+K_RCs = ['00 00 00 00 00 00 00 01', '00 00 00 00 00 00 80 82', '80 00 00 00 00 00 80 8a', '80 00 00 00 80 00 80 00',
+         '00 00 00 00 00 00 80 8b', '00 00 00 00 80 00 00 01', '80 00 00 00 80 00 80 81', '80 00 00 00 00 00 80 09',
+         '00 00 00 00 00 00 00 8a', '00 00 00 00 00 00 00 88', '00 00 00 00 80 00 80 09', '00 00 00 00 80 00 00 0a',
+         '00 00 00 00 80 00 80 8b', '80 00 00 00 00 00 00 8b', '80 00 00 00 00 00 80 89', '80 00 00 00 00 00 80 03',
+         '80 00 00 00 00 00 80 02', '80 00 00 00 00 00 00 80', '00 00 00 00 00 00 80 0a', '80 00 00 00 80 00 00 0a',
+         '80 00 00 00 80 00 80 81', '80 00 00 00 00 00 80 80', '00 00 00 00 80 00 00 01', '80 00 00 00 80 00 80 08']
+
+
 def apply_function(func_name, in_args):
     func_args = []
     for func_arg in in_args:
@@ -55,6 +63,11 @@ def apply_function(func_name, in_args):
             return rbit_shift(func_args[0], 6)
         else:
             print('wrong number of args for bit shift, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'rbitshift':
+        if len(func_args) == 2:
+            return rbit_shift(func_args[0], int(func_args[1]))
+        else:
+            print('wrong number of args for bit shift, expected 2 got ' + str(len(func_args)))
     elif func_name == 'rbitshift11':
         if len(func_args) == 1:
             return rbit_shift(func_args[0], 11)
@@ -80,6 +93,21 @@ def apply_function(func_name, in_args):
             return trunc_32(func_args[0])
         else:
             print('wrong number of args for truncate to 32 bytes, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'first272':
+        if len(func_args) == 1:
+            return first_272(func_args[0])
+        else:
+            print('wrong number of args for first 272 bytes, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'last128':
+        if len(func_args) == 1:
+            return last_128(func_args[0])
+        else:
+            print('wrong number of args for last 128 bytes, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'last384':
+        if len(func_args) == 1:
+            return last_384(func_args[0])
+        else:
+            print('wrong number of args for last 384 bytes, expected 1 got ' + str(len(func_args)))
     elif func_name == 'theta':
         if len(func_args) == 1:
             return theta(func_args[0])
@@ -120,6 +148,11 @@ def apply_function(func_name, in_args):
             return xor_bit(func_args[0], func_args[1])
         else:
             print('wrong number of args for xor, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'indexmat':
+        if len(func_args) == 3:
+            return index_mat(func_args[0], func_args[1], func_args[2])
+        else:
+            print('wrong number of args for indexing matrix, expected 3 got ' + str(len(func_args)))
     elif func_name == '+':
         if len(func_args) == 2:
             return number_add(func_args[0], func_args[1])
@@ -135,7 +168,7 @@ def apply_function(func_name, in_args):
             return concat(func_args[0], func_args[1])
         else:
             print('wrong number of args for concatenation, expected 2 got ' + str(len(func_args)))
-    elif func_name == 'kf_1600':
+    elif func_name == 'kf1600':
         if len(func_args) == 2:
             return keccak_f_1600(func_args[0], func_args[1])
         else:
@@ -325,6 +358,38 @@ def trunc_32(in_byte):
     return out_byte
 
 
+def first_272(in_byte):
+    in_byte = in_byte.replace(' ', '')
+    out_byte = ''
+    for i in range(0, len(in_byte)):
+        if i == 272:
+            return out_byte
+        out_byte += in_byte[i]
+        if (i + 1) % 2 == 0 and (i + 1) != len(in_byte):
+            out_byte += ' '
+    return out_byte
+
+
+def last_128(in_byte):
+    in_byte = in_byte.replace(' ', '')
+    out_byte = ''
+    for i in range(272, len(in_byte)):
+        out_byte += in_byte[i]
+        if (i + 1) % 2 == 0 and (i + 1) != len(in_byte):
+            out_byte += ' '
+    return out_byte
+
+
+def last_384(in_byte):
+    in_byte = in_byte.replace(' ', '')
+    out_byte = ''
+    for i in range(16, len(in_byte)):
+        out_byte += in_byte[i]
+        if (i + 1) % 2 == 0 and (i + 1) != len(in_byte):
+            out_byte += ' '
+    return out_byte
+
+
 def rot(i1, i2):
     return ROT_TABLE[i1][i2]
 
@@ -335,44 +400,92 @@ def create_mat(a):
     curr_i = 0
     curr_sub_i = 0
     for i in range(0, len(a)):
-        if i != 0 and i % 16 == 0:
-            a_mat[curr_i][curr_sub_i] = a[i-16:i]
+        if i != 0 and i % 64 == 0:
+            a_mat[curr_i][curr_sub_i] = a[i-64:i]
             curr_sub_i += 1
-        if i != 0 and i % 80 == 0:
+        if i != 0 and i % 320 == 0:
             curr_i += 1
             curr_sub_i = 0
-    a_mat[4][4] = a[(len(a)-16):]
+    a_mat[4][4] = a[(len(a)-64):]
     return a_mat
 
 
+def un_matrix(in_mat):
+    out_str = ''
+    for x in range(0, len(in_mat)):
+        for y in range(0, len(in_mat[x])):
+            out_str += in_mat[x][y]
+            out_str += ' '
+    return out_str[:len(out_str) - 1]
+
+
 def theta(a):
-    a_mat = create_mat(a)
+    a = byte_to_bit(a)
+    a = create_mat(a)
 
-    c = ['','','','','']
-    d = ['','','','','']
-    #for x in range(0,5):
+    c = ['', '', '', '', '']
+    d = ['', '', '', '', '']
+    for x in range(0, 5):
+        c[x] = xor_bit(xor_bit(xor_bit(xor_bit(a[x][0], a[x][1]), a[x][2]), a[x][3]), a[x][4])
 
-    """for x in range(0,5):
-        for y in range(0,5):
-            B[]"""
-    return a
+    for x in range(0, 5):
+        xplus = x + 1
+        if xplus > 4:
+            xplus = 0
+        d[x] = xor_bit(c[x-1], rbit_shift(c[xplus], 1))
+
+    for x in range(0, 5):
+        for y in range(0, 5):
+            a[x][y] = xor_bit(a[x][y], d[x])
+
+    return bit_to_byte(un_matrix(a))
 
 
 def roh(theta_o):
-    return theta_o
+    theta_o = byte_to_bit(theta_o)
+    theta_o = create_mat(theta_o)
+    for x in range(0, 5):
+        for y in range(0, 5):
+            theta_o[x][y] = rbit_shift(theta_o[x][y], rot(x, y))
+    return bit_to_byte(un_matrix(theta_o))
 
 
 def pi(roh_o):
-    return roh_o
+    roh_o = byte_to_bit(roh_o)
+    roh_o = create_mat(roh_o)
+    for x in range(0, 5):
+        for y in range(0, 5):
+            second_index = 2 * x + 3 * y
+            second_index = second_index % 5
+            roh_o[y][second_index] = roh_o[x][y]
+    return bit_to_byte(un_matrix(roh_o))
 
 
 def chi(pi_o):
-    return pi_o
+    pi_o = byte_to_bit(pi_o)
+    pi_old = create_mat(pi_o)
+    chi_out = pi_old.copy()
+    for x in range(0, 5):
+        for y in range(0, 5):
+            chi_out[x][y] = xor_bit(pi_old[x][y], and_bit(not_bit(pi_old[(x+1) % 5][y]), pi_old[(x+2) % 5][y]))
+    return bit_to_byte(un_matrix(chi_out))
 
 
 def iota(chi_o, rc):
-    return chi_o
+    chi_o = byte_to_bit(chi_o)
+    chi_o = create_mat(chi_o)
+    chi_o[0][0] = xor_bit(chi_o[0][0], byte_to_bit(rc))
+    return bit_to_byte(un_matrix(chi_o))
 
 
 def keccak_f_1600(rate, capacity):
-    return rate + capacity
+    a = rate + ' ' + capacity
+    for i in range(0, 24):
+        a = iota(chi(pi(roh(theta(a)))), K_RCs[i])
+    return a
+
+
+def index_mat(a, index1, index2):
+    a = byte_to_bit(a)
+    a = create_mat(a)
+    return bit_to_byte(a[int(index1)][int(index2)])

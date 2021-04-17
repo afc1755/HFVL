@@ -313,9 +313,9 @@ def read_file(file_to_read, prev_window_dict):
 
 
 def solve_text(box_text, box_dict, prev_window_dict, var_dict):
-    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@hrbitshift13',
+    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@rbitshift13',
                 '@rbitshift22', '@rbitshift6', '@rbitshift11', '@rbitshift25', '@trunc32', '@theta', '@roh', '@chi',
-                '@pi']
+                '@pi', '@last128', '@first272', '@last384']
     if box_text[0] == '@':
         # function found
         func_name, func_args = box_text.split('(', 1)
@@ -323,16 +323,24 @@ def solve_text(box_text, box_dict, prev_window_dict, var_dict):
             func_args = [func_args]
         else:
             balance = 0
-            split_num = -1
+            split_nums = []
             for i in range(0, len(func_args)):
                 if func_args[i] == ';' and balance == 0:
-                    split_num = i
-                    break
+                    split_nums.append(i)
                 elif func_args[i] == '(':
                     balance += 1
                 elif func_args[i] == ')':
                     balance -= 1
-            func_args = [func_args[:split_num], func_args[split_num+1:]]
+            new_func_args = []
+            for i in range(0, len(split_nums)):
+                if i == 0:
+                    new_func_args.append(func_args[:split_nums[i]])
+                else:
+                    new_func_args.append(func_args[split_nums[i - 1] + 1:split_nums[i]])
+                if i == len(split_nums) - 1:
+                    new_func_args.append(func_args[split_nums[i]+1:])
+            func_args = new_func_args
+            #func_args = [func_args[:split_num], func_args[split_num+1:]]
         real_func_args = []
         for func_arg in func_args:
             func_arg = solve_text(func_arg, box_dict, prev_window_dict, var_dict)
@@ -497,12 +505,18 @@ def calculate_displacement(arrow_num):
 
 def get_x_y_diff(s_b, e_b):
     x_diff = min(abs((e_b[0] + e_b[2]) - s_b[0]), abs(e_b[0] - s_b[0]),
-                 abs(e_b[0] - (s_b[0] + s_b[2])), abs((e_b[0] + e_b[2]) - (s_b[0] + s_b[2])))
+                 abs(e_b[0] - (s_b[0] + s_b[2])), abs((e_b[0] + e_b[2]) - (s_b[0] + s_b[2])),
+                 abs((e_b[0] + e_b[2]/2) - (s_b[0] + s_b[2])), abs((e_b[0] + e_b[2]) - (s_b[0] + s_b[2]/2)),
+                 abs((e_b[0] + e_b[2]/2) - s_b[0]), abs(e_b[0] - (s_b[0] + s_b[2]/2)),
+                 abs((e_b[0] + e_b[2]/2) - (s_b[0] + s_b[2]/2)))
     if s_b[0] > e_b[0]:
         x_diff = -x_diff
 
     y_diff = min(abs(e_b[1] - (s_b[1] + s_b[3])), abs(e_b[1] - s_b[1]),
-                 abs((e_b[1] + e_b[3]) - s_b[1]), abs((e_b[1] + e_b[3]) - (s_b[1] + s_b[3])))
+                 abs((e_b[1] + e_b[3]) - s_b[1]), abs((e_b[1] + e_b[3]) - (s_b[1] + s_b[3])),
+                 abs((e_b[1] + e_b[3]/2) - (s_b[1] + s_b[3])), abs((e_b[1] + e_b[3]) - (s_b[1] + s_b[3]/2)),
+                 abs((e_b[1] + e_b[3]/2) - s_b[1]), abs(e_b[1] - (s_b[1] + s_b[3]/2)),
+                 abs((e_b[1] + e_b[3]/2) - (s_b[1] + s_b[3]/2)))
     if s_b[1] > e_b[1]:
         y_diff = -y_diff
     return x_diff, y_diff
