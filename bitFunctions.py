@@ -83,7 +83,7 @@ def apply_function(func_name, in_args):
             return not_bit(func_args[0])
         else:
             print('wrong number of args for not, expected 1 got ' + str(len(func_args)))
-    elif func_name == 'mod':
+    elif func_name == 'mod32':
         if len(func_args) == 1:
             return mod_32(func_args[0])
         else:
@@ -158,6 +158,16 @@ def apply_function(func_name, in_args):
             return number_add(func_args[0], func_args[1])
         else:
             print('wrong number of args for numerical add, expected 2 got ' + str(len(func_args)))
+    elif func_name == '*':
+        if len(func_args) == 2:
+            return number_mult(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for numerical multiply, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'mod':
+        if len(func_args) == 2:
+            return number_mod(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for numerical mod, expected 2 got ' + str(len(func_args)))
     elif func_name == 'lt' or func_name == 'lessthan':
         if len(func_args) == 2:
             return less_than(func_args[0], func_args[1])
@@ -331,6 +341,22 @@ def number_add(num1, num2):
         return str(int(num1) + int(num2))
     except ValueError:
         print('not an acceptable integer expression: ' + num1 + ' + ' + num2)
+        return '0'
+
+
+def number_mod(num1, num2):
+    try:
+        return str(int(num1) % int(num2))
+    except ValueError:
+        print('not an acceptable integer expression: ' + num1 + ' mod ' + num2)
+        return '0'
+
+
+def number_mult(num1, num2):
+    try:
+        return str(int(num1) * int(num2))
+    except ValueError:
+        print('not an acceptable integer expression: ' + num1 + ' * ' + num2)
         return '0'
 
 

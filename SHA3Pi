@@ -1,17 +1,20 @@
 # visualization for pi in sponge function
-# input: theta
+# input: roh
 _roundNum = 0
 _xNum = 0
 _yNum = 0
 Frame 1:
     $modifyTitle(text='Pi Function Visualization Round 0', color='red')
-    $db(b,55,720,860,90,text='Theta bytes')
-    $drawBox(i1by,105,620,200,50,text='Theta[x][y] bytes')
-    $drawBox(i1bi,90,550,230,50,text='Theta[x][y] bits')
-    $drawBox(rot,420,550,200,50,text='Rotation Amount')
-    $drawBox(bs,420,460,200,50,text='Right bit shift')
-    $drawBox(obi,405,360,230,50,text='Theta[x][y] bit shifted bits')
-    $drawBox(oby,420,280,200,50,text='Theta[x][y] bit shifted bytes')
+    $db(b,55,720,860,90,text='Roh bytes')
+    $drawBox(i1by,305,420,200,50,text='Roh[x][y] bytes')
+    $drawBox(x,720,620,50,50,text='X')
+    $drawBox(y,820,620,50,50,text='Y')
+    $drawBox(2x3y,745,520,100,50,text='2x + 3y')
+    $db(mod5,745,420,100,50,text='Mod 5')
+    $db(colind,745,320,100,50,text='Column Number')
+    $drawBox(y2,565,420,50,50,text='Y')
+    $db(rowind,540,320,100,50,text='Row Number')
+
     $db(o00,90,180,200,30,text=' ')
     $db(o01,290,180,200,30,text=' ')
     $db(o02,490,180,200,30,text=' ')
@@ -39,21 +42,135 @@ Frame 1:
     $db(o44,890,60,200,30,text=' ')
     $db(description,930,670,240,140,text='Description of events')
 
+    $da(b,i1by)
+
+    $da(x,2x3y)
+    $da(y,2x3y)
+    $da(y2,rowind)
+    $da(rowind,o02)
+    $da(2x3y,mod5)
+    $da(mod5,colind)
+    $da(colind,o02)
+    $da(i1by,o02)
 Frame End
 
 Frame 2:
-    $mb(b,color=blue,bold=true,text=*theta)
+    $mb(b,color=blue,bold=true,text=*roh)
+    $mb(description,color=blue,text='Populate the output of Roh into our input bytes')
 Frame End
 
 Frame 3:
     $rb(b)
+    $rb(description)
 Frame End
 
 while @lt(_roundNum;25):
     Round
+    Frame 4:
+        $mb(x,color=blue,bold=true,text=_xNum)
+        $mb(y,color=blue,bold=true,text=_yNum)
+        $mb(y2,color=blue,bold=true,text=_yNum)
+        $mb(i1by,color=blue,bold=true,text=@indexmat(*roh;_xNum;_yNum))
+        $mb(description,color=blue,text='Update the x and y values as well as the current block from our input bytes')
+    Frame End
+
+    Frame 5:
+        $rb(x)
+        $rb(y)
+        $rb(i1by)
+        $rb(y2)
+        $rb(description)
+    Frame End
+
+    Frame 6:
+        $mb(x,color=green,bold=true)
+        $mb(y,color=green,bold=true)
+        $ma(x,2x3y,color=green)
+        $ma(y,2x3y,color=green)
+        $mb(description,color=blue,text='Take in our x and y values and plug them into the 2 * x + 3 * y equation')
+    Frame End
+
+    Frame 7:
+        $mb(2x3y,color=red,bold=true,text=@+(@*(_xNum;2);@*(_yNum;3)))
+    Frame End
+
+    Frame 8:
+        $rb(2x3y)
+        $rb(x)
+        $rb(y)
+        $ra(x,2x3y)
+        $ra(y,2x3y)
+        $rb(description)
+    Frame End
+
+    Frame 9:
+        $mb(2x3y,color=green,bold=True)
+        $ma(2x3y,mod5,color=green)
+        $mb(description,color=blue,text='Take our 2 * x + 3 * y value and mod this value by 5')
+    Frame End
+
+    Frame 10:
+        $mb(mod5,color=red,bold=true,text=@mod(*2x3y;5))
+    Frame End
+
+    Frame 11:
+        $rb(mod5)
+        $rb(2x3y)
+        $ra(2x3y,mod5)
+        $rb(description)
+    Frame End
+
+    Frame 12:
+        $mb(y2,color=blue,bold=true)
+        $ma(y2,rowind,color=blue)
+        $mb(mod5,color=blue,bold=true)
+        $ma(mod5,colind,color=blue)
+        $mb(description,color=blue,text='Update the row index based on our current y value and the column index based on our calculation.')
+    Frame End
+
+    Frame 13:
+        $mb(rowind,color=blue,bold=true,text=*y2)
+        $mb(colind,color=blue,bold=true,text=*mod5)
+    Frame End
+
+    Frame 14:
+        $rb(rowind)
+        $rb(colind)
+        $ra(y2,rowind)
+        $ra(mod5,colind)
+        $rb(y2)
+        $rb(mod5)
+        $rb(description)
+    Frame End
+
+    Frame 15:
+        $mb(colind,color=blue,bold=true)
+        $mb(rowind,color=blue,bold=true)
+        $mb(i1by,color=blue,bold=true)
+        $ma(colind,o02,color=blue)
+        $ma(rowind,o02,color=blue)
+        $ma(i1by,o02,color=blue)
+        $mb(description,color=blue,text='Take our row and column indices and place our current input bytes at that corresponding position.')
+    Frame End
+
+    Frame 16:
+        $mb(@concat(@concat('o';*rowind);*colind),color=blue,bold=true,text=*i1by)
+    Frame End
+
+    Frame 17:
+        $rb(colind)
+        $rb(rowind)
+        $rb(i1by)
+        $rb(@concat(@concat('o';*rowind);*colind))
+        $ra(colind,o02)
+        $ra(rowind,o02)
+        $ra(i1by,o02)
+        $rb(description)
+    Frame End
+
 
     _roundNum = @+(_roundNum;1)
-    Frame 26:
+    Frame 18:
         _yNum = @+(_yNum;1)
         if @lt(_yNum;5):
             _xNum = _xNum
@@ -61,10 +178,44 @@ while @lt(_roundNum;25):
             _yNum = 0
             _xNum = @+(_xNum;1)
         if end
+        $mb(i1by,text='Roh[x][y] bytes')
+        $mb(x,text='X')
+        $mb(y,text='Y')
+        $mb(2x3y,text='2x + 3y')
+        $mb(mod5,text='Mod 5')
+        $mb(colind,text='Column Number')
+        $mb(y2,text='Y')
+        $mb(rowind,text='Row Number')
+        $mb(description,color=blue,text='End of current round of Pi, move on to the next block of Roh input')
     Frame End
 While End
 
 Round
-Frame 27:
+Frame 19:
     $mb(description,color=blue,text='End of Pi function, output of Pi is seen in the bottom matrix block')
+    $mb(o00,color=red,bold=True)
+    $mb(o01,color=red,bold=True)
+    $mb(o02,color=red,bold=True)
+    $mb(o03,color=red,bold=True)
+    $mb(o04,color=red,bold=True)
+    $mb(o10,color=red,bold=True)
+    $mb(o11,color=red,bold=True)
+    $mb(o12,color=red,bold=True)
+    $mb(o13,color=red,bold=True)
+    $mb(o14,color=red,bold=True)
+    $mb(o20,color=red,bold=True)
+    $mb(o21,color=red,bold=True)
+    $mb(o22,color=red,bold=True)
+    $mb(o23,color=red,bold=True)
+    $mb(o24,color=red,bold=True)
+    $mb(o30,color=red,bold=True)
+    $mb(o31,color=red,bold=True)
+    $mb(o32,color=red,bold=True)
+    $mb(o33,color=red,bold=True)
+    $mb(o34,color=red,bold=True)
+    $mb(o40,color=red,bold=True)
+    $mb(o41,color=red,bold=True)
+    $mb(o42,color=red,bold=True)
+    $mb(o43,color=red,bold=True)
+    $mb(o44,color=red,bold=True)
 Frame End

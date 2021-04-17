@@ -214,7 +214,7 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 13:
-        $mb(am1o,color='red',bold=True,text=@bitbyte(@mod(@add(@bytebit(*f);@bytebit(*w5)))),link='amviz1',input=f;w5)
+        $mb(am1o,color='red',bold=True,text=@bitbyte(@mod32(@add(@bytebit(*f);@bytebit(*w5)))),link='amviz1',input=f;w5)
     Frame End
 
     Frame 14:
@@ -266,7 +266,7 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 21:
-        $mb(am2o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='amviz2',input=lb5o;am1o)
+        $mb(am2o,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='amviz2',input=lb5o;am1o)
     Frame End
 
     Frame 22:
@@ -457,7 +457,7 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 26:
-        $mb(am3o,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*exw);@bytebit(*am2o))),link='amviz3',input=exw;am2o)
+        $mb(am3o,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*exw);@bytebit(*am2o))),link='amviz3',input=exw;am2o)
     Frame End
 
     Frame 27:
@@ -496,7 +496,7 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 31:
-        $mb(ow1,color=red,bold=True,text=@bitbyte(@mod(@add(@bytebit(*rc);@bytebit(*am3o))),link='amviz4',input=rc;am3o)
+        $mb(ow1,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*rc);@bytebit(*am3o))),link='amviz4',input=rc;am3o)
     Frame End
 
     Frame 32:

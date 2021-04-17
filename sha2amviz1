@@ -101,7 +101,7 @@ Frame 10:
 Frame End
 
 Frame 11:
-    $mb(i1ai2,color='red',bold=True,text=@mod(*addi1i2))
+    $mb(i1ai2,color='red',bold=True,text=@mod32(*addi1i2))
 Frame End
 
 Frame 12:
@@ -147,7 +147,7 @@ Frame 17:
 Frame End
 
 Frame 18:
-    $mb(outbi,color=red,bold=True,text=@mod(*chahaadd))
+    $mb(outbi,color=red,bold=True,text=@mod32(*chahaadd))
 Frame End
 
 Frame 19:

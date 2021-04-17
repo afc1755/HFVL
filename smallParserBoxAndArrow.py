@@ -121,7 +121,9 @@ def read_file(file_to_read, prev_window_dict):
                     box_args = function_line[1].split(',')
                     box_id = box_args[0].replace('\'', '').strip()
                     if box_id not in box_dict:
-                        print('error: no such box as ' + box_id)
+                        box_id = solve_text(box_id, box_dict, prev_window_dict, var_dict)
+                        if box_id not in box_dict:
+                            print('error: no such box as ' + box_id)
                     for i in range(1, len(box_args)):
                         attribute_args = box_args[i].split('=')
                         if attribute_args[0].strip().lower() == 'text':
@@ -159,6 +161,12 @@ def read_file(file_to_read, prev_window_dict):
                     # helper for me to remove all color and bold and link
                     box_args = function_line[1].split(',')
                     box_id = box_args[0].replace('\'', '').strip()
+
+                    if box_id not in box_dict:
+                        box_id = solve_text(box_id, box_dict, prev_window_dict, var_dict)
+                        if box_id not in box_dict:
+                            print('error: no such box as ' + box_id)
+
                     box_dict[box_id] = [box_dict[box_id][0], box_dict[box_id][1],
                                         box_dict[box_id][2], box_dict[box_id][3],
                                         box_dict[box_id][4], False, BLACK, {}]
@@ -313,7 +321,7 @@ def read_file(file_to_read, prev_window_dict):
 
 
 def solve_text(box_text, box_dict, prev_window_dict, var_dict):
-    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@rbitshift13',
+    no_slice = ['@bitbyte', '@bytebit', '@not', '@mod32', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@rbitshift13',
                 '@rbitshift22', '@rbitshift6', '@rbitshift11', '@rbitshift25', '@trunc32', '@theta', '@roh', '@chi',
                 '@pi', '@last128', '@first272', '@last384']
     if box_text[0] == '@':

@@ -441,7 +441,7 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 14:
-        $mb(am2,text=@bitbyte(@mod(@add(@bytebit(*ew);@bytebit(*rc)))))
+        $mb(am2,text=@bitbyte(@mod32(@add(@bytebit(*ew);@bytebit(*rc)))))
     Frame End
 
     Frame 15:
@@ -467,7 +467,7 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 18:
-        $mb(am1,text=@bitbyte(@mod(@add(@mod(@add(@bytebit(*ch);@bytebit(*h)));@bytebit(*am2)))))
+        $mb(am1,text=@bitbyte(@mod32(@add(@mod32(@add(@bytebit(*ch);@bytebit(*h)));@bytebit(*am2)))))
     Frame End
 
     Frame 19:
@@ -513,7 +513,7 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 25:
-        $mb(am3,text=@bitbyte(@mod(@add(@bytebit(*sum1);@bytebit(*am1)))),link='sha2amviz3')
+        $mb(am3,text=@bitbyte(@mod32(@add(@bytebit(*sum1);@bytebit(*am1)))),link='sha2amviz3')
     Frame End
 
     Frame 26:
@@ -537,7 +537,7 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 29:
-        $mb(am4,text=@bitbyte(@mod(@add(@bytebit(*am3);@bytebit(*d)))))
+        $mb(am4,text=@bitbyte(@mod32(@add(@bytebit(*am3);@bytebit(*d)))))
     Frame End
 
     Frame 30:
@@ -604,7 +604,7 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 40:
-        $mb(am5,text=@bitbyte(@mod(@add(@bytebit(*am3);@bytebit(*ma)))))
+        $mb(am5,text=@bitbyte(@mod32(@add(@bytebit(*am3);@bytebit(*ma)))))
     Frame End
 
     Frame 41:
@@ -648,7 +648,7 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 48:
-        $mb(am6,text=@bitbyte(@mod(@add(@bytebit(*am5);@bytebit(*sum2)))))
+        $mb(am6,text=@bitbyte(@mod32(@add(@bytebit(*am5);@bytebit(*sum2)))))
     Frame End
 
     Frame 49:

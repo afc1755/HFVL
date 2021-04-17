@@ -80,7 +80,7 @@ Frame 10:
 Frame End
 
 Frame 11:
-    $mb(obi, color='red',bold=True,text=@mod(*addi1i2))
+    $mb(obi, color='red',bold=True,text=@mod32(*addi1i2))
 Frame End
 
 Frame 12:
