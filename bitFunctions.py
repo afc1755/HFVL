@@ -188,6 +188,21 @@ def apply_function(func_name, in_args):
             return iota(func_args[0], func_args[1])
         else:
             print('wrong number of args for Iota, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'xorloop':
+        if len(func_args) == 2:
+            return xor_loop(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for XOR loop, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'cfunc':
+        if len(func_args) == 1:
+            return c_func(func_args[0])
+        else:
+            print('wrong number of args for C function, expected 1 got ' + str(len(func_args)))
+    elif func_name == 'dfunc':
+        if len(func_args) == 1:
+            return d_func(func_args[0])
+        else:
+            print('wrong number of args for D function, expected 1 got ' + str(len(func_args)))
     return func_name
 
 
@@ -443,6 +458,60 @@ def un_matrix(in_mat):
             out_str += in_mat[x][y]
             out_str += ' '
     return out_str[:len(out_str) - 1]
+
+
+def un_arr(in_arr):
+    out_str = ''
+    for x in range(0, len(in_arr)):
+        out_str += in_arr[x]
+        out_str += ' '
+    return out_str[:len(out_str) - 1]
+
+
+def create_arr(in_str):
+    a_arr = ['', '', '', '', '']
+    in_str = in_str.replace(' ', '')
+    curr_i = 0
+    for i in range(0, len(in_str)):
+        if i != 0 and i % 64 == 0:
+            a_arr[curr_i] = in_str[i - 64:i]
+            curr_i += 1
+    a_arr[4] = in_str[(len(in_str) - 64):]
+    return a_arr
+
+
+def c_func(a):
+    a = byte_to_bit(a)
+    a = create_mat(a)
+    c = ['', '', '', '', '']
+    for x in range(0, 5):
+        c[x] = xor_bit(xor_bit(xor_bit(xor_bit(a[x][0], a[x][1]), a[x][2]), a[x][3]), a[x][4])
+
+    return bit_to_byte(un_arr(c))
+
+
+def d_func(c_in):
+    c_in = byte_to_bit(c_in)
+    c_in = create_arr(c_in)
+    d = ['', '', '', '', '']
+    for x in range(0, 5):
+        xplus = x + 1
+        if xplus > 4:
+            xplus = 0
+        d[x] = xor_bit(c_in[x-1], rbit_shift(c_in[xplus], 1))
+    return bit_to_byte(un_arr(d))
+
+
+def xor_loop(a, d):
+    a = byte_to_bit(a)
+    a = create_mat(a)
+    d = byte_to_bit(d)
+    d = create_arr(d)
+
+    for x in range(0, 5):
+        for y in range(0, 5):
+            a[x][y] = xor_bit(a[x][y], d[x])
+    return bit_to_byte(un_matrix(a))
 
 
 def theta(a):

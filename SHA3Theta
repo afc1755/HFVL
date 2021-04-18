@@ -1,81 +1,104 @@
-# visualization for xor in sponge function
-# input: p1, r1
-
+# visualization for theta in keccak f function
+# input: a
 Frame 1:
-    $modifyTitle(text='XOR of Input Bytes and Rate Visualization', color='red')
-    $drawBox(i1by,50,700,300,100,text='Rate bytes')
-    $drawBox(i1bi,50,470,380,180,text='Rate bits')
-    $drawBox(i2by,50,90,300,100,text='Input bytes')
-    $drawBox(i2bi,50,240,380,180,text='Input bits')
-    $drawBox(xor,540,420,50,50,text='XOR')
-    $drawBox(obi,740,355,380,180,text='output bit')
-    $drawBox(oby,780,180,300,100,text='output byte')
+    $modifyTitle(text='Theta Function Visualization Round 0', color='red')
+    $db(a1,55,720,860,90,text='A bytes')
+    $db(c,55,550,180,120,text='C function')
+    $db(d,55,390,180,120,text='D function')
+    $db(a2,235,390,680,120,text='A bytes')
+    $db(xorLoop,55,170,860,90,text='XOR Loop')
+    $drawBox(oby,55,50,860,90,text='Theta output')
 
-    $drawArrow(i1by,i1bi)
-    $drawArrow(i2by,i2bi)
-    $drawArrow(i2bi,xor)
-    $drawArrow(i1bi,xor)
-    $drawArrow(xor,obi)
-    $drawArrow(obi,oby)
+    $da(a1,c)
+    $da(c,d)
+    $da(d,xorLoop)
+    $da(a2,xorLoop)
+    $da(xorLoop,oby)
 Frame End
 
 Frame 2:
-    $modifyTitle(color='black')
-    $mb(i1by, color='blue',bold=True,text=*p1)
-    $mb(i2by, color='blue',bold=True,text=*r1)
-    $ma(i1by,i1bi,color='blue')
-    $ma(i2by,i2bi,color='blue')
+    $mb(a1,color=blue,bold=true,text=*a)
+    $mb(a2,color=blue,bold=true,text=*a)
 Frame End
 
 Frame 3:
-    $mb(i1bi, color='blue',bold=True,text=@bytebit(*i1by))
-    $mb(i2bi, color='blue',bold=True,text=@bytebit(*i2by))
+    $rb(a1)
+    $rb(a2)
 Frame End
 
 Frame 4:
-    $rb(i1by)
-    $rb(i2by)
-    $ra(i1by,i1bi)
-    $ra(i2by,i2bi)
+    $mb(a1,color=green,bold=true)
+    $ma(a1,c,color=green)
 Frame End
 
 Frame 5:
-    $mb(i1bi,color='green')
-    $mb(i2bi,color='green')
-    $ma(i1bi,xor,color='green')
-    $ma(i2bi,xor,color='green')
+    $mb(c,color=red,bold=true,link='SHA3ThetaC',input=a1)
 Frame End
 
 Frame 6:
-    $mb(xor, color='red',bold=True)
-    $ma(xor,obi,color='red')
+    $mb(c,text=@cfunc(*a))
 Frame End
 
 Frame 7:
-    $mb(obi, color='red',bold=True, text=@xor(*i1bi;*i2bi))
+    $rb(c)
+    $rb(a1)
+    $ra(a1,c)
 Frame End
 
 Frame 8:
-    $rb(obi)
-    $rb(i1bi)
-    $rb(i2bi)
-    $ra(i1bi,xor)
-    $ra(i2bi,xor)
-    $rb(xor)
-    $ra(xor,obi)
+    $mb(c,color=green,bold=true)
+    $ma(c,d,color=green)
 Frame End
 
 Frame 9:
-    $mb(obi,color='blue',bold=true)
-    $ma(obi,oby,color='blue')
+    $mb(d,color=red,bold=true,link='SHA3ThetaD',input=c)
 Frame End
 
 Frame 10:
-    $mb(oby,color='blue',bold=True,text=@bitbyte(*obi))
+    $mb(d,text=@dfunc(*c))
 Frame End
 
 Frame 11:
-    $rb(obi)
-    $ra(obi,oby)
-    $mb(oby, color='red')
+    $rb(c)
+    $rb(d)
+    $ra(c,d)
 Frame End
+
+Frame 12:
+    $mb(d,color=green,bold=true)
+    $mb(a2,color=green,bold=true)
+    $ma(d,xorLoop,color=green)
+    $ma(a2,xorLoop,color=green)
+Frame End
+
+Frame 13:
+    $mb(xorLoop,color=red,bold=true,link='SHA3ThetaXor',input=a2;d)
+Frame End
+
+Frame 14:
+    $mb(xorLoop,text=@xorloop(*a2;*d))
+Frame End
+
+Frame 15:
+    $rb(xorLoop)
+    $rb(a2)
+    $rb(d)
+    $ra(d,xorLoop)
+    $ra(a2,xorLoop)
+Frame End
+
+Frame 16:
+    $mb(xorLoop,color=blue,bold=true)
+    $ma(xorLoop,oby,color=blue)
+Frame End
+
+Frame 17:
+    $mb(oby,color=blue,bold=true,text=*xorLoop)
+Frame End
+
+Frame 18:
+    $rb(xorLoop)
+    $ra(xorLoop,oby)
+    $mb(oby,color=red)
+Frame End
+
