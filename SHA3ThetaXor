@@ -1,91 +1,67 @@
-# visualization for theta in keccak f function
-# input: a
+# visualization for Theta XOR Loop in keccak f function
+# input: a d
 _roundNum = 0
 _xNum = 0
 _yNum = 0
 Frame 1:
     $modifyTitle(text='Theta Function Visualization Round 0', color='red')
-    $db(b,55,720,860,90,text='A bytes')
-    $drawBox(i1by,105,620,200,30,text='A[x][0] bytes')
-    $drawBox(i1bi,90,550,230,50,text='A[x][0] bits')
-    $drawBox(i2by,385,620,200,30,text='A[x][1] bytes')
-    $drawBox(i2bi,370,550,230,50,text='A[x][1] bits')
-    $drawBox(i3by,665,620,200,30,text='A[x][2] bytes')
-    $drawBox(i3bi,650,550,230,50,text='A[x][2] bits')
-    $drawBox(i4by,665,620,200,30,text='A[x][3] bytes')
-    $drawBox(i4bi,650,550,230,50,text='A[x][3] bits')
-    $drawBox(i5by,665,620,200,30,text='A[x][4] bytes')
-    $drawBox(i5bi,650,550,230,50,text='A[x][4] bits')
-    $db(xor1,495,340,230,50,text='XOR')
-    $db(xor2,495,340,230,50,text='XOR')
-    $db(xor3,495,340,230,50,text='XOR')
-    $db(xor4,495,340,230,50,text='XOR')
-    $drawBox(obi,405,260,230,50,text='XOR output bit')
-    $drawBox(oby,420,180,200,50,text='XOR output byte')
-    $drawBox(oba,90,50,860,90,text='C block output')
+    $db(ai,235,670,680,120,text='A bytes')
+    $db(di,55,670,180,120,text='D bytes')
+    $drawBox(i2by,585,570,200,30,text='A[x][y] bytes')
+    $drawBox(i2bi,570,470,230,50,text='A[x][y] bits')
+    $drawBox(i1by,205,570,200,30,text='D[x] bytes')
+    $drawBox(i1bi,190,470,230,50,text='D[x] bits')
+    $db(xor,405,340,230,50,text='XOR')
+    $db(oby,420,250,200,50,text='XOR output byte')
+    $drawBox(obt,90,50,860,90,text='Theta output')
 
-    $drawArrow(b,i2by)
-    $drawArrow(b,i3by)
-    $drawArrow(b,i1by)
-    $drawArrow(i1by,i1bi)
-    $drawArrow(i2by,i2bi)
-    $drawArrow(i3by,i3bi)
-    $drawArrow(i1bi,xor)
-    $da(i2bi,not)
-    $da(not,ni2)
-    $da(ni2,and)
-    $da(i3bi,and)
-    $da(and,ni2ai3)
-    $drawArrow(ni2ai3,xor)
-    $drawArrow(xor,obi)
-    $drawArrow(obi,oby)
-    $da(oby,oba)
+    $da(ai,i2by)
+    $da(di,i1by)
+    $da(i1by,i1bi)
+    $da(i2by,i2bi)
+    $da(i1bi,xor)
+    $da(i2bi,xor)
+    $da(xor,oby)
+    $da(oby,obt)
 Frame End
 
 Frame 2:
-    $mb(b,color=blue,bold=true,text=*pi)
-    $mb(oba,text=' ')
+    $mb(ai,color=blue,bold=true,text=*a2)
+    $mb(di,color=blue,bold=true,text=*d)
+    $mb(obt,text=' ')
 Frame End
 
 Frame 3:
-    $rb(b)
+    $rb(ai)
+    $rb(di)
 Frame End
 
 while @lt(_roundNum;25):
     Round
     Frame 4:
-        $mb(b,color=blue,bold=true)
-        $ma(b,i2by,color=blue)
-        $ma(b,i1by,color=blue)
-        $ma(b,i3by,color=blue)
+        $mb(ai,color=blue,bold=true)
+        $mb(di,color=blue,bold=true)
+        $ma(ai,i2by,color=blue)
+        $ma(di,i1by,color=blue)
     Frame End
 
     Frame 5:
-        if @lt(_xNum;3):
-            $mb(i2by,color=blue,bold=true,text=@indexmat(*pi;@+(_xNum;1);_yNum))
-            $mb(i3by,color=blue,bold=true,text=@indexmat(*pi;@+(_xNum;2);_yNum))
-        elif @lt(_xNum;4):
-            $mb(i2by,color=blue,bold=true,text=@indexmat(*pi;@+(_xNum;1);_yNum))
-            $mb(i3by,color=blue,bold=true,text=@indexmat(*pi;0;_yNum))
-        else:
-            $mb(i2by,color=blue,bold=true,text=@indexmat(*pi;0;_yNum))
-            $mb(i3by,color=blue,bold=true,text=@indexmat(*pi;1;_yNum))
-        if end
-        $mb(i1by,color=blue,bold=true,text=@indexmat(*pi;_xNum;_yNum))
+        $mb(i1by,color=blue,bold=true,text=@indexmat(*ai;_xNum;_yNum)
+        $mb(i2by,color=blue,bold=true,text=@indexarr(*di;_xNum)))
     Frame End
 
     Frame 6:
-        $rb(b)
-        $ra(b,i2by)
-        $ra(b,i1by)
-        $ra(b,i3by)
+        $rb(ai)
+        $rb(di)
+        $ra(ai,i2by)
+        $ra(di,i1by)
+        $rb(i1by)
+        $rb(i2by)
     Frame End
 
     Frame 6:
         $ma(i1by,i1bi,color='blue')
         $ma(i2by,i2bi,color='blue')
-        $ma(i3by,i3bi,color='blue')
-        $mb(i3bi,color=blue,bold=true)
         $mb(i2bi,color=blue,bold=true)
         $mb(i1bi,color=blue,bold=true)
     Frame End
@@ -93,118 +69,68 @@ while @lt(_roundNum;25):
     Frame 7:
         $mb(i1bi,text=@bytebit(*i1by))
         $mb(i2bi,text=@bytebit(*i2by))
-        $mb(i3bi,text=@bytebit(*i3by))
     Frame End
 
     Frame 8:
         $rb(i1bi)
         $rb(i2bi)
-        $rb(i3bi)
         $rb(i1by)
         $rb(i2by)
-        $rb(i3by)
-        $ra(i3by,i3bi)
         $ra(i1by,i1bi)
         $ra(i2by,i2bi)
     Frame End
 
-    Frame 9:
-        $mb(i2bi,color=green,bold=true)
-        $ma(i2bi,not,color=green)
-    Frame End
-
-    Frame 10:
-        $mb(not,color=red,bold=true)
-        $ma(not,ni2,color=red)
-    Frame End
-
-    Frame 11:
-        $mb(ni2,color=red,bold=true,text=@not(*i2bi))
-    Frame End
-
-    Frame 12:
-        $rb(ni2)
-        $rb(i2bi)
-        $rb(not)
-        $ra(not,ni2)
-        $ra(i2bi,not)
-    Frame End
-
     Frame 13:
-        $mb(ni2,color=green,bold=true)
-        $mb(i3bi,color=green,bold=true)
-        $ma(ni2,and,color=green)
-        $ma(i3bi,and,color=green)
+        $mb(i1bi,color=green,bold=true)
+        $mb(i2bi,color=green,bold=true)
+        $ma(i2bi,xor,color=green)
+        $ma(i1bi,xor,color=green)
     Frame End
 
     Frame 14:
-        $mb(and,color=red,bold=true)
-        $ma(and,ni2ai3,color=red)
+        $mb(xor,color=red,bold=true)
     Frame End
 
     Frame 15:
-        $mb(ni2ai3,color=red,bold=true,text=@and(*ni2;*i3bi))
+        $mb(xor,text=@xor(*i1bi;*i2bi))
     Frame End
 
     Frame 16:
-        $rb(ni2ai3)
-        $rb(and)
-        $rb(i3bi)
-        $rb(ni2)
-        $ra(ni2,and)
-        $ra(i3bi,and)
-        $ra(and,ni2ai3)
+        $rb(xor)
+        $rb(i1bi)
+        $rb(i2bi)
+        $ra(i2bi,xor)
+        $ra(i1bi,xor)
     Frame End
 
     Frame 17:
-        $mb(ni2ai3,color=green,bold=true)
-        $mb(i1bi,color=green,bold=true)
-        $ma(i1bi,xor,color=green)
-        $ma(ni2ai3,xor,color=green)
+        $mb(xor,color=blue,bold=true)
+        $ma(xor,oby,color=blue)
     Frame End
 
     Frame 18:
-        $mb(xor,color=red,bold=true)
-        $ma(xor,obi,color=red)
+        $mb(oby,color=blue,bold=true,text=@bitbyte(*xor))
     Frame End
 
     Frame 19:
-        $mb(obi,color=red,bold=True,text=@xor(*i1bi;*ni2ai3))
+        $rb(oby)
+        $rb(xor)
+        $ra(xor,oby)
     Frame End
 
     Frame 20:
-        $rb(obi)
-        $rb(xor)
-        $rb(i1bi)
-        $rb(ni2ai3)
-        $ra(ni2ai3,xor)
-        $ra(i1bi,xor)
-        $ra(xor,obi)
+        $mb(oby,color=blue,bold=true)
+        $ma(oby,obt,color=blue)
     Frame End
 
     Frame 21:
-        $mb(obi,color=blue,bold=true)
-        $ma(obi,oby,color=blue)
+        $mb(obt,color=blue,bold=true,text=@concat(@concat(*obt;' ');*oby))
     Frame End
 
     Frame 22:
-        $mb(oby,color=blue,bold=true,text=@bitbyte(*obi))
-    Frame End
-
-    Frame 23:
-        $rb(obi)
-        $ra(obi,oby)
-    Frame End
-
-    Frame 24:
-        $ma(oby,oba,color=blue)
-        $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby))
-    Frame End
-
-    Frame 25:
-        $rb(oba)
+        $rb(obt)
         $rb(oby)
-        $ra(oby,oba)
+        $ra(oby,obt)
     Frame End
 
     _roundNum = @+(_roundNum;1)
@@ -216,21 +142,17 @@ while @lt(_roundNum;25):
             _yNum = 0
             _xNum = @+(_xNum;1)
         if end
-        $modifyTitle(text=@concat('Chi Function Visualization Round ';_roundNum), color='red')
-        $mb(i1by,text='B[x][y] bytes')
-        $mb(i1bi,text='B[x][y] bits')
-        $mb(i2by,text='B[x+1][y] bytes')
-        $mb(i2bi,text='B[x+1][y] bits')
-        $mb(i3by,text='B[x+2][y] bytes')
-        $mb(i3bi,text='B[x+2][y] bits')
-        $mb(ni2,text='NOT B[x+1][y]')
-        $mb(ni2ai3,text='NOT B[x+1][y] AND B[x+2][y]')'
-        $mb(obi,text='XOR output bit')
+        $modifyTitle(text=@concat('Theta XOR Loop Function Visualization Round ';_roundNum), color='red')
+        $mb(i2by,text='A[x][y] bytes')
+        $mb(i2bi,text='A[x][y] bits')
+        $mb(i1by,text='D[x] bytes')
+        $mb(i1bi,text='D[x] bits')
+        $mb(xor,text='XOR')
         $mb(oby,text='XOR output byte')
     Frame End
 While End
 
 Round
 Frame 27:
-    $mb(oba,color=red,bold=True)
+    $mb(obt,color=red,bold=True)
 Frame End

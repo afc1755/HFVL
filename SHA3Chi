@@ -20,6 +20,7 @@ Frame 1:
     $drawBox(obi,405,260,230,50,text='XOR output bit')
     $drawBox(oby,420,180,200,50,text='XOR output byte')
     $drawBox(oba,90,50,860,90,text='Chi output')
+    $db(description,930,670,240,140,text='Description of events')
 
     $drawArrow(b,i2by)
     $drawArrow(b,i3by)
@@ -42,6 +43,7 @@ Frame End
 Frame 2:
     $mb(b,color=blue,bold=true,text=*pi)
     $mb(oba,text=' ')
+    $mb(description,color=blue,text='Populate the input block with the output of the previous pi function. This input is a matrix of 25 values set up in a 5x5 matrix.')
 Frame End
 
 Frame 3:
@@ -51,6 +53,7 @@ Frame End
 while @lt(_roundNum;25):
     Round
     Frame 4:
+        $mb(description,color=blue,text='Populate current byte values based on the current x and y indices. The x+1 and x+2 values are taken as values modulus 5. We then translate these bytes to their corresponding bit values.')
         $mb(b,color=blue,bold=true)
         $ma(b,i2by,color=blue)
         $ma(b,i1by,color=blue)
@@ -79,6 +82,7 @@ while @lt(_roundNum;25):
     Frame End
 
     Frame 6:
+        $mb(description,color=blue,text='Populate the input block with the output of the previous pi function')
         $ma(i1by,i1bi,color='blue')
         $ma(i2by,i2bi,color='blue')
         $ma(i3by,i3bi,color='blue')
@@ -103,9 +107,11 @@ while @lt(_roundNum;25):
         $ra(i3by,i3bi)
         $ra(i1by,i1bi)
         $ra(i2by,i2bi)
+        $rb(description)
     Frame End
 
     Frame 9:
+        $mb(description,color=blue,text='Take the not of the B[x+1][y] and save this value.')
         $mb(i2bi,color=green,bold=true)
         $ma(i2bi,not,color=green)
     Frame End
@@ -125,9 +131,11 @@ while @lt(_roundNum;25):
         $rb(not)
         $ra(not,ni2)
         $ra(i2bi,not)
+        $rb(description)
     Frame End
 
     Frame 13:
+        $mb(description,color=blue,text='And together the not of B[x+1][y] and B[x+2][y] and store this value.')
         $mb(ni2,color=green,bold=true)
         $mb(i3bi,color=green,bold=true)
         $ma(ni2,and,color=green)
@@ -151,9 +159,11 @@ while @lt(_roundNum;25):
         $ra(ni2,and)
         $ra(i3bi,and)
         $ra(and,ni2ai3)
+        $rb(description)
     Frame End
 
     Frame 17:
+        $mb(description,color=blue,text='XOR together the result of the previous AND and the B[x][y] value. This will become our output for this round.')
         $mb(ni2ai3,color=green,bold=true)
         $mb(i1bi,color=green,bold=true)
         $ma(i1bi,xor,color=green)
@@ -177,9 +187,11 @@ while @lt(_roundNum;25):
         $ra(ni2ai3,xor)
         $ra(i1bi,xor)
         $ra(xor,obi)
+        $rb(description)
     Frame End
 
     Frame 21:
+        $mb(description,color=blue,text='Take the output of the XOR and translate it from bits back into bytes.')
         $mb(obi,color=blue,bold=true)
         $ma(obi,oby,color=blue)
     Frame End
@@ -191,9 +203,11 @@ while @lt(_roundNum;25):
     Frame 23:
         $rb(obi)
         $ra(obi,oby)
+        $rb(description)
     Frame End
 
     Frame 24:
+        $mb(description,color=blue,text='Append the current byte block to the output of our Chi function')
         $ma(oby,oba,color=blue)
         $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby))
     Frame End
@@ -202,6 +216,7 @@ while @lt(_roundNum;25):
         $rb(oba)
         $rb(oby)
         $ra(oby,oba)
+        $rb(description)
     Frame End
 
     _roundNum = @+(_roundNum;1)
@@ -224,10 +239,12 @@ while @lt(_roundNum;25):
         $mb(ni2ai3,text='NOT B[x+1][y] AND B[x+2][y]')'
         $mb(obi,text='XOR output bit')
         $mb(oby,text='XOR output byte')
+        $mb(description,color=blue,text='End of current Chi round. We will increase the y value if it is not currently 4. If the y value is 4 we will increase the x value by 1 and set the y value back to 0. We then run the process again with these new values.')
     Frame End
 While End
 
 Round
 Frame 27:
     $mb(oba,color=red,bold=True)
+    $mb(description,color=red,text='End of the Chi function. The output is shown in the lower block. This will be used as input to the Iota function.')
 Frame End

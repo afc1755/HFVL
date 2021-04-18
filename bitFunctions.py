@@ -163,6 +163,11 @@ def apply_function(func_name, in_args):
             return number_add(func_args[0], func_args[1])
         else:
             print('wrong number of args for numerical add, expected 2 got ' + str(len(func_args)))
+    elif func_name == '-':
+        if len(func_args) == 2:
+            return number_sub(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for numerical subtract, expected 2 got ' + str(len(func_args)))
     elif func_name == '*':
         if len(func_args) == 2:
             return number_mult(func_args[0], func_args[1])
@@ -361,6 +366,14 @@ def number_add(num1, num2):
         return str(int(num1) + int(num2))
     except ValueError:
         print('not an acceptable integer expression: ' + num1 + ' + ' + num2)
+        return '0'
+
+
+def number_sub(num1, num2):
+    try:
+        return str(int(num1) - int(num2))
+    except ValueError:
+        print('not an acceptable integer expression: ' + num1 + ' - ' + num2)
         return '0'
 
 
@@ -588,10 +601,19 @@ def keccak_f_1600(rate, capacity):
 def index_mat(a, index1, index2):
     a = byte_to_bit(a)
     a = create_mat(a)
+    if int(index1) >= len(a):
+        print("invalid index " + index1 + ' for matrix of length ' + str(len(a)))
+        return '0'
+    if int(index2) >= len(a[int(index1)]):
+        print("invalid index " + index2 + ' for array of length ' + str(len(a[index1])))
+        return '0'
     return bit_to_byte(a[int(index1)][int(index2)])
 
 
 def index_arr(a, index1):
     a = byte_to_bit(a)
     a = create_arr(a)
+    if int(index1) >= len(a):
+        print("invalid index " + index1 + ' for array of length ' + str(len(a)))
+        return '0'
     return bit_to_byte(a[int(index1)])

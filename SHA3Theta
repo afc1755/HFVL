@@ -1,13 +1,14 @@
 # visualization for theta in keccak f function
 # input: a
 Frame 1:
-    $modifyTitle(text='Theta Function Visualization Round 0', color='red')
+    $modifyTitle(text='Theta Function Visualization', color='red')
     $db(a1,55,720,860,90,text='A bytes')
     $db(c,55,550,180,120,text='C function')
     $db(d,55,390,180,120,text='D function')
     $db(a2,235,390,680,120,text='A bytes')
     $db(xorLoop,55,170,860,90,text='XOR Loop')
     $drawBox(oby,55,50,860,90,text='Theta output')
+    $db(description,830,550,340,140,text='Description of events')
 
     $da(a1,c)
     $da(c,d)
@@ -17,16 +18,19 @@ Frame 1:
 Frame End
 
 Frame 2:
+    $mb(description,color=blue,text='Take the initial A block as input and start out with this value. This will be input to the xor loop and C functions.')
     $mb(a1,color=blue,bold=true,text=*a)
     $mb(a2,color=blue,bold=true,text=*a)
 Frame End
 
 Frame 3:
+    $rb(description)
     $rb(a1)
     $rb(a2)
 Frame End
 
 Frame 4:
+    $mb(description,color=blue,text='Take the A block and input it into the C function. Click on the C function box to view bit details. This function is simplified as\ for x in (0..4):\ C[x]: A[x][0] xor A[x][1] xor A[x][2] xor A[x][3] xor A[x][4]')
     $mb(a1,color=green,bold=true)
     $ma(a1,c,color=green)
 Frame End
@@ -40,12 +44,14 @@ Frame 6:
 Frame End
 
 Frame 7:
+    $rb(description)
     $rb(c)
     $rb(a1)
     $ra(a1,c)
 Frame End
 
 Frame 8:
+    $mb(description,color=blue,text='Take the C block and input it into the D function. Click on the D function box to learn more. This function is simplified as\ for x in (0..4):\ D[x]: C[x-1] xor (right rotate 1(C[x+1])')
     $mb(c,color=green,bold=true)
     $ma(c,d,color=green)
 Frame End
@@ -59,12 +65,14 @@ Frame 10:
 Frame End
 
 Frame 11:
+    $rb(description)
     $rb(c)
     $rb(d)
     $ra(c,d)
 Frame End
 
 Frame 12:
+    $mb(description,color=blue,text='Take the initial A block and D function output as input to the XOR Loop. Click on the XOR loop box to learn more. This loop is simplified as\ for x in (0..4):\ for y in (0..4):\ A[x][y]: A[x][y] xor D[x]')
     $mb(d,color=green,bold=true)
     $mb(a2,color=green,bold=true)
     $ma(d,xorLoop,color=green)
@@ -80,6 +88,7 @@ Frame 14:
 Frame End
 
 Frame 15:
+    $rb(description)
     $rb(xorLoop)
     $rb(a2)
     $rb(d)
@@ -88,6 +97,7 @@ Frame 15:
 Frame End
 
 Frame 16:
+    $mb(description,color=blue,text='Take the initial XOR Loop output as our output byte block for the entire Theta step. We have now finished the Theta function in Keccak-f[1600]')
     $mb(xorLoop,color=blue,bold=true)
     $ma(xorLoop,oby,color=blue)
 Frame End
@@ -97,6 +107,7 @@ Frame 17:
 Frame End
 
 Frame 18:
+    $rb(description)
     $rb(xorLoop)
     $ra(xorLoop,oby)
     $mb(oby,color=red)

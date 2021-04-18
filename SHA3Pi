@@ -186,13 +186,13 @@ while @lt(_roundNum;25):
         $mb(colind,text='Column Number')
         $mb(y2,text='Y')
         $mb(rowind,text='Row Number')
-        $mb(description,color=blue,text='End of current round of Pi, move on to the next block of Roh input')
+        $mb(description,color=blue,text='End of current round of Pi. We now move on to the next block of Roh input')
     Frame End
 While End
 
 Round
 Frame 19:
-    $mb(description,color=blue,text='End of Pi function, output of Pi is seen in the bottom matrix block')
+    $mb(description,color=blue,text='End of Pi function. The output of Pi is seen in the bottom matrix block')
     $mb(o00,color=red,bold=True)
     $mb(o01,color=red,bold=True)
     $mb(o02,color=red,bold=True)

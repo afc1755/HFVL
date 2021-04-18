@@ -13,6 +13,7 @@ Frame 1:
     $drawBox(obi,220,410,230,50,text='XOR output bit')
     $drawBox(oby,235,310,200,50,text='XOR output byte')
     $drawBox(oba,80,50,860,90,text='Iota output')
+    $db(description,930,670,240,140,text='Description of events')
 
     $drawArrow(chiby,i1by)
     $drawArrow(i1by,i1bi)
@@ -30,11 +31,13 @@ Frame 2:
     $modifyTitle(color='black')
     $mb(chiby,color=blue,bold=True,text=*chi)
     $mb(i2by,color=blue,bold=True,text=*rc)
+    $mb(description,color=blue,text='Populate the input block with the output of the previous Chi function. This input is a matrix of 25 values set up in a 5x5 matrix.')
 Frame End
 
 Frame 3:
     $rb(chiby)
     $rb(i2by)
+    $rb(description)
 Frame End
 
 Frame 4:
@@ -43,6 +46,7 @@ Frame 4:
     $mb(i1by,color=blue,bold=true,text=@indexmat(*chi;0;0))
     $ma(chiby,rchiby,color=blue)
     $mb(rchiby,color=blue,bold=true,text=@last384(*chiby))
+    $mb(description,color=blue,text='Populate the Chi[0][0] block with the corresponding part of the input Chi block and put the rest of the Chi bytes in the Chi bytes box. Also update the round constant box to the curretn round constant')
 Frame End
 
 Frame 5:
@@ -51,6 +55,7 @@ Frame 5:
     $ra(chiby,i1by)
     $rb(rchiby)
     $ra(chiby,rchiby)
+    $rb(description)
 Frame End
 
 Frame 6:
@@ -59,6 +64,7 @@ Frame 6:
     $mb(i2by, color='blue',bold=True,text=*rc)
     $ma(i1by,i1bi,color='blue')
     $ma(i2by,i2bi,color='blue')
+    $mb(description,color=blue,text='Translate the round constant and the Chi[0][0] bytes to bits in preparation for the XOR operation.')
 Frame End
 
 Frame 7:
@@ -71,6 +77,7 @@ Frame 8:
     $rb(i2by)
     $ra(i1by,i1bi)
     $ra(i2by,i2bi)
+    $rb(description)
 Frame End
 
 Frame 9:
@@ -78,6 +85,7 @@ Frame 9:
     $mb(i2bi,color='green')
     $ma(i1bi,xor,color='green')
     $ma(i2bi,xor,color='green')
+    $mb(description,color=blue,text='Take the round constant and Chi[0][0] bits as input and XOR them together. This will become the new Iota[0][0] value.')
 Frame End
 
 Frame 10:
@@ -97,11 +105,13 @@ Frame 12:
     $ra(i2bi,xor)
     $rb(xor)
     $ra(xor,obi)
+    $rb(description)
 Frame End
 
 Frame 13:
     $mb(obi,color='blue',bold=true)
     $ma(obi,oby,color='blue')
+    $mb(description,color=blue,text='Translate the XOR output back to bytes to place into Iota output.')
 Frame End
 
 Frame 14:
@@ -112,6 +122,7 @@ Frame 15:
     $rb(obi)
     $ra(obi,oby)
     $rb(oby)
+    $rb(description)
 Frame End
 
 Frame 16:
@@ -119,6 +130,7 @@ Frame 16:
     $mb(rchiby,color=blue,bold=true)
     $ma(oby,oba,color=blue)
     $ma(rchiby,oba,color=blue)
+    $mb(description,color=red,text='We replace the first value of the matrix with our new value and add the rest of the matrix back to get the output of the Iota function. This is shown in the lower block.')
 Frame End
 
 Frame 17:

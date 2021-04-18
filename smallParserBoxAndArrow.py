@@ -582,7 +582,7 @@ def create_matrix(special_box_coords, special_box_loc, boxes_to_ignore, box_dict
         elif special_box_loc[i] == 'right':
             extra_x = int((special_box_coords[i][0] // MATRIX_RESOLUTION))
             extra_y = int(special_box_coords[i][1] // MATRIX_RESOLUTION)
-            for extra_space in range(0, int(ARROW_END_GAP// MATRIX_RESOLUTION)):
+            for extra_space in range(0, int(ARROW_END_GAP // MATRIX_RESOLUTION)):
                 out_mat[extra_x + extra_space][extra_y - 1] = -1
                 out_mat[extra_x + extra_space][extra_y + 1] = -1
     return out_mat
@@ -638,8 +638,8 @@ def pathfind_arrow_dijkstras(matrix, start_x, start_y, end_x, end_y):
     q.append(src)
     score_dict = {(src.x, src.y): 0}
 
-    row = [-1, 0, 0, 1]
-    col = [0, -1, 1, 0]
+    row = [0, 0, -1, 1]
+    col = [-1, 1, 0, 0]
     candidates = []
 
     # loop till queue is empty
@@ -736,4 +736,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('SHA3', [])
+    run_frames('SHA2', [])
