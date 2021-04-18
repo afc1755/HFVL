@@ -148,6 +148,11 @@ def apply_function(func_name, in_args):
             return xor_bit(func_args[0], func_args[1])
         else:
             print('wrong number of args for xor, expected 2 got ' + str(len(func_args)))
+    elif func_name == 'indexarr':
+        if len(func_args) == 2:
+            return index_arr(func_args[0], func_args[1])
+        else:
+            print('wrong number of args for indexing array, expected 3 got ' + str(len(func_args)))
     elif func_name == 'indexmat':
         if len(func_args) == 3:
             return index_mat(func_args[0], func_args[1], func_args[2])
@@ -584,3 +589,9 @@ def index_mat(a, index1, index2):
     a = byte_to_bit(a)
     a = create_mat(a)
     return bit_to_byte(a[int(index1)][int(index2)])
+
+
+def index_arr(a, index1):
+    a = byte_to_bit(a)
+    a = create_arr(a)
+    return bit_to_byte(a[int(index1)])
