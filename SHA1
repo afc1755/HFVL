@@ -1,7 +1,7 @@
 _roundCount=0
 
 Frame 1:
-    $modifyTitle(text=@concat('SHA-1 ROUND ';_roundCount), color='red')
+    $modifyTitle(text=@concat('SHA-1 Visualization Round ';_roundCount), color='red')
     $drawBox(w1,50,700,150,100,text=@concat('WORD 1 ROUND ';_roundCount))
     $drawBox(w2,200,700,150,100,text=@concat('WORD 2 ROUND ';_roundCount))
     $drawBox(w3,350,700,150,100,text=@concat('WORD 3 ROUND ';_roundCount))
@@ -10,24 +10,24 @@ Frame 1:
 
     $drawBox(f,380,550,150,75,text='F')
 
-    $db(am1, 650,625,150,40,text='Addition mod 2^32')
-    $db(am2, 650, 495, 150,40,text='Addition mod 2^32')
-    $drawBox(am3, 650, 365, 150,40,text='Addition mod 2^32')
-    $drawBox(am4, 650, 235, 150,40,text='Addition mod 2^32')
+    $db(am1, 650,615,150,40,text='Addition mod 2^32')
+    $db(am2, 650, 485, 150,40,text='Addition mod 2^32')
+    $drawBox(am3, 650, 355, 150,40,text='Addition mod 2^32')
+    $drawBox(am4, 650, 225, 150,40,text='Addition mod 2^32')
 
-    $db(am1o, 650, 560, 150, 40,text='Output')
-    $drawBox(am2o, 650, 430, 150, 40,text='Output')
-    $drawBox(am3o, 650, 300, 150, 40,text='Output')
+    $db(am1o, 650, 550, 150, 40,text='Output')
+    $drawBox(am2o, 650, 420, 150, 40,text='Output')
+    $drawBox(am3o, 650, 290, 150, 40,text='Output')
 
-    $db(lb5, 50, 495, 150, 40, text ='5 << rotation')
-    $drawBox(lb5o, 350, 495, 150, 40, text ='Output')
+    $db(lb5, 50, 485, 150, 40, text ='5 << rotation')
+    $drawBox(lb5o, 350, 485, 150, 40, text ='Output')
 
     $db(lb30, 350, 300, 150, 40, text='30 << rotation')
 
-    $drawBox(exw, 850, 365, 150, 40,text='Expanded Word')
-    $drawBox(rc, 850, 235, 150, 40,text='Round Constant')
+    $drawBox(exw, 850, 355, 150, 40,text='Expanded Word')
+    $drawBox(rc, 850, 225, 150, 40,text='Round Constant')
 
-    $drawBox(ow1,50,60,150,100,text=@concat('WORD 1 ROUND ';@+(_roundCount;1)))
+    $drawBox(ow1,50,70,150,100,text=@concat('WORD 1 ROUND ';@+(_roundCount;1)))
     $drawBox(ow2,200,60,150,100,text=@concat('WORD 2 ROUND ';@+(_roundCount;1)))
     $drawBox(ow3,350,60,150,100,text=@concat('WORD 3 ROUND ';@+(_roundCount;1)))
     $drawBox(ow4,500,60,150,100,text=@concat('WORD 4 ROUND ';@+(_roundCount;1)))

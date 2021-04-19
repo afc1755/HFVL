@@ -48,8 +48,8 @@ Frame 1:
     $da(c1bi,and2)
     $da(a2bi,and2)
 
-    $da(b2bi,and3)
     $da(c2bi,and3)
+    $da(b2bi,and3)
 
     $da(and1,aandb)
     $da(and2,aandc)

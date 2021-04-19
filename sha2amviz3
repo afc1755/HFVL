@@ -25,8 +25,8 @@ Frame End
 
 Frame 2:
     $modifyTitle(color='black')
-    $mb(i1by, color='blue',bold=True,text=*sum1)
-    $mb(i2by, color='blue',bold=True,text=*am1)
+    $mb(i1by,color='blue',bold=True,text=*sum1)
+    $mb(i2by,color='blue',bold=True,text=*am1)
     $ma(i1by,i1bi,color='blue')
     $ma(i2by,i2bi,color='blue')
 Frame End

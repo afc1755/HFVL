@@ -736,4 +736,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('SHA2', [])
+    run_frames('SHA1', [])

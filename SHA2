@@ -29,7 +29,7 @@ Frame 1:
     $db(ew,905,700,100,50,text='Expanded Word')
     $db(rc,905,500,100,50,text='Round Constant')
 
-    $drawBox(ao,20,60,100,50,text=@concat('WORD A ROUND ';@+(_roundCount;1)))
+    $drawBox(ao,20,70,100,50,text=@concat('WORD A ROUND ';@+(_roundCount;1)))
     $drawBox(bo,120,60,100,50,text=@concat('WORD B ROUND ';@+(_roundCount;1)))
     $drawBox(co,220,60,100,50,text=@concat('WORD C ROUND ';@+(_roundCount;1)))
     $drawBox(do,320,60,100,50,text=@concat('WORD D ROUND ';@+(_roundCount;1)))
@@ -509,11 +509,11 @@ while @lt(_roundCount;64):
     Frame End
 
     Frame 25:
-        $mb(am3,color=red,bold=True,input=am1;sum1)
+        $mb(am3,color=red,bold=True,input=am1;sum1,link='sha2amviz3',input=sum1;am1)
     Frame End
 
     Frame 25:
-        $mb(am3,text=@bitbyte(@mod32(@add(@bytebit(*sum1);@bytebit(*am1)))),link='sha2amviz3')
+        $mb(am3,text=@bitbyte(@mod32(@add(@bytebit(*sum1);@bytebit(*am1)))))
     Frame End
 
     Frame 26:
