@@ -1,0 +1,12 @@
+# basic box and arrow example
+Frame 1:
+    $mt(text='This is a Title')
+    $db(box1,100,100,100,100,text='box1')
+    $db(box2,100,250,100,100,text='box2')
+    $da(box1,box2)
+Frame End
+
+Frame 2:
+    $mb(box1,color='red',bold=True,link='posterexample2',input=box2)
+    $ma(box1,box2,color='red')
+Frame End

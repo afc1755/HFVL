@@ -113,11 +113,11 @@ def apply_function(func_name, in_args):
             return theta(func_args[0])
         else:
             print('wrong number of args for Theta, expected 1 got ' + str(len(func_args)))
-    elif func_name == 'roh':
+    elif func_name == 'rho':
         if len(func_args) == 1:
-            return roh(func_args[0])
+            return rho(func_args[0])
         else:
-            print('wrong number of args for Roh, expected 1 got ' + str(len(func_args)))
+            print('wrong number of args for Rho, expected 1 got ' + str(len(func_args)))
     elif func_name == 'pi':
         if len(func_args) == 1:
             return pi(func_args[0])
@@ -554,7 +554,7 @@ def theta(a):
     return bit_to_byte(un_matrix(a))
 
 
-def roh(theta_o):
+def rho(theta_o):
     theta_o = byte_to_bit(theta_o)
     theta_o = create_mat(theta_o)
     for x in range(0, 5):
@@ -563,15 +563,15 @@ def roh(theta_o):
     return bit_to_byte(un_matrix(theta_o))
 
 
-def pi(roh_o):
-    roh_o = byte_to_bit(roh_o)
-    roh_o = create_mat(roh_o)
+def pi(rho_o):
+    rho_o = byte_to_bit(rho_o)
+    rho_o = create_mat(rho_o)
     for x in range(0, 5):
         for y in range(0, 5):
             second_index = 2 * x + 3 * y
             second_index = second_index % 5
-            roh_o[y][second_index] = roh_o[x][y]
-    return bit_to_byte(un_matrix(roh_o))
+            rho_o[y][second_index] = rho_o[x][y]
+    return bit_to_byte(un_matrix(rho_o))
 
 
 def chi(pi_o):
@@ -594,7 +594,7 @@ def iota(chi_o, rc):
 def keccak_f_1600(rate, capacity):
     a = rate + ' ' + capacity
     for i in range(0, 24):
-        a = iota(chi(pi(roh(theta(a)))), K_RCs[i])
+        a = iota(chi(pi(rho(theta(a)))), K_RCs[i])
     return a
 
 

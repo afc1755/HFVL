@@ -5,7 +5,7 @@ Frame 1:
     $modifyTitle(text=@concat('Keccak-f[1600] Function Round ';_roundNum), color='red')
     $db(a,30,720,860,90,text=@concat('A Round ';_roundNum))
     $db(theta,30,610,860,90,text='Theta Function')
-    $db(roh,30,500,860,90,text='Roh Function')
+    $db(rho,30,500,860,90,text='Rho Function')
     $db(pi,30,390,860,90,text='Pi Function')
     $db(chi,30,280,860,90,text='Chi Function')
     $db(iota,30,170,860,90,text='Iota Function')
@@ -14,8 +14,8 @@ Frame 1:
     $db(description,930,610,240,200,text='Description of events')
     $db(td1,930,460,240,130,text='Current Round Constant\Round  0:\ 00 00 00 00 00 00 00 01\Round  1:\ 00 00 00 00 00 00 80 82\Round  2:\ 80 00 00 00 00 00 80 8a\Round  3:\ 80 00 00 00 80 00 80 00')
     $da(a,theta)
-    $da(theta,roh)
-    $da(roh,pi)
+    $da(theta,rho)
+    $da(rho,pi)
     $da(pi,chi)
     $da(chi,iota)
     $da(iota,ao)
@@ -57,43 +57,43 @@ while @lt(_roundNum;24):
 
     Frame 7:
         $mb(theta,color=green,bold=True)
-        $ma(theta,roh,color=green)
-        $mb(description,color=blue,text='Take Theta output as input and run it through the Roh function. Click on the Roh box to see bit level details.')
+        $ma(theta,rho,color=green)
+        $mb(description,color=blue,text='Take Theta output as input and run it through the Rho function. Click on the Rho box to see bit level details.')
     Frame End
 
     Frame 8:
-        $mb(roh,color=red,bold=true,link='SHA3Roh',input=theta)
+        $mb(rho,color=red,bold=true,link='SHA3Rho',input=theta)
     Frame End
 
     Frame 9:
-        $mb(roh,text=@roh(*theta))
+        $mb(rho,text=@rho(*theta))
     Frame End
 
     Frame 10:
-        $rb(roh)
+        $rb(rho)
         $rb(theta)
         $rb(description)
-        $ra(theta,roh)
+        $ra(theta,rho)
     Frame End
 
     Frame 11:
-        $mb(roh,color=green,bold=True)
-        $ma(roh,pi,color=green)
-        $mb(description,color=blue,text='Take Roh output as input and run it through the Pi function. Click on the Pi box to see bit level details.')
+        $mb(rho,color=green,bold=True)
+        $ma(rho,pi,color=green)
+        $mb(description,color=blue,text='Take Rho output as input and run it through the Pi function. Click on the Pi box to see bit level details.')
     Frame End
 
     Frame 12:
-        $mb(pi,color=red,bold=true,link='SHA3Pi',input=roh)
+        $mb(pi,color=red,bold=true,link='SHA3Pi',input=rho)
     Frame End
 
     Frame 13:
-        $mb(pi,text=@pi(*roh))
+        $mb(pi,text=@pi(*rho))
     Frame End
 
     Frame 14:
         $rb(pi)
-        $rb(roh)
-        $ra(roh,pi)
+        $rb(rho)
+        $ra(rho,pi)
         $rb(description)
     Frame End
 
@@ -229,7 +229,7 @@ while @lt(_roundNum;24):
         $modifyTitle(color=blue,text=@concat('Keccak-f[1600] Function Round ';_roundNum))
         $mb(a,text=@concat('A Round ';_roundNum))
         $mb(theta,text='Theta Function')
-        $mb(roh,text='Roh Function')
+        $mb(rho,text='Rho Function')
         $mb(pi,text='Pi Function')
         $mb(chi,text='Chi Function')
         $mb(iota,text='Iota Function')

@@ -1,0 +1,5 @@
+# sample sub-visualization file
+Frame 1:
+    $db(linkedbox,100,100,100,100,text=*box2)
+Frame End
+

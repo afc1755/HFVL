@@ -1,10 +1,10 @@
-# visualization for roh in sponge function
+# visualization for rho in sponge function
 # input: theta
 _roundNum = 0
 _xNum = 0
 _yNum = 0
 Frame 1:
-    $modifyTitle(text='Roh Function Visualization Round 0', color='red')
+    $modifyTitle(text='Rho Function Visualization Round 0', color='red')
     $db(b,55,720,860,90,text='Theta bytes')
     $drawBox(i1by,105,620,200,50,text='Theta[x][y] bytes')
     $drawBox(i1bi,90,550,230,50,text='Theta[x][y] bits')
@@ -12,7 +12,7 @@ Frame 1:
     $drawBox(bs,420,460,200,50,text='Right bit shift')
     $drawBox(obi,405,360,230,50,text='Theta[x][y] bit shifted bits')
     $drawBox(oby,420,280,200,50,text='Theta[x][y] bit shifted bytes')
-    $drawBox(obr,90,50,860,90,text='Roh output')
+    $drawBox(obr,90,50,860,90,text='Rho output')
     $db(rotschedule,930,550,240,100,text='Current Rotation\Round  0:  0\Round  1: 36\Round  2:  3\Round  3: 41\Round  4: 18')
     $db(description,930,670,240,140,text='Description of events')
 
@@ -188,7 +188,7 @@ while @lt(_roundNum;25):
     Frame End
 
     Frame 24:
-        $mb(description,color=blue,text='Append the current bytes to the overall Roh output block')
+        $mb(description,color=blue,text='Append the current bytes to the overall rho output block')
         $ma(oby,obr,color=blue)
         $mb(obr,color=blue,bold=true,text=@concat(@concat(*obr;' ');*oby))
     Frame End
@@ -210,7 +210,7 @@ while @lt(_roundNum;25):
             _xNum = @+(_xNum;1)
         if end
         $mb(description,color=blue,text='End of current round. We will now take the next chunk from the input block')
-        $modifyTitle(text=@concat('Roh Function Visualization Round ';_roundNum), color='red')
+        $modifyTitle(text=@concat('rho Function Visualization Round ';_roundNum), color='red')
         $mb(i1by,text='Theta[x][y] bytes')
         $mb(i1bi,text='Theta[x][y] bits')
         $mb(obi,text='Theta[x][y] bit shifted bits')
@@ -222,6 +222,6 @@ While End
 
 Round
 Frame 27:
-    $mb(description,color=blue,text='End of Roh function, output of Roh is seen in the bottom block')
+    $mb(description,color=blue,text='End of rho function, output of rho is seen in the bottom block')
     $mb(obr,color=red,bold=True)
 Frame End

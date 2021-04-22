@@ -1,12 +1,12 @@
 # visualization for pi in sponge function
-# input: roh
+# input: rho
 _roundNum = 0
 _xNum = 0
 _yNum = 0
 Frame 1:
     $modifyTitle(text='Pi Function Visualization Round 0', color='red')
-    $db(b,55,720,860,90,text='Roh bytes')
-    $drawBox(i1by,305,420,200,50,text='Roh[x][y] bytes')
+    $db(b,55,720,860,90,text='rho bytes')
+    $drawBox(i1by,305,420,200,50,text='rho[x][y] bytes')
     $drawBox(x,720,620,50,50,text='X')
     $drawBox(y,820,620,50,50,text='Y')
     $drawBox(2x3y,745,520,100,50,text='2x + 3y')
@@ -55,8 +55,8 @@ Frame 1:
 Frame End
 
 Frame 2:
-    $mb(b,color=blue,bold=true,text=*roh)
-    $mb(description,color=blue,text='Populate the output of Roh into our input bytes')
+    $mb(b,color=blue,bold=true,text=*rho)
+    $mb(description,color=blue,text='Populate the output of rho into our input bytes')
 Frame End
 
 Frame 3:
@@ -70,7 +70,7 @@ while @lt(_roundNum;25):
         $mb(x,color=blue,bold=true,text=_xNum)
         $mb(y,color=blue,bold=true,text=_yNum)
         $mb(y2,color=blue,bold=true,text=_yNum)
-        $mb(i1by,color=blue,bold=true,text=@indexmat(*roh;_xNum;_yNum))
+        $mb(i1by,color=blue,bold=true,text=@indexmat(*rho;_xNum;_yNum))
         $mb(description,color=blue,text='Update the x and y values as well as the current block from our input bytes')
     Frame End
 
@@ -178,7 +178,7 @@ while @lt(_roundNum;25):
             _yNum = 0
             _xNum = @+(_xNum;1)
         if end
-        $mb(i1by,text='Roh[x][y] bytes')
+        $mb(i1by,text='rho[x][y] bytes')
         $mb(x,text='X')
         $mb(y,text='Y')
         $mb(2x3y,text='2x + 3y')
@@ -186,7 +186,7 @@ while @lt(_roundNum;25):
         $mb(colind,text='Column Number')
         $mb(y2,text='Y')
         $mb(rowind,text='Row Number')
-        $mb(description,color=blue,text='End of current round of Pi. We now move on to the next block of Roh input')
+        $mb(description,color=blue,text='End of current round of Pi. We now move on to the next block of rho input')
     Frame End
 While End
 
