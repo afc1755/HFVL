@@ -1,9 +1,9 @@
 from pyglet import shapes
 from pyglet import clock
 from pyglet.gl import *
-from hashConstants import *
+from HFVLConstants import *
 import time
-import smallParserBoxAndArrow
+import HFVL
 
 
 class FrameDisplayer(pyglet.window.Window):
@@ -24,7 +24,7 @@ class FrameDisplayer(pyglet.window.Window):
                 prev_window_dict[window_arg] = self.frames[self.frame_num]['box_dict'][window_arg][4]
             except KeyError:
                 print('issues with argument from current window to function window for window arg: ' + window_arg)
-        smallParserBoxAndArrow.run_frames(file_name, prev_window_dict)
+        HFVL.run_frames(file_name, prev_window_dict)
 
     def next_frame(self):
         if self.frame_num == self.total_frames - 1:

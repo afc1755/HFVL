@@ -4,7 +4,7 @@ from pyglet.gl import *
 import FrameDisplayer
 import copy
 import numpy as np
-from hashConstants import *
+from HFVLConstants import *
 from collections import deque
 from Node import Node
 import bitFunctions
@@ -738,4 +738,4 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
 
 
 if __name__ == "__main__":
-    run_frames('SHA3', [])
+    run_frames('SHA1', [])
