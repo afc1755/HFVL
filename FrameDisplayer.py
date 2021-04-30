@@ -1,3 +1,8 @@
+# Interface between pyglet and frames for drawing in Hash Function Visualization Language
+# Handles movement between frames
+# created by Andrew Chabot
+# RIT Master's Project 2021
+
 from pyglet import shapes
 from pyglet import clock
 from pyglet.gl import *

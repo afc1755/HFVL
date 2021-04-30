@@ -1,3 +1,8 @@
+# main file for Hash Function Visualization Language
+# interpreter for HFVL and holds pathfinding, creation of dictionaries, etc
+# created by Andrew Chabot
+# RIT Master's Project 2021
+
 import time
 import pyglet
 from pyglet.gl import *
@@ -737,5 +742,18 @@ def create_arrowhead(arrow_lines, arrowhead_thickness):
     return points
 
 
+# input file or just keep as taking user input
 if __name__ == "__main__":
-    run_frames('SHA1', [])
+    good_file = False
+    while not good_file:
+        try:
+            file_name = input('Enter HFVL filename to run: ')
+            open(file_name)
+            print('file found, loading visualization for: ' + file_name)
+            good_file = True
+        except FileNotFoundError:
+            # input file doesn't exist
+            print('no file found with name: ' + file_name)
+
+    run_frames(file_name, [])
+    #run_frames('SHA1', [])

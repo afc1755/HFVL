@@ -1,4 +1,7 @@
-# helper functions that can be used in the language
+# helper functions that are used within the HFVL language syntax
+# created by Andrew Chabot
+# RIT Master's Project 2021
+
 BIT_BYTE = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7',
             '1000': '8', '1001': '9', '1010': 'a', '1011': 'b', '1100': 'c', '1101': 'd', '1110': 'e', '1111': 'f'}
 

@@ -1,3 +1,7 @@
+# constants file for Hash Function Visualization Language
+# created by Andrew Chabot
+# RIT Master's Project 2021
+
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 850
 
