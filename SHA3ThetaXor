@@ -4,7 +4,7 @@ _roundNum = 0
 _xNum = 0
 _yNum = 0
 Frame 1:
-    $modifyTitle(text='Theta Function Visualization Round 0', color='red')
+    $modifyTitle(text='Theta XOR Loop Function Visualization Round 0', color='red')
     $db(ai,235,670,680,120,text='A bytes')
     $db(di,55,670,180,120,text='D bytes')
     $drawBox(i2by,585,570,200,30,text='A[x][y] bytes')
@@ -124,7 +124,11 @@ while @lt(_roundNum;25):
     Frame End
 
     Frame 21:
-        $mb(obt,color=blue,bold=true,text=@concat(@concat(*obt;' ');*oby))
+        if @lt(_roundNum;1):
+            $mb(obt,color=blue,bold=true,text=*oby)
+        else:
+            $mb(obt,color=blue,bold=true,text=@concat(@concat(*obt;' ');*oby)
+        if end
     Frame End
 
     Frame 22:

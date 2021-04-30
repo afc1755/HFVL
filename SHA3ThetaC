@@ -239,7 +239,11 @@ while @lt(_xNum;5):
     Frame End
 
     Frame 30:
-        $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby)
+        if @lt(_xNum;1):
+            $mb(oba,color=blue,bold=true,text=*oby)
+        else:
+            $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby)
+        if end
     Frame End
 
     Frame 31:
@@ -250,7 +254,7 @@ while @lt(_xNum;5):
 
     Frame 26:
         _xNum = @+(_xNum;1)
-        $modifyTitle(text=@concat('Chi Function Visualization Round ';_xNum), color='red')
+        $modifyTitle(text=@concat('Theta C Function Visualization Round ';_xNum), color='red')
         $mb(i1by,text='A[x][0] bytes')
         $mb(i1bi,text='A[x][0] bits')
         $mb(i2by,text='A[x][1] bytes')

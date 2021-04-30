@@ -566,12 +566,16 @@ def rho(theta_o):
 def pi(rho_o):
     rho_o = byte_to_bit(rho_o)
     rho_o = create_mat(rho_o)
+    pi_o = [['0','0','0','0','0'],['0','0','0','0','0'],['0','0','0','0','0'],['0','0','0','0','0'],['0','0','0','0','0']]
+    b_pi_o = [['0', '0', '0', '0', '0'], ['0', '0', '0', '0', '0'], ['0', '0', '0', '0', '0'], ['0', '0', '0', '0', '0'],
+            ['0', '0', '0', '0', '0']]
     for x in range(0, 5):
         for y in range(0, 5):
-            second_index = 2 * x + 3 * y
+            second_index = (2 * x) + (3 * y)
             second_index = second_index % 5
-            rho_o[y][second_index] = rho_o[x][y]
-    return bit_to_byte(un_matrix(rho_o))
+            pi_o[y][second_index] = rho_o[x][y]
+            b_pi_o[y][second_index] = bit_to_byte(rho_o[x][y])
+    return bit_to_byte(un_matrix(pi_o))
 
 
 def chi(pi_o):

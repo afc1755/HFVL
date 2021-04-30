@@ -209,7 +209,11 @@ while @lt(_roundNum;25):
     Frame 24:
         $mb(description,color=blue,text='Append the current byte block to the output of our Chi function')
         $ma(oby,oba,color=blue)
-        $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby))
+        if @lt(_roundNum;1):
+            $mb(oba,color=blue,bold=true,text=*oby)
+        else:
+            $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby))
+        if end
     Frame End
 
     Frame 25:

@@ -27,7 +27,6 @@ Frame End
 
 Frame 2:
     $mb(b,color=blue,bold=true,text=*theta)
-    $mb(obr,text=' ')
 Frame End
 
 Frame 3:
@@ -190,7 +189,11 @@ while @lt(_roundNum;25):
     Frame 24:
         $mb(description,color=blue,text='Append the current bytes to the overall rho output block')
         $ma(oby,obr,color=blue)
-        $mb(obr,color=blue,bold=true,text=@concat(@concat(*obr;' ');*oby))
+        if @lt(_roundNum;1):
+            $mb(obr,color=blue,bold=true,text=*oby)
+        else:
+            $mb(obr,color=blue,bold=true,text=@concat(@concat(*obr;' ');*oby))
+        if end
     Frame End
 
     Frame 25:
@@ -210,7 +213,7 @@ while @lt(_roundNum;25):
             _xNum = @+(_xNum;1)
         if end
         $mb(description,color=blue,text='End of current round. We will now take the next chunk from the input block')
-        $modifyTitle(text=@concat('rho Function Visualization Round ';_roundNum), color='red')
+        $modifyTitle(text=@concat('Rho Function Visualization Round ';_roundNum), color='red')
         $mb(i1by,text='Theta[x][y] bytes')
         $mb(i1bi,text='Theta[x][y] bits')
         $mb(obi,text='Theta[x][y] bit shifted bits')
@@ -222,6 +225,6 @@ While End
 
 Round
 Frame 27:
-    $mb(description,color=blue,text='End of rho function, output of rho is seen in the bottom block')
+    $mb(description,color=blue,text='End of Rho function, output of rho is seen in the bottom block')
     $mb(obr,color=red,bold=True)
 Frame End

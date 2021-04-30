@@ -144,7 +144,11 @@ while @lt(_xNum;5):
     Frame End
 
     Frame 21:
-        $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby))
+        if @lt(_xNum;1):
+            $mb(oba,color=blue,bold=true,text=*oby)
+        else:
+            $mb(oba,color=blue,bold=true,text=@concat(@concat(*oba;' ');*oby)
+        if end
     Frame End
 
     Frame 22:

@@ -321,6 +321,8 @@ def read_file(file_to_read, prev_window_dict):
 
 
 def solve_text(box_text, box_dict, prev_window_dict, var_dict):
+    if len(box_text) == 0:
+        return box_text
     no_slice = ['@bitbyte', '@bytebit', '@not', '@mod32', '@lbitshift5', '@lbitshift30', '@rbitshift2', '@rbitshift13',
                 '@rbitshift22', '@rbitshift6', '@rbitshift11', '@rbitshift25', '@trunc32', '@theta', '@rho', '@chi',
                 '@pi', '@last128', '@first272', '@last384', '@dfunc', '@cfunc']
