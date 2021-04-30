@@ -167,13 +167,13 @@ while @lt(_roundCount;79):
 
     Frame 8:
         if @lt(_roundCount;20):
-            $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='fbox1viz',input=w2;w3;w4)
+            $modifyBox(f,color='red',bold=True,text='(W2orW3)or\\((notW2)andW4)',link='SHA1fbox1viz',input=w2;w3;w4)
         elif @lt(_roundCount;40:
-            $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='fbox2viz',input=w2;w3;w4)
+            $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='SHA1fbox2viz',input=w2;w3;w4)
         elif @lt(_roundCount;60):
-            $modifyBox(f,color='red',bold=True,text='(W2andW3)or\\(W2andW4)or\\(W3andW4)',link='fbox3viz',input=w2;w3;w4)
+            $modifyBox(f,color='red',bold=True,text='(W2andW3)or\\(W2andW4)or\\(W3andW4)',link='SHA1fbox3viz',input=w2;w3;w4)
         else:
-            $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='fbox2viz',input=w2;w3;w4)
+            $modifyBox(f,color='red',bold=True,text='W2 xor W3 xor W4',link='SHA1fbox2viz',input=w2;w3;w4)
         if end
     Frame End
 
@@ -209,12 +209,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 12:
-        $modifyBox(am1,color='red',bold=True,link='amviz1',input=f;w5)
+        $modifyBox(am1,color='red',bold=True,link='SHA1amviz1',input=f;w5)
         $ma(am1,am1o,color='red')
     Frame End
 
     Frame 13:
-        $mb(am1o,color='red',bold=True,text=@bitbyte(@mod32(@add(@bytebit(*f);@bytebit(*w5)))),link='amviz1',input=f;w5)
+        $mb(am1o,color='red',bold=True,text=@bitbyte(@mod32(@add(@bytebit(*f);@bytebit(*w5)))),link='SHA1amviz1',input=f;w5)
     Frame End
 
     Frame 14:
@@ -235,12 +235,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 16:
-        $mb(lb5,color='red',bold=True,link='lb5viz',input=w1)
+        $mb(lb5,color='red',bold=True,link='SHA1lb5viz',input=w1)
         $ma(lb5,lb5o,color='red')
     Frame End
 
     Frame 17:
-        $mb(lb5o,color='red',bold=True,text=@bitbyte(@lbitshift5(@bytebit(*w1))),link='lb5viz',input=w1)
+        $mb(lb5o,color='red',bold=True,text=@bitbyte(@lbitshift5(@bytebit(*w1))),link='SHA1lb5viz',input=w1)
     Frame End
 
     Frame 18:
@@ -261,12 +261,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 20:
-        $mb(am2,color=red,bold=True,link='amviz2',input=lb5o;am1o)
+        $mb(am2,color=red,bold=True,link='SHA1amviz2',input=lb5o;am1o)
         $ma(am2,am2o,color=red)
     Frame End
 
     Frame 21:
-        $mb(am2o,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='amviz2',input=lb5o;am1o)
+        $mb(am2o,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*lb5o);@bytebit(*am1o))),link='SHA1amviz2',input=lb5o;am1o)
     Frame End
 
     Frame 22:
@@ -452,12 +452,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 25:
-        $mb(am3,color=red, bold=True,link='amviz3',input=exw;am2o)
+        $mb(am3,color=red, bold=True,link='SHA1amviz3',input=exw;am2o)
         $ma(am3,am3o,color=red)
     Frame End
 
     Frame 26:
-        $mb(am3o,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*exw);@bytebit(*am2o))),link='amviz3',input=exw;am2o)
+        $mb(am3o,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*exw);@bytebit(*am2o))),link='SHA1amviz3',input=exw;am2o)
     Frame End
 
     Frame 27:
@@ -491,12 +491,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 30:
-        $mb(am4,color=red,bold=True,link='amviz4',input=rc;am3o)
+        $mb(am4,color=red,bold=True,link='SHA1amviz4',input=rc;am3o)
         $ma(am4,ow1,color=red)
     Frame End
 
     Frame 31:
-        $mb(ow1,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*rc);@bytebit(*am3o))),link='amviz4',input=rc;am3o)
+        $mb(ow1,color=red,bold=True,text=@bitbyte(@mod32(@add(@bytebit(*rc);@bytebit(*am3o))),link='SHA1amviz4',input=rc;am3o)
     Frame End
 
     Frame 32:
@@ -517,12 +517,12 @@ while @lt(_roundCount;79):
     Frame End
 
     Frame 34:
-        $mb(lb30,color=red,bold=True,link='lb30viz',input=w2)
+        $mb(lb30,color=red,bold=True,link='SHA1lb30viz',input=w2)
         $ma(lb30,ow3,color=red)
     Frame End
 
     Frame 35:
-        $mb(ow3,color=red,bold=True,text=@bitbyte(@lbitshift30(@bytebit(*w2)))),link='lb30viz',input=w2)
+        $mb(ow3,color=red,bold=True,text=@bitbyte(@lbitshift30(@bytebit(*w2)))),link='SHA1lb30viz',input=w2)
     Frame End
 
     Frame 36:

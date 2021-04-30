@@ -7,6 +7,6 @@ Frame 1:
 Frame End
 
 Frame 2:
-    $mb(box1,color='red',bold=True,link='posterexample2',input=box2)
+    $mb(box1,color='red',bold=True,link='linkfile',input=box2)
     $ma(box1,box2,color='red')
 Frame End
