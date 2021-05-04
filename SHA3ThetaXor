@@ -46,8 +46,8 @@ while @lt(_roundNum;25):
     Frame End
 
     Frame 5:
-        $mb(i1by,color=blue,bold=true,text=@indexmat(*ai;_xNum;_yNum)
-        $mb(i2by,color=blue,bold=true,text=@indexarr(*di;_xNum)))
+        $mb(i2by,color=blue,bold=true,text=@indexmat(*ai;_xNum;_yNum)
+        $mb(i1by,color=blue,bold=true,text=@indexarr(*di;_xNum)))
     Frame End
 
     Frame 6:
