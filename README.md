@@ -37,7 +37,7 @@ Every frame is started with a Frame : command and ended with a Frame End command
 
 The visual functions are below with examples:
 
-###$drawBox or $db
+### $drawBox or $db
 
 The $drawBox function takes in 5 parameters and has 4 optional parameters.
 
@@ -55,13 +55,17 @@ The options for color are 'blue', 'red', 'green', and 'black'. 'black' is the de
 
 The options for bold are True and False.
 
-The text parameter can be any valid text characters. This text will be displayed inside of the box, centered if fitting on one line and paragraph style if multi-line.
+The text parameter can be any valid text characters. This text will be displayed inside of the box, centered if fitting on one line and paragraph style if multi-line. Text can be referenced from another box using that box's id and a * symbol.
+
+>
+>     $db(box1,100,100,100,100,text=*box2)
+>
 
 For link, the input must be the name of another HFVL filename to be used for subvisualization.
 
 For input, the input must be the id of a current box. Multiple box ids can be provided but must be seperated by a semicolon.
 
-###$drawArrow or $da
+### $drawArrow or $da
 
 The $drawArrow function takes in 2 parameters and has 2 optional parameters.
 
@@ -73,7 +77,7 @@ The input parameters start_box_id and end_box_id must correspond to valid boxes 
 
 The color and bold parameters have the same valid values as mentioned in $drawBox.
 
-###$modifyBox or $mb
+### $modifyBox or $mb
 
 The $modifyBox function takes in 1 parameter and has 5 optional parameters. This function is used to change the optional parameters of a box.
 
@@ -83,7 +87,7 @@ The $modifyBox function takes in 1 parameter and has 5 optional parameters. This
 
 The parameters are identical to those in the $drawBox function. If a new link is given, the old link will be removed. If a new input is given, the old inputs will be removed and replaced with the new input.
 
-###$modifyArrow or $ma
+### $modifyArrow or $ma
 
 The $modifyArrow function takes in 2 parameters and has 2 optional parameters. This function is used to change the optional parameters of an arrow.
 
@@ -93,7 +97,7 @@ The $modifyArrow function takes in 2 parameters and has 2 optional parameters. T
 
 The function takes in two box_ids as the id for the arrow to modify. The color and bold parameters can then be changed.
 
-###$resetBox or $rb
+### $resetBox or $rb
 
 The $resetBox command is a shortcut to set a box back to default settings. This means the box will have links and inputs removed, the box will have bold set to False, the color of the box will be 'black'. **The text of the box will not be modified**.
 > $resetBox(box_id)
@@ -101,14 +105,14 @@ The $resetBox command is a shortcut to set a box back to default settings. This 
 > $resetBox(box1)
 
 
-###$resetArrow or $ra
+### $resetArrow or $ra
 
 The $resetArrow command is a shortcut to set an arrow back to default settings. This means the arrow will have bold set to False, and the color of the arrow will be 'black'.
 > $resetArrow(start_box_id, end_box_id)
 >
 > $resetArrow(box1, box2)
 
-###$modifyTitle or $mt
+### $modifyTitle or $mt
 
 The $modifyTitle command has three optional parameters and is used to change the attributes for the title of the visualization.
 
@@ -208,7 +212,7 @@ Non-drawing functions are used to modify text and variables. All of these functi
 
 These functions can be nested within each other, an example of them being nested in SHA-1 is below for an F function:
 
-> $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
+>     $modifyBox(f,text=@bitbyte(@or(@or(@bytebit(*w2);@bytebit(*w3));@and(@not(@bytebit(*w2));@bytebit(*w4)))))
 >
 >
 
@@ -225,6 +229,7 @@ All if statements must end with an 'if end' line.
 >          $mb(box1,color=red)
 >      if end
 >
+
 ## While Statements
 While loops begin with a while and then a function that evaluates to a boolean. Currently the @lt function is the only function that serves this purpose.
 
